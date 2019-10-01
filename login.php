@@ -14,7 +14,8 @@
     }
 
 ?>
-<html>
+<!DOCTYPE html>
+<html lang="en">
     <head>
         <title>Login</title>
         <link rel="stylesheet" type="text/css" href="assets/css/styles.css">
@@ -33,14 +34,15 @@
             }
         ?>
 
-
         <!-- Login form -->
-        <form name="loginForm" action="./login.php" method="POST">
-            <label for="name">Name:</label>
-            <input type="text" name="name">
-            <label for="password">Password:</label>
-            <input type="text" name="password">
-            <input name="submit"  type="submit" value="submit" />
-        </form>
+        <div id="login-form-container">
+            <form id="login-form" name="loginForm" action="./login.php" method="POST">
+                <label class="loginFormItem">Name:</label>
+                <input type="text" name="name" class="loginFormItem" /><br/>
+                <label class="loginFormItem">Password:</label>
+                <input type="text" name="password" class="loginFormItem" />
+                <input name="submit" type="submit" value="submit" />
+            </form>
+        </div>
     </body>
 </html>

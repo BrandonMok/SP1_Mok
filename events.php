@@ -2,7 +2,8 @@
     session_name("Mok_Project1");
     session_start();
 ?>
-<html>
+<!DOCTYPE html>
+<html lang="en">
     <head>
         <title>Events</title>
         <link rel="stylesheet" href="./assets/css/styles.css">

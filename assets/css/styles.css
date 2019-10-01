@@ -5,12 +5,23 @@
    margin: 0;
    padding: 0;
    font-family: 'Source Sans Pro', sans-serif; 
-   background-color: #FDFEFD;
 }
 
 header {
-    background-color: #838383;
+    background-color: #2e3339;
     height: 5em;
     width: 100vw;
     border-bottom: 1.25em solid #29E789;
+}
+
+#login-form-container {
+    background-color: #626b77;
+    text-align: center;
+    margin: auto;
+}
+#login-form {
+    /* display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left; */
 }

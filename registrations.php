@@ -3,7 +3,8 @@
     session_start();
 
 ?>
-<html>
+<!DOCTYPE html>
+<html lang="en">
     <head>
         <title>Registration</title>
         <link rel="stylesheet" href="./assets/css/styles.css">
