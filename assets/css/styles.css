@@ -1,0 +1,16 @@
+/** Brandon Mok **/
+/** CSS **/
+
+* {
+   margin: 0;
+   padding: 0;
+   font-family: 'Source Sans Pro', sans-serif; 
+   background-color: #FDFEFD;
+}
+
+header {
+    background-color: #838383;
+    height: 5em;
+    width: 100vw;
+    border-bottom: 1.25em solid #29E789;
+}
