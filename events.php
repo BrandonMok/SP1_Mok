@@ -1,20 +1,26 @@
 <?php
     session_name("Mok_Project1");
     session_start();
+
+    require_once('DB.class.php');
+    require_once('utilities.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <title>Events</title>
-        <link rel="stylesheet" href="./assets/css/styles.css">
-        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap" rel="stylesheet">
+        <?php
+            reusableLinks();
+        ?>
     </head>
     <body>
         <?php 
+            // Header
+            reusableHeader();
 
-
-            if(isset($_SERVER['userLoggedIn'])){
-
+            // Verify User logged in before allowing any actions
+            if(isset($_SESSION['userLoggedIn'])){
+                echo "HERE THEN";
             }
             else{
                 // REDIRECT - User not logged in
@@ -22,6 +28,10 @@
                 exit;
             }
         ?>
-        
+
+
+        <?php
+            reusableFooter();
+        ?>       
     </body>
 </html>

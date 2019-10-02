@@ -7,8 +7,9 @@
 <html lang="en">
     <head>
         <title>Registration</title>
-        <link rel="stylesheet" href="./assets/css/styles.css">
-        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap" rel="stylesheet">
+        <?php
+            reusableLinks();
+        ?>
     </head>
     <body>
         <?php 

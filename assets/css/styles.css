@@ -9,19 +9,130 @@
 
 header {
     background-color: #2e3339;
-    height: 5em;
+    height: 4em;
     width: 100vw;
     border-bottom: 1.25em solid #29E789;
 }
 
-#login-form-container {
-    background-color: #626b77;
+footer {
+    background-color: #2e3339;
+    height: 4em;
+    width: 100vw;
+    border-top: 1.25em solid #29E789;
+    position: absolute;
+    bottom: 0;
+}
+
+/** ALl Anchor tags */
+a {
+    text-decoration: none;
+    color: black;
+}
+a:visited {
+    color: black;
+}
+
+
+div#back-arrow-container {
+    margin-top: 2em;
+}
+.fontawesome-icons {
+    font-size: 3rem;
+}
+.fontawesome-icons:hover {
+    color:#29E789;
+}
+
+
+/* Heading for page/section headings */
+.section-heading {
     text-align: center;
-    margin: auto;
+    margin: 1.25em 0;
+    font-size: 2.5rem;
+    font-weight: bold;
 }
-#login-form {
-    /* display: inline-block;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: left; */
+
+
+/* Login + register Form Styling */
+#login-form-container, #account-register-container {
+    background-color: #aeb1b6;
+    border-radius: 1em;
+    text-align: center;
+    margin: 0 25%;
+    padding: 2em 0;
 }
+form#login-form > *, form#account-register-form > * {
+    font-size: 1.25rem;
+    display: block;
+    margin: 0 auto;
+}
+form#login-form > label, form#account-register-form > label {
+    font-size: 1.5em;
+}
+#submit-btn {
+    background-color: #29E789;
+    font-weight: bold;
+    padding: .5em;
+    border: 2px solid #29E789;
+    border-style: outset;
+    border-radius: .5em;
+    text-shadow: none;
+}
+#submit-btn:hover {
+    cursor: pointer;
+    border: 2px solid rgb(37, 214, 126);
+}
+
+
+div#new-user-register {
+    margin-top: 2em;
+}
+div#new-user-register a {
+    font-size: 1.25rem;
+    font-style: italic;
+}
+div#new-user-register a:hover {
+    font-weight: bold;
+    font-style: initial;
+}
+
+
+
+/* Form error + success text */
+.form-error-text {
+    margin-top: 1em;
+    font-weight: bold;
+    color: rgb(255, 77, 77);
+}
+.form-success-text {
+    margin-top: 1em;
+    font-weight: bold;
+    color: #29E789;
+}
+
+
+
+
+/* #fullscreen-overlay {
+    position: fixed;
+    display: block;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.534);
+    z-index: 10;
+}
+.sub-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 2rem;
+    width: 15em;
+    height: 5em;
+    border-radius: 1em;
+    background-color: white;
+    transform: translate(-50%,-50%);
+} */
