@@ -1,4 +1,6 @@
 <?php 
+    require_once('DB.class.php');
+
     $db = new DB(); // One DB object to use 
 
     /**
@@ -21,6 +23,20 @@
         $headerSTR = '<header></header>';
         echo $headerSTR;
     }
+    /**
+     * reusableHeader2
+     * Contains a logout option once logged int
+     */
+    function reusableHeader2(){
+        $headerSTR = '<header>
+                        <ul class="nav">
+                            <li>
+                                <a href="logout.php">Logout  <i class="fas fa-sign-out-alt"></i></a>
+                            </li>
+                        </ul>
+                    </header>';
+        echo $headerSTR;
+    }
 
     /**
      * reusableFooter
@@ -30,12 +46,7 @@
         echo $footerSTR;
     }
 
-    // function successOverlay(){
-    //     $overlay = '<div id="fullscreen-overlay">
-    //                     <div class="sub-box">Hi there</div>
-    //                 </div>';
-    //     echo $overlay;
-    // }
+
 
 
 

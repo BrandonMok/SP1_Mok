@@ -4,9 +4,6 @@
 
     require_once('DB.class.php');
     require_once('utilities.php');
-
-    // $db = new DB(); // DB object
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -58,9 +55,7 @@
                                 // Able to make a new account
                                 $id = $db->insertUser($uName, $password);
                                 if($id > 0){
-                                    // successfully made a new account
-                                    // display succesfull MSG
-                                    
+                            
                                     // make custom full screen to display account created successfully?
                                     // white rounded box
                                     // green check mark

@@ -1,0 +1,5 @@
+SetEnv DB bxm5989
+SetEnv DB_SERVER localhost
+SetEnv DB_PASSWORD bottlesubject
+SetEnv DB_USER bxm5989
+# put in main .htaccess file if you want to effect whole site

@@ -6,10 +6,16 @@
     require_once('utilities.php');
 
 
+
     // User logged in already, just redirect to events
     if(!empty($_SESSION['userLoggedIn'])){
-        header('Location: events.php');
-        exit;
+        if($_SESSION['userLoggedIn']  == false){
+            endSession();
+        }
+        else{
+            header('Location: events.php');
+            exit;
+        }
     }
 ?>
 <!DOCTYPE html>
@@ -33,7 +39,7 @@
                 <label>Name:</label>
                 <input type="text" name="name" maxlength="50" placeholder="Name"/><br/>
                 <label>Password:</label>
-                <input type="text" name="password" placeholder="Password"/><br />
+                <input type="password" name="password" placeholder="Password"/><br />
                 <input name="submit" id="submit-btn" type="submit" value="Submit"/>
             </form>
 

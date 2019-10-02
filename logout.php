@@ -8,7 +8,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Events</title>
+        <title>Logging out...</title>
         <?php
             reusableLinks();
         ?>
@@ -16,23 +16,29 @@
     <body>
         <?php 
             // Header
-            reusableHeader2();
+            reusableHeader();
 
             // Verify User logged in before allowing any actions
-            if(isset($_SESSION['userLoggedIn'])){
-                echo "HERE THEN";
-
- 
-            }
-            else{
-                // REDIRECT - User not logged in
+            if(!isset($_SESSION['userLoggedIn'])){
+                // Logout page meant to unset session variables
+                // DON'T want someone logged in to directly go to this page
                 header('Location: login.php');
                 exit;
             }
         ?>
+        <div id="logout-screen">
+            <span id="logout-textbox">Logging Out...</span>
+        </div>
 
 
         <?php
+            endSession(); // End the Session!
+
+            usleep(2000000);
+
+            header('Location: login.php');
+            exit;
+
             reusableFooter();
         ?>       
     </body>
