@@ -15,8 +15,16 @@
     </head>
     <body>
         <?php 
-            if(isset($_SERVER['userLoggedIn'])){
-
+            // Admins and event managers only!
+            // BUT Admins do everything
+            // Event managers only specific things, so check roles
+            if(isset($_SESSION['userLoggedIn']) && isset($_SESSION['role'])){
+                if($_SESSION['role'] == 'admin'){
+                    // ADMIN ONLY
+                }
+                else if($_SESSION['role'] == 'event_manager'){
+                    // EVENT MANAGER ONLY
+                }
             }
             else{
                 // REDIRECT - User not logged in

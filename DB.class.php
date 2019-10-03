@@ -28,18 +28,24 @@
          */
         function verifyUser($username, $password){
             try{
-                // $data = array();
+                include_once('./classes/Attendee.class.php');
+                $data = array();
                 $stmt = $this->db->prepare("SELECT * FROM attendee WHERE name = :name AND password = :password");
 
                 $stmt->execute(array(
                     ":name" => $username,
                     ":password" => $password
                 ));
-                // $data = $stmt->fetchAll();
+                $stmt->setFetchMode(PDO::FETCH_CLASS, 'Attendee');
+                $data = $stmt->fetchAll();
 
                 // Check to see if row was returned, if not then login failed
                 if($stmt->rowCount() > 0){
-                    return $stmt->rowCount();
+                    $responseArr = array(
+                        "rowCount" => $stmt->rowCount(),
+                        "role" => $data->role
+                    );
+                    return $responseArr;
                 }
                 else{
                     return -1; // no match found
@@ -69,6 +75,30 @@
             }
             catch(PDOException $e){
                 die("There was a problem inserting user!");
+            } 
+        }
+
+
+        /**
+         * getALlUsers
+         * Returns all users - primarily for the admin
+         */
+        function getAllUsers(){
+            try{
+                include_once('./classes/Attendee.class.php'); // include the attendee class file
+
+                $data = array();
+                $query = "SELECT * FROM attendee";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute();
+
+                $stmt->setFetchMode(PDO::FETCH_CLASS, "Attendee");
+                $data = $stmt->fetchAll();
+
+                return $data;
+            }
+            catch(PDOException $e){
+                die("There was a problem getting all users!");
             } 
         }
     }

@@ -4,6 +4,14 @@
 
     require_once('DB.class.php');
     require_once('utilities.php');
+
+    // Verify User logged in before allowing any actions
+    if(!isset($_SESSION['userLoggedIn'])){
+        // Logout page meant to unset session variables
+        // DON'T want someone logged in to directly go to this page
+        header('Location: login.php');
+        exit;
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,32 +22,16 @@
         ?>
     </head>
     <body>
-        <?php 
-            // Header
-            reusableHeader();
-
-            // Verify User logged in before allowing any actions
-            if(!isset($_SESSION['userLoggedIn'])){
-                // Logout page meant to unset session variables
-                // DON'T want someone logged in to directly go to this page
-                header('Location: login.php');
-                exit;
-            }
-        ?>
         <div id="logout-screen">
-            <span id="logout-textbox">Logging Out...</span>
+            <div id="logout-textbox"><span>Logging Out... <br/><i class="fas fa-spinner"></i></span></div>
         </div>
 
 
         <?php
             endSession(); // End the Session!
 
-            usleep(2000000);
-
             header('Location: login.php');
             exit;
-
-            reusableFooter();
         ?>       
     </body>
 </html>

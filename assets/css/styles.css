@@ -128,14 +128,28 @@ div#new-user-register a:hover {
 
 
 #logout-screen {
-    position: relative;
-    z-index: 10;
+    background-color: #29E789;
     height: 100vh;
-    background-color: rgb(70, 70, 70);
 }
 #logout-textbox {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+    font-size: 3rem;
     background-color: white;
+    border-radius: .5em;
     width: 10em;
-    height: 15em;
-    border-radius: 1em;
+    height: 2.5em;
+    text-align: center;
+    border: 2px solid #2e3339;
+}
+#logout-textbox span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
 }

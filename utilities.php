@@ -55,8 +55,9 @@
      * End the session
      */
     function endSession(){
-        unset($_SESSION['userLoggedIn']);
-        unset($_SESSION);
+        unset($_SESSION['userLoggedIn']); // unset login session variable
+        unset($_SESSION['role']);       // unset role variable
+        unset($_SESSION);               
         
         if(isset($_COOKIE[session_name()])){
             unset($_COOKIE[session_name()]);        // unset session cookie

@@ -48,7 +48,7 @@
             </div>
             <?php
                 // When user submits form - verify user logged in correclty
-                if($_SERVER["REQUEST_METHOD"] == "POST"){
+                if($_SERVER['REQUEST_METHOD'] == 'POST'){
                     if(!empty($_POST['name']) && !empty($_POST['password'])){
                         if(isset($_POST['name']) && isset($_POST['password'])){
                             $uName = sanitizeString($_POST['name']);                        // sanitize
@@ -56,8 +56,28 @@
 
                             $userCheck = $db->verifyUser($uName, $password);    // verify user (-1 if not found or 1 if found)
 
-                            if($userCheck > 0){
+                            $rows = $userCheck['rowCount']; // rowcount
+                            $role = $userCheck['role'];     // role
+
+                            // Only proceed if rows returned (aka found the user)
+                            if($rows > 0){
                                 $_SESSION['userLoggedIn'] = true;  // set session variable
+                                
+                                // Switch to determine role -> store as session variable
+                                switch($role){
+                                    case '1':
+                                        $_SESSION['role'] = 'admin';
+                                        break;
+                                    case '2':
+                                        $_SESSION['role'] = 'event_manager';
+                                        break;
+                                    case '3':
+                                        $_SESSION['role'] = 'attendee';
+                                        break;
+                                    default: 
+                                        $_SESSION['role'] = 'attendee'; 
+                                        break;
+                                }
 
                                 header('Location: events.php');
                                 exit;

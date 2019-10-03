@@ -1,18 +1,11 @@
-- Close session after
-	- user logs out
-	- inactivity
-	- close browser
-
-- Forgot password?? - but security if you can do it to anyone - OR have another table for security questions? 
-									-> If get those correct, then can do an UPDATE on account
+- Forgot password?? - but security if you can do it to anyone - OR have another table for security questions? 									-> If get those correct, then can do an UPDATE on account
 									
-- Have the 'Hi {name}' on header when logged in
-- Have LOGOUT in header!!!!
--- Need navigation
+- Have the 'Hi {name}' on header when logged in?
 
 
 Session will be based off role!!
+	- need to do something about logging off 
+
 
 - Use of classes
-	- make each table a class
 	- Do the FETCH_CLASS, classname
