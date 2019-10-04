@@ -15,7 +15,6 @@
     </head>
     <body>
         <?php 
-            // Header
             reusableHeader();
 
             // Verify User logged in before allowing any actions
@@ -30,11 +29,11 @@
                         $eventContainer = "<p class='section-heading'>Events</p>";
                         $eventContainer .= "<div id='event-container'>";
                         foreach($allEvents as $event){
-                            $eventContainer .= "<div class='events'>
+                            $eventContainer .= "<a href='./registrations.php'><div class='events'>
                                                     <p class='event-headings'>{$event->getName()}</p>
                                                     <p>{$event->getDateStart()} - {$event->getDateEnd()}</p>
                                                     <p>Venue: {$event->getVenue()}</p>
-                                                </div>";
+                                                </div></a>";
                         }
                         $eventContainer .= "</div>";
 

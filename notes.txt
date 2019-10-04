@@ -1,9 +1,6 @@
-- Forgot password?? - but security if you can do it to anyone - OR have another table for security questions? 									-> If get those correct, then can do an UPDATE on account
+- Forgot password?? - but security if you can do it to anyone - OR have another table for security questions? -> If get those correct, then can do an UPDATE on account
 									
 - Have the 'Hi {name}' on header when logged in?
-
-- Use of classes
-	- Do the FETCH_CLASS, classname
 
 - Navigation
 	- show all but deny access?
@@ -11,13 +8,20 @@
 	- could do a utility function based on role to return a specific header! (might want to ask since he wants sessions)
 
 
-
 - Need to do something with venue since on events it comes back as a number
 	- Allowed to get all info at beginning on login?
 
 
-- ISSUE w/ footer overlapping content
-
 If need to hold current user entire obj, could have function to store entire obj array!!
 
-Figure out what to do with users having same name and password!!!!!!!!!!!!!!!!!!!!!!!
+
+Figure out what to do with users having same name and password!!!!!!
+
+
+
+Registrations.php
+-> put into URL and do a GET	
+
+
+!!Might want to consider making the header w/nav as a flex layout
+

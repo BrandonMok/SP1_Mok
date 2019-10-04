@@ -43,7 +43,12 @@
                 if($stmt->rowCount() > 0){
                     $responseArr = array(
                         "rowCount" => $stmt->rowCount(),
-                        "currentUser" => $data
+                        // "currentUser" => $data
+                        "currentUser" => array(
+                            "name" => $data[0]->getName(),
+                            "role" => $data[0]->getRole()
+                        )
+
                     );
 
                     return $responseArr;

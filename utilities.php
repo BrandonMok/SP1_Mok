@@ -38,6 +38,7 @@
         }
         else{
             $headerSTR = "<header>
+                            <span class='user-welcome'>Hi ".$_SESSION['currentUSR']."</span>
                             <ul class='nav'>
                                 <li>
                                     <a href='logout.php'>Logout  <i class='fas fa-sign-out-alt'></i></a>

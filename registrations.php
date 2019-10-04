@@ -17,8 +17,11 @@
         <?php 
             reusableHeader();
             
-            if(isset($_SERVER['userLoggedIn'])){
+            if(isset($_SESSION['userLoggedIn']) && isset($_SESSION['role'])){
+                // EXTRA check to make sure user is allowed to access page
+                if($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'event_manager' || $_SESSION['role'] == 'attendee'){
 
+                }
             }
             else{
                 // REDIRECT - User not logged in

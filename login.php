@@ -9,7 +9,7 @@
     // User logged in already, just redirect to events
     if(!empty($_SESSION['userLoggedIn'])){
         if($_SESSION['userLoggedIn']  == false){
-            endSession();
+            endSession(); // call function to end the session
         }
         else{
             header('Location: events.php');
@@ -27,7 +27,6 @@
     </head>
     <body>
         <?php 
-            // Header
             reusableHeader('login');
         ?>
         <h1 class="section-heading">Login</h1>
@@ -57,14 +56,15 @@
 
                             $userCheck = $db->verifyUser($uName, $password);    // verify user (-1 if not found or 1 if found)
 
-                            $rows = $userCheck['rowCount']; // rowcount
+                            $rows = $userCheck['rowCount'];             // rowcount
                             $role = $userCheck['currentUser']['role'];  // role
-                            // $userName = $userCheck['currentUser']['name'];
+                            $name = $userCheck['currentUser']['name'];  // name
+
 
                             // Only proceed if rows returned (aka found the user)
                             if($rows > 0){
                                 $_SESSION['userLoggedIn'] = true;  // set session variable
-                                // $_SESSION['curUSR'] = $username;
+                                $_SESSION['currentUSR'] = $name;
                                 
                                 // Switch to determine role -> store as session variable
                                 switch($role){
@@ -82,22 +82,22 @@
                                         break;
                                 }
 
-                                header("Location: events.php");
-                                exit;
+                               header("Location: events.php");
+                               exit;
                             }
                             else{
                                 // Invalid Login
-                                echo "<p class='form-error-text'>**Invalid credentials. Please try again!</p>";
+                                echo "<p class='form-error-text'>**Invalid Login. Please try again!</p>";
                             }
                         }
                         else{
                             // Invalid login
-                            echo "<p class='form-error-text'>**Invalid credentials. Please try again!</p>";
+                            echo "<p class='form-error-text'>**Invalid Login. Please try again!</p>";
                         }
                     }
                     else {
                         // Invalid Login - empty input
-                        echo "<p class='form-error-text'>* Please enter valid credentials!</p>";
+                        echo "<p class='form-error-text'>* Please enter valid Login!</p>";
                     }
                 }// end if
             ?>
@@ -105,7 +105,6 @@
 
 
         <?php
-            // Footer
             reusableFooter('footer-login');
         ?>  
     </body>
