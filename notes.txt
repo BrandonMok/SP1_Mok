@@ -2,10 +2,22 @@
 									
 - Have the 'Hi {name}' on header when logged in?
 
-
-Session will be based off role!!
-	- need to do something about logging off 
-
-
 - Use of classes
 	- Do the FETCH_CLASS, classname
+
+- Navigation
+	- show all but deny access?
+	- Or only show some?
+	- could do a utility function based on role to return a specific header! (might want to ask since he wants sessions)
+
+
+
+- Need to do something with venue since on events it comes back as a number
+	- Allowed to get all info at beginning on login?
+
+
+- ISSUE w/ footer overlapping content
+
+If need to hold current user entire obj, could have function to store entire obj array!!
+
+Figure out what to do with users having same name and password!!!!!!!!!!!!!!!!!!!!!!!

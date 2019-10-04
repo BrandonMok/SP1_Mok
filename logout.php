@@ -22,8 +22,8 @@
         ?>
     </head>
     <body>
-        <div id="logout-screen">
-            <div id="logout-textbox"><span>Logging Out... <br/><i class="fas fa-spinner"></i></span></div>
+        <div id="logout-screen" class="center-element">
+            <div id="logout-textbox" class="center-element"><span>Logging Out... <br/><i class="fas fa-spinner"></i></span></div>
         </div>
 
 

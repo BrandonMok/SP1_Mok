@@ -2,9 +2,8 @@
     session_name("Mok_Project1");
     session_start();
 
-    require_once('DB.class.php');
-    require_once('utilities.php');
-
+    require_once("DB.class.php");
+    require_once("utilities.php");
 
 
     // User logged in already, just redirect to events
@@ -46,6 +45,8 @@
             <div id="new-user-register">
                 <a href="./accountRegistration.php">New User?</a>
             </div>
+
+
             <?php
                 // When user submits form - verify user logged in correclty
                 if($_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -57,11 +58,13 @@
                             $userCheck = $db->verifyUser($uName, $password);    // verify user (-1 if not found or 1 if found)
 
                             $rows = $userCheck['rowCount']; // rowcount
-                            $role = $userCheck['role'];     // role
+                            $role = $userCheck['currentUser']['role'];  // role
+                            // $userName = $userCheck['currentUser']['name'];
 
                             // Only proceed if rows returned (aka found the user)
                             if($rows > 0){
                                 $_SESSION['userLoggedIn'] = true;  // set session variable
+                                // $_SESSION['curUSR'] = $username;
                                 
                                 // Switch to determine role -> store as session variable
                                 switch($role){
@@ -79,7 +82,7 @@
                                         break;
                                 }
 
-                                header('Location: events.php');
+                                header("Location: events.php");
                                 exit;
                             }
                             else{
@@ -103,7 +106,7 @@
 
         <?php
             // Footer
-            reusableFooter();
+            reusableFooter('footer-login');
         ?>  
     </body>
 </html>

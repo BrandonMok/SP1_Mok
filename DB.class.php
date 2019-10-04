@@ -28,7 +28,7 @@
          */
         function verifyUser($username, $password){
             try{
-                include_once('./classes/Attendee.class.php');
+                include_once("./classes/Attendee.class.php");
                 $data = array();
                 $stmt = $this->db->prepare("SELECT * FROM attendee WHERE name = :name AND password = :password");
 
@@ -36,15 +36,16 @@
                     ":name" => $username,
                     ":password" => $password
                 ));
-                $stmt->setFetchMode(PDO::FETCH_CLASS, 'Attendee');
+                $stmt->setFetchMode(PDO::FETCH_CLASS, "Attendee");
                 $data = $stmt->fetchAll();
 
                 // Check to see if row was returned, if not then login failed
                 if($stmt->rowCount() > 0){
                     $responseArr = array(
                         "rowCount" => $stmt->rowCount(),
-                        "role" => $data->role
+                        "currentUser" => $data
                     );
+
                     return $responseArr;
                 }
                 else{
@@ -85,7 +86,7 @@
          */
         function getAllUsers(){
             try{
-                include_once('./classes/Attendee.class.php'); // include the attendee class file
+                include_once("./classes/Attendee.class.php"); // include the attendee class file
 
                 $data = array();
                 $query = "SELECT * FROM attendee";
@@ -99,6 +100,32 @@
             }
             catch(PDOException $e){
                 die("There was a problem getting all users!");
+            } 
+        }
+
+
+
+        /** EVENTS */
+        /**
+         * getAllEvents
+         * Retrieves all available events
+         */
+        function getAllEvents(){
+            try{
+                include_once("./classes/Event.class.php");
+
+                $data = array();
+                $query = 'SELECT * FROM event';
+                $stmt = $this->db->prepare($query);
+                $stmt->execute();
+
+                $stmt->setFetchMode(PDO::FETCH_CLASS, "Event");
+                $data = $stmt->fetchAll(); // fetch all the events
+
+                return $data;
+            }
+            catch(PDOException $e){
+                die("There was a problem getting all events!");
             } 
         }
     }
