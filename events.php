@@ -16,7 +16,7 @@
     <body>
         <?php 
             // Header
-            reusableHeader2();
+            reusableHeader();
 
             // Verify User logged in before allowing any actions
             if(isset($_SESSION['userLoggedIn']) && isset($_SESSION['role'])){

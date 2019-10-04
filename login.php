@@ -28,7 +28,7 @@
     <body>
         <?php 
             // Header
-            reusableHeader();
+            reusableHeader('login');
         ?>
         <h1 class="section-heading">Login</h1>
 

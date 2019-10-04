@@ -26,34 +26,35 @@
         echo $headLinks;
     }
 
-
     /**
      * reusableHeader
+     * Pass in value for regular header
+     * Don't pass in value, use logged in header            // WILL NEED TO ADJUST WHEN FIGURE OUT REQS FOR NAVIGATION (i.e. show all or only show some)
      */
-    function reusableHeader(){
-        $headerSTR = "<header></header>";
-        echo $headerSTR;
-    }
-    /**
-     * reusableHeader2
-     * Contains a logout option once logged int
-     */
-    function reusableHeader2(){
-        $headerSTR = "<header>
-                        <ul class='nav'>
-                            <li>
-                                <a href='logout.php'>Logout  <i class='fas fa-sign-out-alt'></i></a>
-                            </li>
-                        </ul>
-                    </header>";             
-        echo $headerSTR;
+    function reusableHeader($classname = ""){
+        if(isset($classname) && !empty($classname)){
+            $headerSTR = "<header></header>";
+            echo $headerSTR;
+        }
+        else{
+            $headerSTR = "<header>
+                            <ul class='nav'>
+                                <li>
+                                    <a href='logout.php'>Logout  <i class='fas fa-sign-out-alt'></i></a>
+                                </li>
+                            </ul>
+                        </header>";             
+            echo $headerSTR;
+        }
     }
 
     /**
      * reusableFooter
+     * Pass in a value to use login specific footer
+     * Don't pass value, use regular footer and its styling
      */
-    function reusableFooter($classname = ""){
-        if(isset($classname) && !empty($classname)){
+    function reusableFooter($classname = ""){ 
+        if(isset($classname) && !empty($classname)){              
             $footerSTR = "<footer class='footer-login'></footer>";
             echo $footerSTR;
         }

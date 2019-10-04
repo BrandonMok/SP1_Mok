@@ -15,6 +15,8 @@
     </head>
     <body>
         <?php 
+            reusableHeader();
+            
             if(isset($_SERVER['userLoggedIn'])){
 
             }
@@ -23,6 +25,8 @@
                 header('Location: login.php');
                 exit;
             }
+
+            reusableFooter();
         ?>
     </body>
 </html>

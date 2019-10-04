@@ -15,6 +15,8 @@
     </head>
     <body>
         <?php 
+            reusableHeader();
+
             // Admins and event managers only!
             // BUT Admins do everything
             // Event managers only specific things, so check roles
@@ -31,6 +33,8 @@
                 header('Location: login.php');
                 exit;
             }
+
+            reusableFooter();
         ?>  
     </body>
 </html>
