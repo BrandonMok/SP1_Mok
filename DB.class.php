@@ -44,12 +44,18 @@
                     $responseArr = array(
                         "rowCount" => $stmt->rowCount(),
                         // "currentUser" => $data
-                        "currentUser" => array(
-                            "name" => $data[0]->getName(),
+                        "currentUser" => array(            
+                            "name" => $data[0]->getName(),  
                             "role" => $data[0]->getRole()
                         )
-
                     );
+
+
+                    // might want to return entire obj so can change the role for defaults
+                    // OR check here if it's null, then set it?
+                    // if(!isset($data[0]->getRole())){
+                    //     // DO AN UPDATE TO THE USER FOR THEIR ROLE!
+                    // }
 
                     return $responseArr;
                 }
@@ -83,6 +89,95 @@
                 die("There was a problem inserting user!");
             } 
         }
+
+        /**
+         * updateUser
+         */
+        // function updateUser($data){
+        //     try{
+        //         $query = "UPDATE attendee SET ";
+        //         // $items = array();
+        //         // $types = "";
+        //         $updateId = 0; 
+        //         // $numRows = 0;
+
+        //         // foreach($data as $k => $v){
+        //         //     switch($k){
+        //         //         case "name":
+        //         //             $query .= "name = ?,";
+        //         //             $items[] = &$v;
+        //         //             $types .= "s";
+        //         //             break;
+        //         //         case "password":
+        //         //             $query .= "password = ?,";
+        //         //             $items[] = &$v;
+        //         //             $types .= "s";
+        //         //             break;
+        //         //         case "role":
+        //         //             $query .= "role = ?,";
+        //         //             $items[] = intval($v);
+        //         //             $types .= "i";
+        //         //             break;
+        //         //         case "id":                      // going to pass in id too
+        //         //             $updateId = intval($k);
+        //         //             break;
+        //         //     }
+        //         // }
+
+        //         // $query = trim($query, ",");
+        //         // $query .= " WHERE idattendee = ?";
+        //         // $types .= "i"; // for the above where question mark 
+        //         // $items[] = &$updateId;
+    
+        //         // if($stmt = $this->dbh->prepare($query)){
+        //         //     // marge items and types
+        //         //     $refArr = array_merge(array($types), $items);
+        //         //     $ref = new ReflectionClass('mysqli_stmt');
+        //         //     $method = $ref->getMethod("bind_param");
+        //         //     $method->invokeArgs($stmt, $refArr);
+    
+        //         //     $stmt->execute();
+        //         //     $stmt->fetchAll();
+        //         //     $numRows = $stmt->affected_rows;
+        //         // }            
+    
+        //         // return $numRows;
+
+
+        //         $updateArr = array();
+        //         foreach($data as $k => $v){
+        //             switch($k){
+        //                 case "name":
+        //                     $query .= "name = ?,";
+        //                     $updateArr[] = array("name" => &$v);
+        //                     break;
+        //                 case "password":
+        //                     $query .= "password = ?,";
+        //                     $updateArr[] = array("password" => &$v);
+        //                     break;
+        //                 case "role":
+        //                     $query .= "role = ?,";
+        //                     $updateArr[] = array("role" => &$v);
+        //                     break;
+        //                 case "id":    
+        //                     $updateId = intval($k);
+        //                     break;
+        //             }
+        //         }
+        //         $query = trim($query, ",");
+        //         $query .= " WHERE idattendee = ?";
+        //         $updateArr[] = array("id" => $updateId);
+
+
+        //         $stmt = $this->db->prepare($query); 
+        //         $stmt->execute($updateArr); // array w/values to binds
+
+        //         return $stmt->affected_rows; // return the # of rows affected
+        //     }
+        //     catch(PDOException $e){
+        //         die("There was a problem updating user!");
+        //     } 
+        // }
 
 
         /**

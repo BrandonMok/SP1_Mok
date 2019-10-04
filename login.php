@@ -27,7 +27,8 @@
     </head>
     <body>
         <?php 
-            reusableHeader('login');
+            reusableHeader();
+
         ?>
         <h1 class="section-heading">Login</h1>
 
@@ -77,10 +78,11 @@
                                     case '3':
                                         $_SESSION['role'] = 'attendee';
                                         break;
-                                    default: 
+                                    default:    
                                         $_SESSION['role'] = 'attendee'; 
                                         break;
                                 }
+
 
                                header("Location: events.php");
                                exit;
@@ -105,7 +107,7 @@
 
 
         <?php
-            reusableFooter('footer-login');
+            reusableFooter();
         ?>  
     </body>
 </html>

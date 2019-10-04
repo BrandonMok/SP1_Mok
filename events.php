@@ -33,10 +33,10 @@
                                                     <p class='event-headings'>{$event->getName()}</p>
                                                     <p>{$event->getDateStart()} - {$event->getDateEnd()}</p>
                                                     <p>Venue: {$event->getVenue()}</p>
+                                                    <p>Total Allowed: {$event->getNumberAllowed()}</p>
                                                 </div></a>";
                         }
                         $eventContainer .= "</div>";
-
                         echo $eventContainer;
                     }
                     else{

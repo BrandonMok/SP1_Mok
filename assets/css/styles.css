@@ -35,13 +35,14 @@ footer, .footer-login {
 }
 .nav > li {
     display: inline-block;
+    margin: .5em 0 0 1em;
 }
 .nav li a {
     color: white;
     font-size: 1.5rem;
     margin: auto 0;
 }
-
+/* In nav, the "HI {username} */
 .user-welcome {
     margin: .5em 0 0 1em;
     float: left;
@@ -58,17 +59,6 @@ a {
 }
 a:visited {
     color: black;
-}
-
-
-div#back-arrow-container {
-    margin-top: 2em;
-}
-.fontawesome-icons {
-    font-size: 3rem;
-}
-.fontawesome-icons:hover {
-    color:#29E789;
 }
 
 
@@ -135,6 +125,17 @@ div#new-user-register a:hover {
     font-weight: bold;
     font-style: initial;
 }
+div#back-arrow-container {
+    margin-top: 2em;
+}
+
+.fontawesome-icons {
+    font-size: 3rem;
+}
+.fontawesome-icons:hover {
+    color:#29E789;
+}
+
 
 
 /* Form error + success text */
@@ -149,9 +150,9 @@ div#new-user-register a:hover {
     color: #29E789;
 }
 
-/* #event-container {
-    background-color: aquamarine;
-} */
+
+
+/** EVENTS **/
 .events {
     display: block;
     border: 2px solid #2e3339;
@@ -168,7 +169,7 @@ div#new-user-register a:hover {
 
 
 
-
+/** LOGOUT **/
 #logout-screen {
     background-color: #29E789;
     height: 100vh;

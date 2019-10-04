@@ -28,23 +28,51 @@
 
     /**
      * reusableHeader
-     * Pass in value for regular header
-     * Don't pass in value, use logged in header            // WILL NEED TO ADJUST WHEN FIGURE OUT REQS FOR NAVIGATION (i.e. show all or only show some)
+     * Based on role to display available pages
      */
-    function reusableHeader($classname = ""){
-        if(isset($classname) && !empty($classname)){
-            $headerSTR = "<header></header>";
-            echo $headerSTR;
+    function reusableHeader(){
+        // Based on roles
+        if(isset($_SESSION['role']) && !empty($_SESSION['role'])){
+            $role = $_SESSION['role'];
+            if($role == "admin" || $role == "event_manager"){
+                // ADMIN + EVENT_MANAGER have access to the admin page w/all other pages
+                // EVENT_MANAGER has limited actions on the admin page though
+                $headerSTR = "<header>
+                                <span class='user-welcome'>Hi ".$_SESSION['currentUSR']."</span>
+                                <ul class='nav'>
+                                    <li>
+                                        <a href='admin.php'>Admin</a>
+                                    </li>
+                                    <li>
+                                        <a href='events.php'>Events</a>
+                                    </li>
+                                    <li>
+                                        <a href='logout.php'>Logout  <i class='fas fa-sign-out-alt'></i></a>
+                                    </li>
+                                </ul>
+                            </header>"; 
+                echo $headerSTR;
+
+            }
+            else {
+                // attendee header
+                $headerSTR = "<header>
+                                <span class='user-welcome'>Hi ".$_SESSION['currentUSR']."</span>
+                                <ul class='nav'>
+                                    <li>
+                                        <a href='events.php'>Events</a>
+                                    </li>
+                                    <li>
+                                        <a href='logout.php'>Logout  <i class='fas fa-sign-out-alt'></i></a>
+                                    </li>
+                                </ul>
+                            </header>";             
+                echo $headerSTR;
+            }
         }
         else{
-            $headerSTR = "<header>
-                            <span class='user-welcome'>Hi ".$_SESSION['currentUSR']."</span>
-                            <ul class='nav'>
-                                <li>
-                                    <a href='logout.php'>Logout  <i class='fas fa-sign-out-alt'></i></a>
-                                </li>
-                            </ul>
-                        </header>";             
+            // no role, so in login or registration page
+            $headerSTR = "<header></header>";
             echo $headerSTR;
         }
     }
@@ -54,13 +82,13 @@
      * Pass in a value to use login specific footer
      * Don't pass value, use regular footer and its styling
      */
-    function reusableFooter($classname = ""){ 
-        if(isset($classname) && !empty($classname)){              
-            $footerSTR = "<footer class='footer-login'></footer>";
+    function reusableFooter(){ 
+        if(isset($_SESSION['role']) && !empty($_SESSION['role'])){
+            $footerSTR = "<footer></footer>";
             echo $footerSTR;
         }
         else{
-            $footerSTR = "<footer></footer>";
+            $footerSTR = "<footer class='footer-login'></footer>";
             echo $footerSTR;
         }
     }
@@ -72,8 +100,9 @@
      * End the session
      */
     function endSession(){
-        unset($_SESSION['userLoggedIn']); // unset login session variable
-        unset($_SESSION['role']);       // unset role variable
+        unset($_SESSION['userLoggedIn']);   // unset login session variable
+        unset($_SESSION['role']);           // unset role variable
+        unset($_SESSION['currentUSR']);     // unset current user's name
         unset($_SESSION);               
         
         if(isset($_COOKIE[session_name()])){

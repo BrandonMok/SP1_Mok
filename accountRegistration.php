@@ -18,7 +18,9 @@
             // Header
             reusableHeader(); 
         ?>
-        <h1 class="section-heading">Register</h1>
+        <h1 class="section-heading">Register <br/><i class="fas fa-address-book"></i></h1>
+        
+
 
         <div id="account-register-container">
             <form name="acountRegisterForm" id="account-register-form" action="./accountRegistration.php" method="POST">
