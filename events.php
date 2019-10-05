@@ -29,12 +29,14 @@
                         $eventContainer = "<p class='section-heading'>Events</p>";
                         $eventContainer .= "<div id='event-container'>";
                         foreach($allEvents as $event){
-                            $eventContainer .= "<a href='./registrations.php'><div class='events'>
-                                                    <p class='event-headings'>{$event->getName()}</p>
-                                                    <p>{$event->getDateStart()} - {$event->getDateEnd()}</p>
-                                                    <p>Venue: {$event->getVenue()}</p>
-                                                    <p>Total Allowed: {$event->getNumberAllowed()}</p>
-                                                </div></a>";
+                            $eventContainer .= "<a href='./registrations.php'>
+                                                    <div class='events'>
+                                                        <p class='event-headings'>{$event->getName()}</p>
+                                                        <p class='event-timings'>{$event->getDateStart()} - {$event->getDateEnd()}</p>
+                                                        <p>Venue: {$event->getVenue()}</p>
+                                                        <p>Total Allowed: {$event->getNumberAllowed()}</p>
+                                                    </div>
+                                                </a>";
                         }
                         $eventContainer .= "</div>";
                         echo $eventContainer;

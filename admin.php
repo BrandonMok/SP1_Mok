@@ -23,9 +23,49 @@
             if(isset($_SESSION['userLoggedIn']) && isset($_SESSION['role'])){
                 if($_SESSION['role'] == 'admin'){
                     // ADMIN ONLY
+                    // ADD/EDIT/DELETE/VIEW USERS
+
+                    echo "<p class='section-heading'>Admin</p>";
+
+                    $allUsers = $db->getAllUsers();
+                    if(count($allUsers) > 0){
+                        // display table
+                        $tableSTR = "<div id='user-table-container'>
+                                        <table id='all-users-table'>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Name</th>
+                                                <th>Role</th>
+                                                <th>Edit</th>
+                                                <th>Delete</th>
+                                            </tr>";
+
+                        foreach($allUsers as $v){
+                            $tableSTR .= "<tr>
+                                            <td>{$v->getIdAttendee()}</td>
+                                            <td>{$v->getName()}</td>
+                                            <td>{$v->getRole()}</td>
+                                            <td><a href=''>Edit</a></td>";
+                                   
+                            // Check if user is an admin -> Don't allow admin account to be deleted
+                            if($v->getRole() == 1){
+                                $tableSTR .= "<td></td></tr>";
+                            }
+                            else{
+                                $tableSTR .= " <td><a href=''>Delete</a></td></tr>";
+                            }
+                        }            
+
+                        $tableSTR .= "</table></div>";
+                        echo $tableSTR;
+                    }                    
                 }
                 else if($_SESSION['role'] == 'event_manager'){
                     // EVENT MANAGER ONLY
+
+
+
+
                 }
             }
             else{

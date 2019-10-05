@@ -41,21 +41,27 @@
 
                 // Check to see if row was returned, if not then login failed
                 if($stmt->rowCount() > 0){
+                    $user = $data[0];
+                    $name = $data[0]->getName();
+                    $role = $data[0]->getRole();
+
+                    // If a role is not set (new account), then set to attendee
+                    if(!isset($role) || empty($role)){
+                        $user->setRole(3);
+                        
+                        // NEED TO DO AN UPDATE
+
+                        
+                    }
+
+                    // Array to pass info needed on login page
                     $responseArr = array(
                         "rowCount" => $stmt->rowCount(),
-                        // "currentUser" => $data
                         "currentUser" => array(            
-                            "name" => $data[0]->getName(),  
-                            "role" => $data[0]->getRole()
+                            "name" => $name,  
+                            "role" => $role
                         )
                     );
-
-
-                    // might want to return entire obj so can change the role for defaults
-                    // OR check here if it's null, then set it?
-                    // if(!isset($data[0]->getRole())){
-                    //     // DO AN UPDATE TO THE USER FOR THEIR ROLE!
-                    // }
 
                     return $responseArr;
                 }
@@ -71,16 +77,17 @@
 
         /**
          * insertUser
-         * Inserts a new attendee account user
+         * Inserts a new user - ATTENDEE ROLE by DEFAULT unless admin changes it
          */
         function insertUser($name, $password){
             try{
-                $query = "INSERT INTO attendee (name,password) 
-                            VALUES (:name, :password)";
+                $query = "INSERT INTO attendee (name,password,role) 
+                            VALUES (:name, :password, :role)";
                 $stmt = $this->db->prepare($query);
                 $stmt->execute(array(
                     ":name" => $name,
-                    "password" => $password
+                    ":password" => $password,
+                    ":role" => 3
                 ));
 
                 return $this->db->lastInsertId();
@@ -178,6 +185,13 @@
         //         die("There was a problem updating user!");
         //     } 
         // }
+
+
+        function deleteUser($idattendee){
+            // CHECK TO SEE ROLE OF USER ISN'T AN ADMIN 
+            // DON'T ALLOW TO DELETE AN ADMIN ACCOUNT
+            
+        }
 
 
         /**

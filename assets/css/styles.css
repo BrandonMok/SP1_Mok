@@ -158,10 +158,41 @@ div#back-arrow-container {
     border: 2px solid #2e3339;
     margin: 1.25em;
     padding: 1.25em;
+    text-align: center;
 }
 .event-headings {
     font-size: 2rem;
     font-weight: bold ;
+}
+.event-timings {
+    font-style: italic;
+    font-weight: bold;
+}
+
+
+/** ADMIN **/
+/* #users-table-container {
+    margin: 3em;
+} */
+#all-users-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+#all-users-table td, #all-users-table th {
+    border: 1px solid #2e3339;
+    padding: 8px;
+}
+#all-users-table tr:nth-child(even){
+    background-color: #f2f2f2;
+}
+#all-users-table tr:hover {
+    background-color: #656f7c;
+}
+#all-users-table th {
+    padding: 1em;
+    text-align: left;
+    background-color: #29E789;
+    color: #2e3339;
 }
 
 

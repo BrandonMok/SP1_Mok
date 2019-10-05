@@ -8,8 +8,16 @@ Registrations.php
 -> put into URL and do a GET for a specific event
 
 
-!!Might want to consider making the header w/nav as a flex layout
+Might want to consider making the header w/nav as a flex layout
 
 
+Admin.php
+	- Table of all users
+	- Each row represents one users
+	- Add two columns at end w/clickable for edit/delete
+	- ADD user option out of table
+	- NEED TO DO A REFRESH AFTERWARDS TO SHOW CHANGES
+	- HAVE A MSG THAT INFORMS IF SUCESSFUL OR NOT
 
 
+Who sets the initial role of new users?
