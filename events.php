@@ -24,10 +24,11 @@
                 if($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'event_manager' || $_SESSION['role'] == 'attendee'){
                     $allEvents = $db->getAllEvents();
 
+                    echo "<p class='section-heading'>Events</p>";
+
                     // Check to see the # of events retrieved
                     if(count($allEvents) > 0){
-                        $eventContainer = "<p class='section-heading'>Events</p>";
-                        $eventContainer .= "<div id='event-container'>";
+                        $eventContainer = "<div id='event-container'>";
                         foreach($allEvents as $event){
                             $eventContainer .= "<a href='./registrations.php'>
                                                     <div class='events'>

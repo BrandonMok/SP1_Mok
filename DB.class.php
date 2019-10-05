@@ -41,18 +41,8 @@
 
                 // Check to see if row was returned, if not then login failed
                 if($stmt->rowCount() > 0){
-                    $user = $data[0];
                     $name = $data[0]->getName();
                     $role = $data[0]->getRole();
-
-                    // If a role is not set (new account), then set to attendee
-                    if(!isset($role) || empty($role)){
-                        $user->setRole(3);
-                        
-                        // NEED TO DO AN UPDATE
-
-                        
-                    }
 
                     // Array to pass info needed on login page
                     $responseArr = array(
@@ -190,7 +180,7 @@
         function deleteUser($idattendee){
             // CHECK TO SEE ROLE OF USER ISN'T AN ADMIN 
             // DON'T ALLOW TO DELETE AN ADMIN ACCOUNT
-            
+
         }
 
 

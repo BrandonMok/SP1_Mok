@@ -171,9 +171,9 @@ div#back-arrow-container {
 
 
 /** ADMIN **/
-/* #users-table-container {
-    margin: 3em;
-} */
+#user-table-container{
+    margin: 1em 1.5em 1em 1.5em;
+}
 #all-users-table {
     border-collapse: collapse;
     width: 100%;
@@ -181,6 +181,10 @@ div#back-arrow-container {
 #all-users-table td, #all-users-table th {
     border: 1px solid #2e3339;
     padding: 8px;
+}
+#all-users-table td a:hover {
+    color: #29E789;
+    font-style: bold;
 }
 #all-users-table tr:nth-child(even){
     background-color: #f2f2f2;
