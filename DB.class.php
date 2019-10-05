@@ -185,6 +185,31 @@
 
 
         /**
+         * getUser
+         * @param $id
+         * Retrieves a specific user from a given ID
+         * Different from verifyUser as will return entire attendee obj
+         */
+        function getUser($id){
+            try{
+                include_once("./classes/Attendee.class.php");
+                $data = array();
+                $query = "SELECT * FROM attendee WHERE idattendee = :id";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute(array(
+                    ":id" => $id
+                ));
+                $data = $stmt->fetchAll(); // retrieves the user
+
+                return $data;
+            }
+            catch(PDOException $e){
+                die("There was a problem getting the user!");
+            }
+        }
+
+
+        /**
          * getALlUsers
          * Returns all users - primarily for the admin
          */
