@@ -24,35 +24,49 @@
                         $id = $_GET['id'];          // In the URL to retrieve the id
                         $action = $_GET['action'];  // In the URL to retrieve the action
 
-                        // Make a request for this specific person to display data
-                        if($action == 'edit'){
-                            // make a a prefilled form w/users values
-                            // allow fields to be editable so user can make changes
-                            // ** Make sure that values were changed before doing the update 
+                        $specificUser = $db->getUser($id)[0]; // get USER
 
-                            
-                            // GET SPECIFIC USER FIRST
+                        if(!empty($specificUser) && count($specificUser) > 0){
+                                // Make a request for this specific person to display data
+                            if($action == 'edit'){
+                                // make a a prefilled form w/users values
+                                // allow fields to be editable so user can make changes
+                                // ** Make sure that values were changed before doing the update 
 
-                            // $editForm = "<form id='user-edit-form' name='user-edit-form' action='./accountManagement.php' method='POST'>
-                            //                 <label>ID</label>
-                            //                 <input type='text'>  
-                            //                 <label>Name</label>
-                            //                 <input type='text'>
-                            //                 <label>Password</label>
-                            //                 <input type='text'>
-                            //                 <label>Role</label>
-                            //                 <input type='text'>
-                            //             </form>";
+                                echo "<h2 class='section-heading'>Edit</h2>";
+
+                                $editForm = "<form id='user-edit-form' name='user-edit-form' action='./accountManagement.php' method='POST'>
+                                                <label>ID</label>
+                                                <input type='text' name='id' placeholder='{$specificUser->getIdAttendee()}'>  
+                                                <label>Name</label>
+                                                <input type='text' name='name' placeholder='{$specificUser->getName()}'>
+                                                <label>Password</label>
+                                                <input type='text' name='password' placeholder='{$specificUser->getPassword()}'>
+                                                <label>Role</label>";
+
+                                
+                                // Don't let admin to change roles -> NEED to have a SUPERADMIN account
+                                if($specificUser->getRole() == "1"){
+                                    $editForm .= "<input type='text' name='role' placeholder='{$specificUser->getRole()}' readonly='readonly'>";
+                                }
+                                else{
+                                    $editForm .= "<input type='text' name='role' placeholder='{$specificUser->getRole()}'>";
+                                }
+
+                                $editForm .= "<input name='submit' id='submit-btn' type='submit' value='Submit'/></form>";
+                                                
+                                echo $editForm;
+                            }
+                            else if($action == "delete"){
 
 
 
 
+                            }
                         }
-                        else if($action == "delete"){
-
-
-
-
+                        else {
+                            // No user found
+                            echo "<h2>ERROR: User now found!</h2>";
                         }
                     }
                     else{
@@ -69,6 +83,20 @@
             else {
                 header("Location: login.php");
                 exit;
+            }
+
+            
+
+
+            // CATCH THE EDIT POST REQUEST
+            if($_SERVER['REQUEST_METHOD'] == 'POST'){
+                // Need to take care of roles 
+                // Should allow both a number and string role to be entered
+                // Catch it and on update, use the number
+
+
+
+                
             }
 
             reusableFooter();

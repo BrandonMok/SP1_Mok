@@ -196,6 +196,7 @@
                 $data = array();
                 $query = "SELECT * FROM attendee WHERE idattendee = :id";
                 $stmt = $this->db->prepare($query);
+                $stmt->setFetchMode(PDO::FETCH_CLASS, "Attendee");
                 $stmt->execute(array(
                     ":id" => $id
                 ));
