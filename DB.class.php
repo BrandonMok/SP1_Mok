@@ -67,6 +67,8 @@
 
         /**
          * insertUser
+         * @param $name
+         * @param $password
          * Inserts a new user - ATTENDEE ROLE by DEFAULT unless admin changes it
          */
         function insertUser($name, $password){
@@ -89,6 +91,8 @@
 
         /**
          * updateUser
+         * @param $data
+         * Updates a user by a provided array of field & values
          */
         function updateUser($data){
             try{
@@ -135,12 +139,24 @@
         }
 
 
+        /**
+         * deleteUser
+         * @param $idattendee
+         * Deletes a user by id
+         */
         function deleteUser($idattendee){
-            // CHECK TO SEE ROLE OF USER ISN'T AN ADMIN 
-            // DON'T ALLOW TO DELETE AN ADMIN ACCOUNT
-            
+            try{
+                $query = "DELETE FROM attendee WHERE idattendee = :id";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute(array(
+                        ":id" => $idattendee
+                ));
 
-
+                return $stmt->rowCount();
+            }
+            catch(PDOException $e){
+                die("There was a problem deleting user!");
+            } 
         }
 
 
@@ -192,6 +208,9 @@
                 die("There was a problem getting all users!");
             } 
         }
+
+
+
 
 
 
