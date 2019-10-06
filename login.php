@@ -107,7 +107,7 @@
 
 
         <?php
-            reusableFooter();
+            // reusableFooter();
         ?>  
     </body>
 </html>

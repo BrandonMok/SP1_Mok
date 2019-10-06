@@ -29,7 +29,7 @@
                 exit;
             }
 
-            reusableFooter();
+            // reusableFooter();
         ?>
     </body>
 </html>

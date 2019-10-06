@@ -97,7 +97,7 @@
 
         <?php
             // Footer
-            reusableFooter();
+            // reusableFooter();
         ?>  
     </body>
 </html>

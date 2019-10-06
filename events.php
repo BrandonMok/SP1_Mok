@@ -56,7 +56,7 @@
 
             
             // FOOTER
-            reusableFooter();
+            // reusableFooter();
         ?>       
     </body>
 </html>
