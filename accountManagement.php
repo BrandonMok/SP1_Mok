@@ -20,86 +20,98 @@
             // ADMINS only
             if(isset($_SESSION['userLoggedIn']) && isset($_SESSION['role'])){
                 if($_SESSION['role'] == 'admin'){
-                    if(isset($_GET['id']) && !empty($_GET['id']) && isset($_GET['action']) && !empty($_GET['action'])) {
-                        $id = $_GET['id'];          // In the URL to retrieve the id
-                        $action = $_GET['action'];  // In the URL to retrieve the action
+                    if(isset($_GET['id']) && !empty($_GET['id'])) {
+                        if(isset($_GET['action']) && !empty($_GET['action'])){
+                            $id = $_GET['id'];          // In the URL to retrieve the id
+                            $action = $_GET['action'];  // In the URL to retrieve the action
 
-                        $specificUser = $db->getUser($id)[0]; // get USER
+                            $specificUser = $db->getUser($id)[0]; // get USER
 
-                        if(!empty($specificUser) && count($specificUser) > 0){
-                                // Make a request for this specific person to display data
-                            if($action == 'edit'){
-                                // make a a prefilled form w/users values
-                                // allow fields to be editable so user can make changes
-                                // ** Make sure that values were changed before doing the update 
+                            if(!empty($specificUser) && count($specificUser) > 0){
+                                if($action == 'edit'){
+                                    // ** Make sure that values were changed before doing the update 
 
-                                echo "<h2 class='section-heading'>Edit</h2>";
+                                    echo "<h2 class='section-heading'>Edit</h2>";
 
-                                $editForm = "<div id='account-form-container'>
-                                                <form id='user-edit-form' name='user-edit-form' action='./accountManagement.php' method='POST'>
-                                                    <label>ID</label>
-                                                    <input type='text' name='id' value='{$specificUser->getIdAttendee()}'><br/>
-                                                    <label>Name</label>
-                                                    <input type='text' name='name' value='{$specificUser->getName()}'><br/>
-                                                    <label>Password</label>
-                                                    <input type='text' name='password' value='{$specificUser->getPassword()}'><br/>
-                                                    <label>Role</label>";
+                                    $editForm = "<div id='account-form-container'>
+                                                    <form id='user-edit-form' name='user-edit-form' action='./accountManagement.php' method='POST'>
+                                                        <label>ID</label>
+                                                        <input type='text' name='id' value='{$specificUser->getIdAttendee()}'><br/>
+                                                        <label>Name</label>
+                                                        <input type='text' name='name' value='{$specificUser->getName()}'><br/>
+                                                        <label>Password</label>
+                                                        <input type='text' name='password' value='{$specificUser->getPassword()}'><br/>
+                                                        <label>Role</label>";
 
-                                
-                                // Don't let admin to change roles -> NEED to have a SUPERADMIN account
-                                if($specificUser->getRole() == "1"){
-                                    $editForm .= "<input type='text' name='role' value='{$specificUser->getRole()}' readonly='readonly'><br/>";
+                                    
+                                    // Don't let admin to change roles -> NEED to have a SUPERADMIN account
+                                    if($specificUser->getRole() == "1"){
+                                        $editForm .= "<input type='text' name='role' value='{$specificUser->getRole()}' readonly='readonly'><br/>";
+                                    }
+                                    else{
+                                        $editForm .= "<input type='text' name='role' value='{$specificUser->getRole()}'><br/>";
+                                    }
+
+                                    $editForm .= "<input name='submit' id='submit-btn' type='submit' value='Submit'/></form></div>";
+                                                    
+                                    echo $editForm;
                                 }
-                                else{
-                                    $editForm .= "<input type='text' name='role' value='{$specificUser->getRole()}'><br/>";
-                                }
+                                else if($action == "delete"){
+                                    echo "<h2 class='section-heading'>Delete</h2>";
 
-                                $editForm .= "<input name='submit' id='submit-btn' type='submit' value='Submit'/></form></div>";
-                                                
-                                echo $editForm;
-                            }
-                            else if($action == "delete"){
-                                echo "<h2 class='section-heading'>Delete</h2>";
+                                    $deleteUserTable = "<div id='user-table-container'> 
+                                                            <table id='all-users-table'>
+                                                                <tr>
+                                                                    <th>ID</th>
+                                                                    <th>Name</th>
+                                                                    <th>Password</th>
+                                                                    <th>Role</th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>{$specificUser->getIdAttendee()}</td>
+                                                                    <td>{$specificUser->getName()}</td>
+                                                                    <td>{$specificUser->getPassword()}</td>
+                                                                    <td>{$specificUser->getRole()}</td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>";
 
-                                $deleteUserTable = "<div id='user-table-container'> 
-                                                        <table id='all-users-table'>
-                                                            <tr>
-                                                                <th>ID</th>
-                                                                <th>Name</th>
-                                                                <th>Password</th>
-                                                                <th>Role</th>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>{$specificUser->getIdAttendee()}</td>
-                                                                <td>{$specificUser->getName()}</td>
-                                                                <td>{$specificUser->getPassword()}</td>
-                                                                <td>{$specificUser->getRole()}</td>
-                                                            </tr>
-                                                        </table>
+                                    echo $deleteUserTable;
+
+
+                                    // Yes & no options to delete action
+                                    echo "<h2 class='section-heading'>Are you sure you want to delete the selected account?</h2><br/>";
+                                    $optionDiv = "<div id='confirm-delete-container' class='center-element'>
+                                                        <a href='./accountManagement.php?id={$specificUser->getIdAttendee()}&action=delete&confirm=yes'>
+                                                            <div class='delete-btn' id='confirm-delete-btn'>Yes</div>
+                                                        </a>
+                                                        <a href='./accountManagement.php?id={$specificUser->getIdAttendee()}&action=delete&confirm=no'>
+                                                            <div class='delete-btn' id='deny-delete-btn'>No</div>
+                                                        </a>
                                                     </div>";
-
-                                echo $deleteUserTable;
-
-                                // Display the info or just delete it from admin page and process here?
-                                // If use this page, have it add a $_GET var if chose yes or no to deleting!
-
-                                // $confirmationDiv = "<div id='confirm-delete-container'>
-                                //                         <h2 class='section-heading'>Are you sure you want to delete the selected account?</h2>
-                                                        
-                                //                     </div>";
+                                    echo $optionDiv;
+                                }
                             }
+                            else {
+                                // No user found
+                                echo "<h2>ERROR: User now found!</h2>";
+                            }
+
+                        }
+                    }
+                    else if(isset($_GET['action']) && !empty($_GET['action'])) {
+                        // If no ID was passed, but an action was -> new user button was clicked
+                        if($_GET['action'] == "add"){
+                            echo "<h2 class='section-heading'>Add</h2>";
+                            
                         }
                         else {
-                            // No user found
-                            echo "<h2>ERROR: User now found!</h2>";
+                            // Redirect back to admin page if id wasn't set and action doesn't = add
+                            header("Location: admin.php");
+                            exit;
                         }
                     }
-                    else{
-                        // if user is logged in and an admin, but the ID and ACTION aren't in the URL, redirect back to admin page
-                        header("Location: admin.php");
-                        exit;
-                    }
-                }
+                } // end of admin role check
                 else {
                    header("Location: events.php");
                    exit;
@@ -119,12 +131,14 @@
             //     // Should allow both a number and string role to be entered
             //     // Catch it and on update, use the number
 
+                    // have a catch to $_GET on the url for confirm = value (yes/no)
+                    // then redirect back to admin.php
 
 
                 
             // }
 
-            // reusableFooter();
+            reusableFooter();
         ?>
     </body>
 </html>       

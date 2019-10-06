@@ -27,6 +27,10 @@
 
                     echo "<p class='section-heading'>Admin</p>";
 
+                    echo "<a href='./accountManagement.php?action=add'>
+                                <div id='add-user-btn'>Add User</div>
+                            </a>";
+
                     $allUsers = $db->getAllUsers();
                     if(count($allUsers) > 0){
                         // display table

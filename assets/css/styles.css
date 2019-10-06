@@ -199,6 +199,39 @@ div#back-arrow-container {
     color: #2e3339;
 }
 
+/** Admin - account management (page w/specific chosen user) */
+/* Add */
+#add-user-btn {
+    margin: 0 1.5em;
+    border: 2px solid #29E789;
+    background-color: #29E789;
+    text-align: center;
+    font-size: 1.2rem;
+    padding: .5em;
+    cursor: pointer;
+}
+#add-user-btn:hover {
+    font-weight: bold;
+    border: 2px solid #2e3339;
+}
+/* Delete */
+#confirm-delete-container {
+    margin-top: 5em;
+}
+.delete-btn {
+    background-color: #29E789;
+    padding: .5em;
+    font-size: 1.1rem;
+    border: 2px solid #29E789;
+    display: inline-block;
+    text-align: center;
+    width: 10em;
+}
+.delete-btn:hover {
+    border: 2px solid #2e3339;
+    font-weight: bold;
+}
+
 
 
 
