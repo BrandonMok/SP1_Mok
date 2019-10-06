@@ -90,96 +90,56 @@
         /**
          * updateUser
          */
-        // function updateUser($data){
-        //     try{
-        //         $query = "UPDATE attendee SET ";
-        //         // $items = array();
-        //         // $types = "";
-        //         $updateId = 0; 
-        //         // $numRows = 0;
+        function updateUser($data){
+            try{
+                $query = "UPDATE attendee SET ";
+                $updateId = 0; 
+                $updateArr = array();
 
-        //         // foreach($data as $k => $v){
-        //         //     switch($k){
-        //         //         case "name":
-        //         //             $query .= "name = ?,";
-        //         //             $items[] = &$v;
-        //         //             $types .= "s";
-        //         //             break;
-        //         //         case "password":
-        //         //             $query .= "password = ?,";
-        //         //             $items[] = &$v;
-        //         //             $types .= "s";
-        //         //             break;
-        //         //         case "role":
-        //         //             $query .= "role = ?,";
-        //         //             $items[] = intval($v);
-        //         //             $types .= "i";
-        //         //             break;
-        //         //         case "id":                      // going to pass in id too
-        //         //             $updateId = intval($k);
-        //         //             break;
-        //         //     }
-        //         // }
+                foreach($data as $k => $v){
+                    switch($k){
+                        case "name":
+                            $query .= "name = :name,";
+                            $updateArr[":name"] = $v;
+                            break;
+                        case "password":
+                            $query .= "password = :password,";
+                            $updateArr[":password"] = $v;
+                            break;
+                        case "role":
+                            $query .= "role = :role,";
+                            $updateArr[":role"] = $v;
+                            break;
+                        case "id":    
+                            $updateId = intval($v);
+                            break;
+                    }
+                }
+                $query = trim($query, ",");
+                $query .= " WHERE idattendee = :id";
+                $updateArr[":id"] = $updateId;
 
-        //         // $query = trim($query, ",");
-        //         // $query .= " WHERE idattendee = ?";
-        //         // $types .= "i"; // for the above where question mark 
-        //         // $items[] = &$updateId;
-    
-        //         // if($stmt = $this->dbh->prepare($query)){
-        //         //     // marge items and types
-        //         //     $refArr = array_merge(array($types), $items);
-        //         //     $ref = new ReflectionClass('mysqli_stmt');
-        //         //     $method = $ref->getMethod("bind_param");
-        //         //     $method->invokeArgs($stmt, $refArr);
-    
-        //         //     $stmt->execute();
-        //         //     $stmt->fetchAll();
-        //         //     $numRows = $stmt->affected_rows;
-        //         // }            
-    
-        //         // return $numRows;
+                $stmt = $this->db->prepare($query);
 
+                // Bind all params 
+                foreach($updateArr as $k => $v){
+                    $stmt->bindParam($k, $v);
+                }
+                $stmt->execute($updateArr);
 
-        //         $updateArr = array();
-        //         foreach($data as $k => $v){
-        //             switch($k){
-        //                 case "name":
-        //                     $query .= "name = ?,";
-        //                     $updateArr[] = array("name" => &$v);
-        //                     break;
-        //                 case "password":
-        //                     $query .= "password = ?,";
-        //                     $updateArr[] = array("password" => &$v);
-        //                     break;
-        //                 case "role":
-        //                     $query .= "role = ?,";
-        //                     $updateArr[] = array("role" => &$v);
-        //                     break;
-        //                 case "id":    
-        //                     $updateId = intval($k);
-        //                     break;
-        //             }
-        //         }
-        //         $query = trim($query, ",");
-        //         $query .= " WHERE idattendee = ?";
-        //         $updateArr[] = array("id" => $updateId);
-
-
-        //         $stmt = $this->db->prepare($query); 
-        //         $stmt->execute($updateArr); // array w/values to binds
-
-        //         return $stmt->affected_rows; // return the # of rows affected
-        //     }
-        //     catch(PDOException $e){
-        //         die("There was a problem updating user!");
-        //     } 
-        // }
+                return $stmt->rowCount(); // return the # of rows affected
+            }
+            catch(PDOException $e){
+                die("There was a problem updating user!");
+            } 
+        }
 
 
         function deleteUser($idattendee){
             // CHECK TO SEE ROLE OF USER ISN'T AN ADMIN 
             // DON'T ALLOW TO DELETE AN ADMIN ACCOUNT
+            
+
 
         }
 
