@@ -57,6 +57,29 @@
                                     echo $editForm;
                                 }
                                 else if($action == "delete"){
+                                    // if delete option was chosen, check for confirm variable in URL that's set when clicking Yes/No
+                                    if(isset($_GET['confirm']) && !empty($_GET['confirm'])){
+                                        $decision = $_GET['confirm'];
+
+                                        if($decision == 'yes'){
+                                            $delete = $db->deleteUser($specificUser->getIdAttendee());
+
+                                            if($delete > 0){ // if rowcount wasn't 0 -> delete user
+                                                header('Location: admin.php');
+                                                exit;  
+                                            }
+                                            else{
+                                                // ERROR w/the delete occured
+                                                echo "<h2>Deleting selected user failed!</h2>";
+                                            }
+                                        }
+                                        else{
+                                            // user chose NO to deleting user
+                                            header("Location: admin.php");
+                                            exit;
+                                        }
+                                    }
+
                                     echo "<h2 class='section-heading'>Delete</h2>";
 
                                     $deleteUserTable = "<div id='user-table-container'> 
@@ -96,7 +119,6 @@
                                 // No user found
                                 echo "<h2>ERROR: User now found!</h2>";
                             }
-
                         }
                     }
                     else if(isset($_GET['action']) && !empty($_GET['action'])) {
@@ -111,12 +133,12 @@
                             exit;
                         }
                     }
-                } // end of admin role check
+                }// end of admin role check
                 else {
                    header("Location: events.php");
                    exit;
                 }
-            }
+            }// end of if loggedin
             else {
                 header("Location: login.php");
                 exit;
@@ -126,17 +148,17 @@
 
 
             // // CATCH THE EDIT POST REQUEST
-            // if($_SERVER['REQUEST_METHOD'] == 'POST'){
-            //     // Need to take care of roles 
-            //     // Should allow both a number and string role to be entered
-            //     // Catch it and on update, use the number
+            if($_SERVER['REQUEST_METHOD'] == 'POST'){
+                // Need to take care of roles 
+                // Should allow both a number and string role to be entered
+                // Catch it and on update, use the number
 
                     // have a catch to $_GET on the url for confirm = value (yes/no)
                     // then redirect back to admin.php
 
 
                 
-            // }
+            }
 
             reusableFooter();
         ?>
