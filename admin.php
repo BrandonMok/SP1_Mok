@@ -26,7 +26,7 @@
 
                     /* -------------------- Users -------------------- */
                     echo "<a href='./accountManagement.php?action=add'>
-                                <div id='add-btn'>Add User</div>
+                                <div class='add-btn'>Add User</div>
                             </a>";
 
                     $allUsers = $db->getAllUsers();
@@ -65,7 +65,7 @@
                         /* -------------------- VENUES -------------------- */
                         echo "<p class='section-heading'>Venues</p>";
                         echo "<a href=''>
-                                    <div id='add-btn'>Add Venue</div>
+                                    <div class='add-btn'>Add Venue</div>
                                 </a>";
 
                         $venueTable = "<div class='admin-table-container'>

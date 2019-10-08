@@ -20,6 +20,7 @@
             } 
         }
 
+        /** -------------------- USERS -------------------- */
         /**
          * VerifyUser
          * Takes username and password from login form and checks with records already in db
@@ -62,6 +63,54 @@
             catch(PDOException $e){
                 die("There was a problem logging user in!");
             } 
+        }
+
+        /**
+         * getALlUsers
+         * Returns all users - primarily for the admin
+         */
+        function getAllUsers(){
+            try{
+                include_once("./classes/Attendee.class.php"); // include the attendee class file
+
+                $data = array();
+                $query = "SELECT * FROM attendee";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute();
+
+                $stmt->setFetchMode(PDO::FETCH_CLASS, "Attendee");
+                $data = $stmt->fetchAll();
+
+                return $data;
+            }
+            catch(PDOException $e){
+                die("There was a problem getting all users!");
+            } 
+        }
+
+        /**
+         * getUser
+         * @param $id
+         * Retrieves a specific user from a given ID
+         * Different from verifyUser as will return entire attendee obj
+         */
+        function getUser($id){
+            try{
+                include_once("./classes/Attendee.class.php");
+                $data = array();
+                $query = "SELECT * FROM attendee WHERE idattendee = :id";
+                $stmt = $this->db->prepare($query);
+                $stmt->setFetchMode(PDO::FETCH_CLASS, "Attendee");
+                $stmt->execute(array(
+                    ":id" => $id
+                ));
+                $data = $stmt->fetchAll(); // retrieves the user
+
+                return $data;
+            }
+            catch(PDOException $e){
+                die("There was a problem getting the user!");
+            }
         }
 
 
@@ -138,7 +187,6 @@
             } 
         }
 
-
         /**
          * deleteUser
          * @param $idattendee
@@ -159,62 +207,12 @@
             } 
         }
 
-
-        /**
-         * getUser
-         * @param $id
-         * Retrieves a specific user from a given ID
-         * Different from verifyUser as will return entire attendee obj
-         */
-        function getUser($id){
-            try{
-                include_once("./classes/Attendee.class.php");
-                $data = array();
-                $query = "SELECT * FROM attendee WHERE idattendee = :id";
-                $stmt = $this->db->prepare($query);
-                $stmt->setFetchMode(PDO::FETCH_CLASS, "Attendee");
-                $stmt->execute(array(
-                    ":id" => $id
-                ));
-                $data = $stmt->fetchAll(); // retrieves the user
-
-                return $data;
-            }
-            catch(PDOException $e){
-                die("There was a problem getting the user!");
-            }
-        }
-
-
-        /**
-         * getALlUsers
-         * Returns all users - primarily for the admin
-         */
-        function getAllUsers(){
-            try{
-                include_once("./classes/Attendee.class.php"); // include the attendee class file
-
-                $data = array();
-                $query = "SELECT * FROM attendee";
-                $stmt = $this->db->prepare($query);
-                $stmt->execute();
-
-                $stmt->setFetchMode(PDO::FETCH_CLASS, "Attendee");
-                $data = $stmt->fetchAll();
-
-                return $data;
-            }
-            catch(PDOException $e){
-                die("There was a problem getting all users!");
-            } 
-        }
+        
+ 
 
 
 
-
-
-
-        /** EVENTS */
+        /** -------------------- EVENTS -------------------- */
         /**
          * getAllEvents
          * Retrieves all available events
@@ -239,6 +237,7 @@
         }
         
 
+        /* -------------------- VENUES -------------------- */
         /**
          * getAllVenues
          * Retrieves all available venues
@@ -261,5 +260,121 @@
                 die("There was a problem getting all venues!");
             } 
         }
-    }
+
+        /**
+         * getVenue
+         * @param $id
+         * Retrieves a single venue
+         */
+        function getVenue($id){
+            try{
+                include_once("./classes/Venue.class.php");
+                $data = array();
+                $query = "SELECT * FROM venue WHERE idvenue = :id";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute(array(
+                    ":id" => $id
+                ));
+
+                $stmt->setFetchMode(PDO::FETCH_CLASS, "Venue");
+                $data = $stmt->fetchAll();
+
+                return $data;
+            }
+            catch(PDOException $e){
+                die("There was a problem getting venue!");
+            } 
+        }
+
+         /**
+         * addVenue()
+         * @param $name
+         * @param $capacity
+         * Adds a new venue
+         */
+        function addVenue($name, $capacity){
+            try{
+                $query = "INSERT INTO venue (name, capacity)
+                            VALUES (:name, :capacity)";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute(array(
+                    ":name" => $name,
+                    ":capacity" => $capacity
+                ));
+                return $stmt->rowCount();
+            }
+            catch(PDOException $e){
+                die("There was a problem adding venue!");
+            } 
+        }
+
+        /**
+         * editVenue
+         * @param $data
+         * Edits/Updates a venue given an array of data
+         */
+        function updateVenue($data){
+            try{
+                $query = "UPDATE venue SET ";
+                $updateId = 0; 
+                $updateArr = array();
+
+                foreach($data as $k => $v){
+                    switch($k){
+                        case "name":
+                            $query .= "name = :name,";
+                            $updateArr[":name"] = $v;
+                            break;
+                        case "capacity":
+                            $query .= "capacity = :capacity,";
+                            $updateArr[":capacity"] = $v;
+                            break;
+                        case "idvenue":    
+                            $updateId = intval($v);
+                            break;
+                    }
+                }
+                $query = trim($query, ",");
+                $query .= " WHERE idvenue = :id";
+                $updateArr[":id"] = $updateId;
+
+                $stmt = $this->db->prepare($query);
+
+                // Bind all params 
+                foreach($updateArr as $k => $v){
+                    $stmt->bindParam($k, $v);
+                }
+                $stmt->execute($updateArr);
+
+                return $stmt->rowCount(); // return the # of rows affected
+            }
+            catch(PDOException $e){
+                die("There was a problem updating venue!");
+            } 
+        }
+        
+        /**
+         * deleteVenue
+         * @param $id
+         * Deletes a venue by ID
+         */
+        function deleteVenue($id){
+            try{
+                $query = "DELETE FROM venue WHERE idvenue = :id";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute(array(
+                    ":id" => $id
+                ));
+
+                return $stmt->rowCount();
+            }
+            catch(PDOException $e){
+                die("There was a problem deleting venue!");
+            } 
+        }
+
+        
+
+
+    }// end class
 

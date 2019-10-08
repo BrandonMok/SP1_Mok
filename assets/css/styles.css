@@ -203,7 +203,7 @@ div#back-arrow-container {
 
 /** Admin - account management (page w/specific chosen user) */
 /* Add */
-#add-btn {
+.add-btn {
     margin: 0 1.5em;
     border: 2px solid #29E789;
     background-color: #29E789;

@@ -1,13 +1,11 @@
 - Need to do something with venue since on events it comes back as a number
-	- Allowed to get all info at beginning on login?
-
 
 Registrations.php
 -> put into URL and do a GET for a specific event
 
+VenueManagement.php
+	- Consider having table be done in a utility function?
+		- So event manager can have same table, but ONLY theirs? as another check
 
 
-AccountManagement.php
-- Add user 
-	- functionality (Tring to mash w/edit so form can be resuable
 	

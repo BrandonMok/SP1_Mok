@@ -28,14 +28,16 @@
 
                             $specificUser = $db->getUser($id)[0]; // get USER
 
-                            if(!empty($specificUser) && count($specificUser) > 0){
+                            // ONLY proceed if user was found
+                            if(!empty($specificUser) && isset($specificUser)){
+                                // EDIT
                                 if($action == 'edit'){ 
 
                                     echo "<h2 class='section-heading'>Edit</h2>";
 
                                     userManagementForm();
                                 }
-                                else if($action == "delete"){
+                                else if($action == "delete"){ // DELETE
                                     // if delete option was chosen, check for confirm variable in URL that's set when clicking Yes/No
                                     if(isset($_GET['confirm']) && !empty($_GET['confirm'])){
                                         $decision = $_GET['confirm'];
@@ -61,8 +63,8 @@
 
                                     echo "<h2 class='section-heading'>Delete</h2>";
 
-                                    $deleteUserTable = "<div id='user-table-container'> 
-                                                            <table id='all-users-table'>
+                                    $deleteUserTable = "<div class='admin-table-container'> 
+                                                            <table class='admin-table'>
                                                                 <tr>
                                                                     <th>ID</th>
                                                                     <th>Name</th>
