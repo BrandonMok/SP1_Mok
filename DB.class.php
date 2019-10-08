@@ -224,7 +224,7 @@
                 include_once("./classes/Event.class.php");   
 
                 $data = array();
-                $query = 'SELECT * FROM event';
+                $query = "SELECT * FROM event";
                 $stmt = $this->db->prepare($query);
                 $stmt->execute();
 
@@ -235,6 +235,30 @@
             }
             catch(PDOException $e){
                 die("There was a problem getting all events!");
+            } 
+        }
+        
+
+        /**
+         * getAllVenues
+         * Retrieves all available venues
+         */
+        function getAllVenues(){
+            try{
+                include_once("./classes/Venue.class.php");
+
+                $data = array();
+                $query = "SELECT * FROM venue";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute();
+
+                $stmt->setFetchMode(PDO::FETCH_CLASS, "Venue");
+                $data = $stmt->fetchAll();
+
+                return $data;
+            }
+            catch(PDOException $e){
+                die("There was a problem getting all venues!");
             } 
         }
     }

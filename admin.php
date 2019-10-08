@@ -19,23 +19,21 @@
 
             // Admins and event managers only!
             // BUT Admins do everything
-            // Event managers only specific things, so check roles
             if(isset($_SESSION['userLoggedIn']) && isset($_SESSION['role'])){
                 if($_SESSION['role'] == 'admin'){
                     // ADMIN ONLY
-                    // ADD/EDIT/DELETE/VIEW USERS
-
                     echo "<p class='section-heading'>Admin</p>";
 
+                    /* -------------------- Users -------------------- */
                     echo "<a href='./accountManagement.php?action=add'>
-                                <div id='add-user-btn'>Add User</div>
+                                <div id='add-btn'>Add User</div>
                             </a>";
 
                     $allUsers = $db->getAllUsers();
                     if(count($allUsers) > 0){
                         // display table
-                        $tableSTR = "<div id='user-table-container'>
-                                        <table id='all-users-table'>
+                        $tableSTR = "<div class='admin-table-container'>
+                                        <table class='admin-table'>
                                             <tr>
                                                 <th>ID</th>
                                                 <th>Name</th>
@@ -62,6 +60,42 @@
 
                         $tableSTR .= "</table></div>";
                         echo $tableSTR;
+
+
+                        /* -------------------- VENUES -------------------- */
+                        echo "<p class='section-heading'>Venues</p>";
+                        echo "<a href=''>
+                                    <div id='add-btn'>Add Venue</div>
+                                </a>";
+
+                        $venueTable = "<div class='admin-table-container'>
+                                        <table class='admin-table'>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Name</th>
+                                                <th>Capacity</th>
+                                                <th>Edit</th>
+                                                <th>Delete</th>
+                                            </tr>";
+                                            
+                        $allVenues = $db->getAllVenues();   // get all venues
+
+                        if(count($allVenues) > 0){
+                            foreach($allVenues as $v){
+                                $venueTable .= "<tr>    
+                                                    <td>{$v->getIdVenue()}</td>
+                                                    <td>{$v->getName()}</td>
+                                                    <td>{$v->getCapacity()}</td>
+                                                    <td><a href=''>Edit</a></td>
+                                                    <td><a href=''>Delete</a></td>
+                                                </tr>";
+                            }
+                            $venueTable .= "</table></div>";
+                            echo $venueTable;
+                        }
+                        else{
+                            echo "<h2>No venues available!</h2>";
+                        }
                     }                    
                 }
                 else if($_SESSION['role'] == 'event_manager'){
