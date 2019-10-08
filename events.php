@@ -53,10 +53,6 @@
                 header("Location: login.php");
                 exit;
             }
-
-            
-            // FOOTER
-            // reusableFooter();
         ?>       
     </body>
 </html>

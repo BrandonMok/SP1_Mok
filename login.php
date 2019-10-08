@@ -104,10 +104,5 @@
                 }// end if
             ?>
         </div>
-
-
-        <?php
-            // reusableFooter();
-        ?>  
     </body>
 </html>

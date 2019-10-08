@@ -2,8 +2,9 @@
     session_name("Mok_Project1");
     session_start();
 
-    require_once('DB.class.php');
-    require_once('utilities.php');
+    require_once("DB.class.php");
+    require_once("utilities.php");
+    require_once("validations.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,33 +29,11 @@
                             $specificUser = $db->getUser($id)[0]; // get USER
 
                             if(!empty($specificUser) && count($specificUser) > 0){
-                                if($action == 'edit'){
-                                    // ** Make sure that values were changed before doing the update 
+                                if($action == 'edit'){ 
 
                                     echo "<h2 class='section-heading'>Edit</h2>";
 
-                                    $editForm = "<div id='account-form-container'>
-                                                    <form id='user-edit-form' name='user-edit-form' action='./accountManagement.php' method='POST'>
-                                                        <label>ID</label>
-                                                        <input type='text' name='id' value='{$specificUser->getIdAttendee()}'><br/>
-                                                        <label>Name</label>
-                                                        <input type='text' name='name' value='{$specificUser->getName()}'><br/>
-                                                        <label>Password</label>
-                                                        <input type='text' name='password' value='{$specificUser->getPassword()}'><br/>
-                                                        <label>Role</label>";
-
-                                    
-                                    // Don't let admin to change roles -> NEED to have a SUPERADMIN account
-                                    if($specificUser->getRole() == "1"){
-                                        $editForm .= "<input type='text' name='role' value='{$specificUser->getRole()}' readonly='readonly'><br/>";
-                                    }
-                                    else{
-                                        $editForm .= "<input type='text' name='role' value='{$specificUser->getRole()}'><br/>";
-                                    }
-
-                                    $editForm .= "<input name='submit' id='submit-btn' type='submit' value='Submit'/></form></div>";
-                                                    
-                                    echo $editForm;
+                                    userManagementForm();
                                 }
                                 else if($action == "delete"){
                                     // if delete option was chosen, check for confirm variable in URL that's set when clicking Yes/No
@@ -125,7 +104,8 @@
                         // If no ID was passed, but an action was -> new user button was clicked
                         if($_GET['action'] == "add"){
                             echo "<h2 class='section-heading'>Add</h2>";
-                            
+
+                            userManagementForm();
                         }
                         else {
                             // Redirect back to admin page if id wasn't set and action doesn't = add
@@ -147,20 +127,17 @@
             
 
 
-            // // CATCH THE EDIT POST REQUEST
+            // CATCH THE POST REQUESTS
             if($_SERVER['REQUEST_METHOD'] == 'POST'){
-                // Need to take care of roles 
-                // Should allow both a number and string role to be entered
-                // Catch it and on update, use the number
-
-                    // have a catch to $_GET on the url for confirm = value (yes/no)
-                    // then redirect back to admin.php
-
-
-                
+                if(isset($_GET["action"]) && !empty($_GET["action"])){
+                    if($_GET["action"] == "edit"){
+                        editFormPOST();
+                    }
+                    else if($_GET["action"] == "add") {
+                        addFormPOST();
+                    }
+                }
             }
-
-            // reusableFooter();
         ?>
     </body>
 </html>       

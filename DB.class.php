@@ -71,7 +71,7 @@
          * @param $password
          * Inserts a new user - ATTENDEE ROLE by DEFAULT unless admin changes it
          */
-        function insertUser($name, $password){
+        function insertUser($name, $password, $role = 3){
             try{
                 $query = "INSERT INTO attendee (name,password,role) 
                             VALUES (:name, :password, :role)";
@@ -79,7 +79,7 @@
                 $stmt->execute(array(
                     ":name" => $name,
                     ":password" => $password,
-                    ":role" => 3
+                    ":role" => $role
                 ));
 
                 return $this->db->lastInsertId();
@@ -221,7 +221,7 @@
          */
         function getAllEvents(){
             try{
-                include_once("./classes/Event.class.php");
+                include_once("./classes/Event.class.php");   
 
                 $data = array();
                 $query = 'SELECT * FROM event';

@@ -1,17 +1,6 @@
 <?php 
     require_once("DB.class.php");
     $db = new DB(); // One DB object to use 
-    
-    // DON'T WANT USERS TO GO TO THIS PAGE!!
-    // if(isset($_SESSION['userLoggedIn'])){
-    //     header("Location: events.php");
-    //     exit;
-    // }
-    // else{
-    //     header("Location: login.php");
-    //     exit;
-    // }
-
 
 
     /**
@@ -77,22 +66,177 @@
         }
     }
 
-    /**
-     * reusableFooter
-     * Pass in a value to use login specific footer
-     * Don't pass value, use regular footer and its styling
-     */
-    function reusableFooter(){ 
-        if(isset($_SESSION['role']) && !empty($_SESSION['role'])){
-            $footerSTR = "<footer></footer>";
-            echo $footerSTR;
-        }
-        else{
-            $footerSTR = "<footer class='footer-login'></footer>";
-            echo $footerSTR;
+
+
+    function userManagementForm(){
+        global $db;
+
+        if(isset($_GET['action'])){
+            if($_GET['action'] == "edit"){
+                $user = $db->getUser($_GET['id'])[0]; 
+                $editForm = "<div id='account-form-container'>
+                                <form id='user-edit-form' name='user-edit-form' action='./accountManagement.php?id={$user->getIdAttendee()}&action=edit' method='POST'>
+                                    <div id='user-edit-labels'>
+                                        <label>ID</label><br/>
+                                        <label>Name</label><br/>
+                                        <label>Password</label><br/>
+                                        <label>Role</label><br/>                                                   
+                                    </div>
+                                    <div id='user-edit-inputs'>
+                                        <input type='text' name='id' value='{$user->getIdAttendee()}' readonly='readonly'><br/>
+                                        <input type='text' name='name' value='{$user->getName()}'><br/>
+                                        <input type='text' name='password'><br/>";
+
+                
+                // Don't let admin to change roles -> NEED to have a SUPERADMIN account
+                if($user->getRole() == "1"){
+                    $editForm .= "<input type='text' name='role' value='{$user->getRole()}' readonly='readonly'><br/></div>";
+                }
+                else{
+                    $editForm .= "<input type='text' name='role' value='{$user->getRole()}'><br/></div><br/>";
+                }
+
+
+                $editForm .= "<input name='submit' id='submit-btn' type='submit' value='Submit'/></form></div>";
+                                
+                echo $editForm;
+            }
+            else if($_GET['action'] == "add"){
+                $addForm = "<div id='account-form-container'>
+                            <form id='user-edit-form' name='user-edit-form' action='./accountManagement.php?&action=add' method='POST'>
+                                    <div id='user-edit-labels'>
+                                        <label>ID</label><br/>
+                                        <label>Name</label><br/>
+                                        <label>Password</label><br/>
+                                        <label>Role</label><br/>                                                   
+                                    </div>
+                                    <div id='user-edit-inputs'>
+                                        <input type='text' name='id' readonly='readonly' placeholder='Auto-increment'><br/>
+                                        <input type='text' name='name'><br/>
+                                        <input type='text' name='password'><br/>
+                                        <input type='text' name='role'><br/>
+                                    </div><br/>";
+
+                $addForm .= "<input name='submit' id='submit-btn' type='submit' value='Submit'/></form></div>";
+                                
+                echo $addForm;
+            }
         }
     }
 
+    /** 
+     * editFormPOST()
+     * POST processing after clicking submit on the edit page
+     */
+    function editFormPOST(){
+        global $db;
+        $name = sanitizeString($_POST["name"]);
+        $password = sanitizeString($_POST["password"]);
+        $role = sanitizeString($_POST["role"]);
+
+        $specificUser = $db->getUser($_GET["id"])[0]; 
+        
+        $changesArray = array();
+    
+        if(!empty($name) && isset($name) && $name != $specificUser->getName()){
+            $changesArray["name"] = $name;
+        }
+        if(!empty($password) && isset($password) && $password != ""){
+            $password = hash('sha256', $password);
+            $changesArray["password"] = $password;
+        }
+        if(!empty($role) && isset($role) && $role != $specificUser->getRole()){
+            if($role != $specificUser->getRole()){
+                switch($role){
+                    case 1: 
+                    case "admin":
+                        $changesArray["role"] = 1;
+                        break;
+                    case 2:
+                    case "event_manager":
+                    case "event manager":
+                        $changesArray["role"] = 2;
+                        break;
+                    case 3:
+                    case "attendee":
+                        $changesArray["role"] = 3;
+                        break;
+                }
+            }
+        }
+
+        // If changes were made!
+        if(!empty($changesArray)){
+            $changesArray["id"] = $specificUser->getIdAttendee();
+            $rowCount = $db->updateUser($changesArray);
+
+            if($rowCount > 0){
+                header("Location: admin.php");
+                exit;
+            }
+            else{
+                echo "<p class='form-error-text '>** Editing user failed!</p>";
+            }
+        }
+        else{
+            echo "<p class='form-error-text '>** No changes made to user!</p>";
+        }
+    }
+
+
+    /**
+     * addFormPOST()
+     * POST processing after clicking submit on ADD user form
+     */
+    function addFormPOST(){
+        global $db;
+        $name = sanitizeString($_POST["name"]);
+        $password = sanitizeString($_POST["password"]);
+        $role = sanitizeString($_POST["role"]);
+
+        $changesArray = array();
+    
+        if(!empty($name) && isset($name)){
+            $changesArray["name"] = $name;
+        }
+        if(!empty($password) && isset($password) && $password != ""){
+            $password = hash('sha256', $password);
+            $changesArray["password"] = $password;
+        }
+        if(!empty($role) && isset($role)){
+            switch($role){
+                case 1: 
+                case "admin":
+                    $changesArray["role"] = 1;
+                    break;
+                case 2:
+                case "event_manager":
+                case "event manager":
+                    $changesArray["role"] = 2;
+                    break;
+                case 3:
+                case "attendee":
+                    $changesArray["role"] = 3;
+                    break;
+            }
+        }
+
+        // If changes were made!
+        if(!empty($changesArray)){
+            $rowCount = $db->insertUser($changesArray["name"], $changesArray["password"], $changesArray["role"]);
+
+            if($rowCount > 0){
+                header("Location: admin.php");
+                exit;
+            }
+            else{
+                echo "<p class='form-error-text '>** Editing user failed!</p>";
+            }
+        }
+        else{
+            echo "<p class='form-error-text '>** No changes made to user!</p>";
+        }
+    }
 
 
 

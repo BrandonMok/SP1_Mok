@@ -2,8 +2,9 @@
     session_name("Mok_Project1");
     session_start();
 
-    require_once('DB.class.php');
-    require_once('utilities.php');
+    require_once("DB.class.php");
+    require_once("utilities.php");
+    require_once("validations.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -94,10 +95,5 @@
                 </a>
             </div>
         </div>
-
-        <?php
-            // Footer
-            // reusableFooter();
-        ?>  
     </body>
 </html>

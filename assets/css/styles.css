@@ -107,6 +107,8 @@ form#login-form > label, form#account-register-form > label {
     border-style: outset;
     border-radius: .5em;
     text-shadow: none;
+    font-size: 1.3em;
+    margin-top: .5em;
 }
 #submit-btn:hover {
     cursor: pointer;
@@ -169,6 +171,7 @@ div#back-arrow-container {
 }
 
 
+
 /** ADMIN **/
 #user-table-container{
     margin: 1em 1.5em 1em 1.5em;
@@ -213,6 +216,34 @@ div#back-arrow-container {
     font-weight: bold;
     border: 2px solid #2e3339;
 }
+/** EDIT */
+#account-form-container {
+    background-color: #aeb1b6;
+    border-radius: 1em;
+    margin: 0 25%;
+    padding: 2em 0;
+    text-align: center;
+}
+#user-edit-form > div label {
+    font-size: 1.4rem;
+}
+#user-edit-form > div input {
+    font-size: 1.2em;
+}
+#user-edit-labels {
+    display: inline-block;
+    text-align: left;
+}
+#user-edit-inputs {
+    margin-left: 1em;
+    display: inline-block;
+}
+
+
+
+
+
+
 /* Delete */
 #confirm-delete-container {
     margin-top: 5em;

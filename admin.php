@@ -2,8 +2,8 @@
     session_name("Mok_Project1");
     session_start();
 
-    require_once('DB.class.php');
-    require_once('utilities.php');
+    require_once("DB.class.php");
+    require_once("utilities.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -77,8 +77,6 @@
                 header('Location: login.php');
                 exit;
             }
-
-            // reusableFooter();
         ?>  
     </body>
 </html>
