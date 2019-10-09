@@ -212,7 +212,7 @@ div#back-arrow-container {
     padding: .5em;
     cursor: pointer;
 }
-#add-btn:hover {
+.add-btn:hover {
     font-weight: bold;
     border: 2px solid #2e3339;
 }

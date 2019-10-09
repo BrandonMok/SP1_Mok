@@ -126,10 +126,107 @@
             if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 if(isset($_GET["action"]) && !empty($_GET["action"])){
                     if($_GET["action"] == "edit"){
-                        editFormPOST();
+                        // editFormPOST();
+                        $name = sanitizeString($_POST["name"]);
+                        $password = sanitizeString($_POST["password"]);
+                        $role = sanitizeString($_POST["role"]);
+
+                        $specificUser = $db->getUser($_GET["id"])[0]; 
+                        
+                        $changesArray = array();
+                    
+                        if(!empty($name) && isset($name) && $name != $specificUser->getName()){
+                            $changesArray["name"] = $name;
+                        }
+                        if(!empty($password) && isset($password) && $password != ""){
+                            $password = hash('sha256', $password);
+                            $changesArray["password"] = $password;
+                        }
+                        if(!empty($role) && isset($role) && $role != $specificUser->getRole()){
+                            if($role != $specificUser->getRole()){
+                                switch($role){
+                                    case 1: 
+                                    case "admin":
+                                        $changesArray["role"] = 1;
+                                        break;
+                                    case 2:
+                                    case "event_manager":
+                                    case "event manager":
+                                        $changesArray["role"] = 2;
+                                        break;
+                                    case 3:
+                                    case "attendee":
+                                        $changesArray["role"] = 3;
+                                        break;
+                                }
+                            }
+                        }
+
+                        // If changes were made!
+                        if(!empty($changesArray)){
+                            $changesArray["id"] = $specificUser->getIdAttendee();
+                            $rowCount = $db->updateUser($changesArray);
+
+                            if($rowCount > 0){
+                                header("Location: admin.php");
+                                exit;
+                            }
+                            else{
+                                echo "<p class='form-error-text '>** Editing user failed!</p>";
+                            }
+                        }
+                        else{
+                            echo "<p class='form-error-text '>** No changes made to user!</p>";
+                        }
                     }
                     else if($_GET["action"] == "add") {
-                        addFormPOST();
+                        // addFormPOST();
+                        $name = sanitizeString($_POST["name"]);
+                        $password = sanitizeString($_POST["password"]);
+                        $role = sanitizeString($_POST["role"]);
+
+                        $changesArray = array();
+                    
+                        if(!empty($name) && isset($name)){
+                            $changesArray["name"] = $name;
+                        }
+                        if(!empty($password) && isset($password) && $password != ""){
+                            $password = hash('sha256', $password);
+                            $changesArray["password"] = $password;
+                        }
+                        if(!empty($role) && isset($role)){
+                            switch($role){
+                                case 1: 
+                                case "admin":
+                                    $changesArray["role"] = 1;
+                                    break;
+                                case 2:
+                                case "event_manager":
+                                case "event manager":
+                                    $changesArray["role"] = 2;
+                                    break;
+                                case 3:
+                                case "attendee":
+                                    $changesArray["role"] = 3;
+                                    break;
+                            }
+                        }
+
+                        // If changes were made!
+                        if(!empty($changesArray)){
+                            $rowCount = $db->insertUser($changesArray["name"], $changesArray["password"], $changesArray["role"]);
+
+                            if($rowCount > 0){
+                                header("Location: admin.php");
+                                exit;
+                            }
+                            else{
+                                echo "<p class='form-error-text '>** Editing user failed!</p>";
+                            }
+                        }
+                        else{
+                            echo "<p class='form-error-text '>** No changes made to user!</p>";
+                        }
                     }
                 }
             }

@@ -27,8 +27,6 @@
         if(isset($_SESSION['role']) && !empty($_SESSION['role'])){
             $role = $_SESSION['role'];
             if($role == "admin" || $role == "event_manager"){
-                // ADMIN + EVENT_MANAGER have access to the admin page w/all other pages
-                // EVENT_MANAGER has limited actions on the admin page though
                 $headerSTR = "<header>
                                 <span class='user-welcome'>Hi ".$_SESSION['currentUSR']."</span>
                                 <ul class='nav'>
@@ -73,7 +71,6 @@
 
     function userManagementForm(){
         global $db;
-
         if(isset($_GET['action'])){
             if($_GET['action'] == "edit"){
                 $user = $db->getUser($_GET['id'])[0]; 
@@ -127,119 +124,40 @@
         }
     }
 
-    /** 
-     * editFormPOST()
-     * POST processing after clicking submit on the edit page
-     */
-    function editFormPOST(){
-        global $db;
-        $name = sanitizeString($_POST["name"]);
-        $password = sanitizeString($_POST["password"]);
-        $role = sanitizeString($_POST["role"]);
-
-        $specificUser = $db->getUser($_GET["id"])[0]; 
-        
-        $changesArray = array();
-    
-        if(!empty($name) && isset($name) && $name != $specificUser->getName()){
-            $changesArray["name"] = $name;
-        }
-        if(!empty($password) && isset($password) && $password != ""){
-            $password = hash('sha256', $password);
-            $changesArray["password"] = $password;
-        }
-        if(!empty($role) && isset($role) && $role != $specificUser->getRole()){
-            if($role != $specificUser->getRole()){
-                switch($role){
-                    case 1: 
-                    case "admin":
-                        $changesArray["role"] = 1;
-                        break;
-                    case 2:
-                    case "event_manager":
-                    case "event manager":
-                        $changesArray["role"] = 2;
-                        break;
-                    case 3:
-                    case "attendee":
-                        $changesArray["role"] = 3;
-                        break;
-                }
-            }
-        }
-
-        // If changes were made!
-        if(!empty($changesArray)){
-            $changesArray["id"] = $specificUser->getIdAttendee();
-            $rowCount = $db->updateUser($changesArray);
-
-            if($rowCount > 0){
-                header("Location: admin.php");
-                exit;
-            }
-            else{
-                echo "<p class='form-error-text '>** Editing user failed!</p>";
-            }
-        }
-        else{
-            echo "<p class='form-error-text '>** No changes made to user!</p>";
-        }
-    }
-
 
     /**
-     * addFormPOST()
-     * POST processing after clicking submit on ADD user form
+     * ['th'] = array(th, th, th);
+     * ['data'] = obj
+     * ['dataMethods'] = array(method1, method2)
+     * ['editURL'] = 
+     * ['deleteURL']
      */
-    function addFormPOST(){
-        global $db;
-        $name = sanitizeString($_POST["name"]);
-        $password = sanitizeString($_POST["password"]);
-        $role = sanitizeString($_POST["role"]);
+    // function adminTables($data){
+    //     var_dump($data['dataMethods']);
 
-        $changesArray = array();
-    
-        if(!empty($name) && isset($name)){
-            $changesArray["name"] = $name;
-        }
-        if(!empty($password) && isset($password) && $password != ""){
-            $password = hash('sha256', $password);
-            $changesArray["password"] = $password;
-        }
-        if(!empty($role) && isset($role)){
-            switch($role){
-                case 1: 
-                case "admin":
-                    $changesArray["role"] = 1;
-                    break;
-                case 2:
-                case "event_manager":
-                case "event manager":
-                    $changesArray["role"] = 2;
-                    break;
-                case 3:
-                case "attendee":
-                    $changesArray["role"] = 3;
-                    break;
-            }
-        }
+    //     // $data will be an array w/alot of necessary data
+    //     $table = "<div class='admin-table-container'>
+    //                 <table class='admin-table'>
+    //                     <tr>";
+    //     foreach($data["th"] as $v){
+    //         $table .= "<th>{$v}</th>";
+    //     }
+    //     $table .= "</tr>";
 
-        // If changes were made!
-        if(!empty($changesArray)){
-            $rowCount = $db->insertUser($changesArray["name"], $changesArray["password"], $changesArray["role"]);
+    //     include_once("./classes/Venue.class.php");
+    //     foreach($data['data'] as $v){
+    //         $table .= "<tr>";
+    //                 // foreach($data["dataMethods"] as $method){
+    //                 //     $table .= "<td>{$v->$method}</td>";
+    //                 // }
 
-            if($rowCount > 0){
-                header("Location: admin.php");
-                exit;
-            }
-            else{
-                echo "<p class='form-error-text '>** Editing user failed!</p>";
-            }
-        }
-        else{
-            echo "<p class='form-error-text '>** No changes made to user!</p>";
-        }
-    }
+    //         $table .= "<td><a href='{$data['editURL']}'>Edit</a></td>
+    //                     <td><a href='{$data['deleteURL']}'>Delete</a></td>
+    //                 </tr>";
+                 
+    //     }
+    //     $table .= "</table></div>";
+    // }
 
 
 

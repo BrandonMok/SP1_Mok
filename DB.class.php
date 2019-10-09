@@ -327,9 +327,9 @@
                             break;
                         case "capacity":
                             $query .= "capacity = :capacity,";
-                            $updateArr[":capacity"] = $v;
+                            $updateArr[":capacity"] = intval($v);
                             break;
-                        case "idvenue":    
+                        case "id":    
                             $updateId = intval($v);
                             break;
                     }

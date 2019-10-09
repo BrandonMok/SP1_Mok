@@ -64,6 +64,16 @@
 
 
                         /* -------------------- VENUES -------------------- */
+                        // include_once("./classes/Venue.class.php");
+                        // echo adminTables(array(
+                        //     "th" => array("ID", "Name", "Capacity", "Edit", "Delete"),
+                        //     "data" => $db->getAllVenues(),
+                        //     "dataMethods" => get_class_methods("Venue"),
+                        //     "editURL" => "./venueManagement.php?id={}&action=edit",
+                        //     "deleteURL" => "./venueManagement.php?id={}&action=delete"
+                        // ));
+
+
                         echo "<p class='section-heading'>Venues</p>";
                         echo "<a href=''>
                                     <div class='add-btn'>Add Venue</div>
@@ -87,7 +97,7 @@
                                                     <td>{$v->getIdVenue()}</td>
                                                     <td>{$v->getName()}</td>
                                                     <td>{$v->getCapacity()}</td>
-                                                    <td><a href=''>Edit</a></td>
+                                                    <td><a href='./venueManagement.php?id={$v->getIdVenue()}&action=edit'>Edit</a></td>
                                                     <td><a href='./venueManagement.php?id={$v->getIdVenue()}&action=delete'>Delete</a></td>
                                                 </tr>";
                             }
