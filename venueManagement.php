@@ -162,7 +162,7 @@
                         $id = $_GET["id"];
                         $name = sanitizeString($_POST["name"]);
                         $capacity = sanitizeString($_POST["capacity"]);
-                        $originalValues = json_decode($_POST["originalValues"], true);
+                        $originalValues = json_decode($_POST["originalValues"], true); 
 
                         $dataFields = array();
                         $dataFields["area"] = "venue";

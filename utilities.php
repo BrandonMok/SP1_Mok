@@ -72,36 +72,7 @@
     function userManagementForm(){
         global $db;
         if(isset($_GET['action'])){
-            if($_GET['action'] == "edit"){
-                $user = $db->getUser($_GET['id'])[0]; 
-                $editForm = "<div id='account-form-container'>
-                                <form id='user-edit-form' name='user-edit-form' action='./accountManagement.php?id={$user->getIdAttendee()}&action=edit' method='POST'>
-                                    <div id='user-edit-labels'>
-                                        <label>ID</label><br/>
-                                        <label>Name</label><br/>
-                                        <label>Password</label><br/>
-                                        <label>Role</label><br/>                                                   
-                                    </div>
-                                    <div id='user-edit-inputs'>
-                                        <input type='text' name='id' value='{$user->getIdAttendee()}' readonly='readonly'><br/>
-                                        <input type='text' name='name' value='{$user->getName()}'><br/>
-                                        <input type='text' name='password'><br/>";
-
-                
-                // Don't let admin to change roles -> NEED to have a SUPERADMIN account
-                if($user->getRole() == "1"){
-                    $editForm .= "<input type='text' name='role' value='{$user->getRole()}' readonly='readonly'><br/></div>";
-                }
-                else{
-                    $editForm .= "<input type='text' name='role' value='{$user->getRole()}'><br/></div><br/>";
-                }
-
-
-                $editForm .= "<input name='submit' id='submit-btn' type='submit' value='Submit'/></form></div>";
-                                
-                echo $editForm;
-            }
-            else if($_GET['action'] == "add"){
+            if($_GET['action'] == "add"){
                 $addForm = "<div id='account-form-container'>
                             <form id='user-edit-form' name='user-edit-form' action='./accountManagement.php?&action=add' method='POST'>
                                     <div id='user-edit-labels'>
@@ -163,6 +134,11 @@
         /**
          * editPost
          * @param $fields
+         * $fields = array();
+         * $fields['area'] = string
+         * $fields['fields'] = array(str, str, str, ...); 
+         * $fields['method'] = array(string of method name);
+         * $fields['originalValues'] = array(obj as associative array);
          * Reusuable POST handling for admin form submits
          */
         function editPost($fields){
