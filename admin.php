@@ -62,6 +62,7 @@
                         echo $tableSTR;
 
 
+
                         /* -------------------- VENUES -------------------- */
                         echo "<p class='section-heading'>Venues</p>";
                         echo "<a href=''>
@@ -87,7 +88,7 @@
                                                     <td>{$v->getName()}</td>
                                                     <td>{$v->getCapacity()}</td>
                                                     <td><a href=''>Edit</a></td>
-                                                    <td><a href=''>Delete</a></td>
+                                                    <td><a href='./venueManagement.php?id={$v->getIdVenue()}&action=delete'>Delete</a></td>
                                                 </tr>";
                             }
                             $venueTable .= "</table></div>";
