@@ -344,7 +344,9 @@
                 foreach($updateArr as $k => $v){
                     $stmt->bindParam($k, $v);
                 }
+
                 $stmt->execute($updateArr);
+
 
                 return $stmt->rowCount(); // return the # of rows affected
             }

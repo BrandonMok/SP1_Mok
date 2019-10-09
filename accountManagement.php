@@ -135,6 +135,7 @@
                         
                         $changesArray = array();
                     
+                        // Might not need to check w/user object as an update with the same info will produce 0 rows affected
                         if(!empty($name) && isset($name) && $name != $specificUser->getName()){
                             $changesArray["name"] = $name;
                         }

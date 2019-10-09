@@ -73,9 +73,10 @@
                         //     "deleteURL" => "./venueManagement.php?id={}&action=delete"
                         // ));
 
+                        $allVenues = $db->getAllVenues();   // get all venues
 
                         echo "<p class='section-heading'>Venues</p>";
-                        echo "<a href=''>
+                        echo "<a href='./venueManagement.php?{}'>
                                     <div class='add-btn'>Add Venue</div>
                                 </a>";
 
@@ -89,7 +90,6 @@
                                                 <th>Delete</th>
                                             </tr>";
                                             
-                        $allVenues = $db->getAllVenues();   // get all venues
 
                         if(count($allVenues) > 0){
                             foreach($allVenues as $v){

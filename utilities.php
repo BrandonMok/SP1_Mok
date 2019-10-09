@@ -159,6 +159,48 @@
     //     $table .= "</table></div>";
     // }
 
+    
+        /**
+         * editPost
+         * @param $fields
+         * Reusuable POST handling for admin form submits
+         */
+        function editPost($fields){
+            global $db;
+            if($_GET["action"] == "edit"){
+                $changesArray = array();
+
+                foreach($fields["fields"] as $k => $v){
+                    foreach($fields["originalValues"] as $key => $value){
+                        if($k == $key){
+                            if(!empty($v) && isset($v) && $v != $value){
+                                $changesArray[$k] = $v;
+                            }
+                        }
+                    }
+                }
+
+                $changesArray["id"] = $fields["fields"]["id"]; // set ID for where cause
+
+                if(!empty($changesArray)){
+                    $rowCount = call_user_func_array(array($db, $fields["method"]["update"] ), array($changesArray));
+
+
+                    if($rowCount > 0){
+                        header("Location: admin.php");
+                        exit;
+                    }
+                    else{
+                        echo "<p class='form-error-text '>** Editing {$fields['area']} failed!</p>";
+                    }
+                }
+
+                unset($_SESSION["initialFormValues"]); // unset session variable array of initial value
+            }
+        }
+
+
+
 
 
     /**
