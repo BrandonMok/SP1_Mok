@@ -70,35 +70,16 @@
                             else if($action == "delete"){ 
                                 // if delete option was chosen, check for confirm variable in URL that's set when clicking Yes/No
                                 if(isset($_GET["confirm"]) && !empty($_GET["confirm"])){
-                                    $decision = $_GET["confirm"];
-
-                                    if($decision == "yes"){
-                                        $delete = $db->deleteUser($_GET["id"]);
-
-                                        if($delete > 0){ // if rowcount wasn't 0 -> delete user
-                                            header("Location: admin.php");
-                                            exit;  
-                                        }
-                                        else{
-                                            // ERROR w/the delete occured
-                                            echo "<h2>Deleting selected user failed!</h2>";
-                                        }
-                                    }
-                                    else{
-                                        // user chose NO to deleting user
-                                        header("Location: admin.php");
-                                        exit;
-                                    }
-
-                                    // $dataFields = array();
-                                    // $dataFields["area"] = "user";
-                                    // $dataFields["fields"] = array(
-                                    //     "id" => $id,
-                                    // );
-                                    // $dataFields["method"] = array(
-                                    //     "delete" => "deleteUser"
-                                    // );
-                                    // deleteAction($dataFields);
+                                    // Use reusable DELETE action
+                                    $dataFields = array();
+                                    $dataFields["area"] = "user";
+                                    $dataFields["fields"] = array(
+                                        "id" => $id,
+                                    );
+                                    $dataFields["method"] = array(
+                                        "delete" => "deleteUser"
+                                    );
+                                    deleteAction($dataFields);
                                 }
 
                                 // Get user now to display delete information
@@ -183,7 +164,7 @@
             
 
 
-            // CATCH THE POST REQUESTS
+             /** -------------------- POST LOGIC --------------------*/
             if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 if(isset($_GET["action"]) && !empty($_GET["action"])){
                     if($_GET["action"] == "edit"){
@@ -229,6 +210,7 @@
                             echo "<p class='form-error-text'>** Please enter a valid name!</p>";
                         }
                         else {
+                            // Perform EDIT POST REQUEST Proccessing
                             $dataFields = array();
                             $dataFields["area"] = "user";
                             $dataFields["fields"] = array(
@@ -245,7 +227,6 @@
                         }
                     }
                     else if($_GET["action"] == "add") {
-                        // addFormPOST();
                         $name = sanitizeString($_POST["name"]);
                         $password = sanitizeString($_POST["password"]);
                         $role = sanitizeString($_POST["role"]);

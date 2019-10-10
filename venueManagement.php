@@ -163,6 +163,7 @@
                             echo "<p class='form-error-text'>** Please enter a valid capacity!</p>";
                         }
                         else{
+                            // Perform EDIT POST REQUEST Processing
                             $dataFields = array();
                             $dataFields["area"] = "venue";
                             $dataFields["fields"] = array(
@@ -181,6 +182,7 @@
                         $name = sanitizeString($_POST["name"]);
                         $capacity = sanitizeString($_POST["capacity"]);
 
+                        // Perform ADD POST REQUEST Processing
                         $dataFields = array();
                         $dataFields["area"] = "venue";
                         $dataFields["fields"]["name"] = array("type" => "s", "value" => $name);

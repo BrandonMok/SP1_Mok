@@ -190,14 +190,15 @@
         /**
          * deleteUser
          * @param $idattendee
+         * $idattendee is an array with only one value of ID
          * Deletes a user by id
          */
-        function deleteUser($idattendee){ //$idattendee
+        function deleteUser($data){ 
             try{
-                $query = "DELETE FROM attendee WHERE idattendee = :id";
+                $query = "DELETE FROM attendee WHERE idattendee = :idattendee";
                 $stmt = $this->db->prepare($query);
                 $stmt->execute(array(
-                        ":id" => $idattendee
+                    ":idattendee" => $data[0]
                 ));
 
                 return $stmt->rowCount();
@@ -236,6 +237,8 @@
             } 
         }
         
+
+
 
         /* -------------------- VENUES -------------------- */
         /**
@@ -289,6 +292,7 @@
          /**
          * addVenue()
          * $data = array();
+         * $data only contains the name and capacity values to use
          * Adds a new venue
          */
         function addVenue($data){

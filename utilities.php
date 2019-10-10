@@ -230,10 +230,6 @@
             if(isset($_GET["confirm"]) && !empty($_GET["confirm"])){
                 $decision = $_GET["confirm"];
 
-                var_dump($data["fields"]["id"]);
-                var_dump($data["method"]["delete"]);
-
-
                 if($decision == "yes"){
                     $delete = call_user_func_array(array($db, $data["method"]["delete"]), array($data["fields"]["id"]));
 
