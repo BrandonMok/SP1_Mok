@@ -70,7 +70,6 @@
                                     $decision = $_GET['confirm'];
 
                                     if($decision == 'yes'){
-                                        // $delete = $db->deleteUser($specificUser->getIdAttendee());
                                         $delete = $db->deleteUser($_GET["id"]);
 
                                         if($delete > 0){ // if rowcount wasn't 0 -> delete user
@@ -92,7 +91,7 @@
                                 // Get user now to display delete information
                                 $specificUser = $db->getUser($id)[0];
 
-                                echo "<h2 class='section-heading'>Delete</h2>";
+                                echo "<h2 class='section-heading'>Delete User</h2>";
                                 $deleteUserTable = "<div class='admin-table-container'> 
                                                         <table class='admin-table'>
                                                             <tr>
@@ -130,9 +129,26 @@
                     else if(isset($_GET['action']) && !empty($_GET['action'])) {
                         // If no ID was passed, but an action was -> new user button was clicked
                         if($_GET['action'] == "add"){
-                            echo "<h2 class='section-heading'>Add</h2>";
+                            echo "<h2 class='section-heading'>Add User</h2>";
 
-                            userManagementForm();
+                            $addForm = "<div id='account-form-container'>
+                                        <form id='user-edit-form' name='user-edit-form' action='./accountManagement.php?&action=add' method='POST'>
+                                                <div id='user-edit-labels'>
+                                                    <label>ID</label><br/>
+                                                    <label>Name</label><br/>
+                                                    <label>Password</label><br/>
+                                                    <label>Role</label><br/>                                                   
+                                                </div>
+                                                <div id='user-edit-inputs'>
+                                                    <input type='text' name='id' readonly='readonly' placeholder='Auto-increment'><br/>
+                                                    <input type='text' name='name'><br/>
+                                                    <input type='text' name='password'><br/>
+                                                    <input type='text' name='role'><br/>
+                                                </div><br/>";
+
+                            $addForm .= "<input name='submit' id='submit-btn' type='submit' value='Submit'/></form></div>";
+                                            
+                            echo $addForm;
                         }
                         else {
                             // Redirect back to admin page if id wasn't set and action doesn't = add
@@ -195,7 +211,7 @@
                             // ERROR - not in range
                             echo "<p class='form-error-text'>** Please enter a valid role!</p>";
                         }
-                        else if(alphabeticSpace($name) == 0){
+                        else if(alphabetic($name) == 0){
                             // ERROR - name had numbers
                             echo "<p class='form-error-text'>** Please enter a valid name!</p>";
                         }

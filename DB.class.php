@@ -288,18 +288,16 @@
 
          /**
          * addVenue()
-         * @param $name
-         * @param $capacity
          * Adds a new venue
          */
-        function addVenue($name, $capacity){
+        function addVenue($data){
             try{
                 $query = "INSERT INTO venue (name, capacity)
                             VALUES (:name, :capacity)";
                 $stmt = $this->db->prepare($query);
                 $stmt->execute(array(
-                    ":name" => $name,
-                    ":capacity" => $capacity
+                    ":name" => $data["name"],
+                    ":capacity" => $data["capacity"]
                 ));
                 return $stmt->rowCount();
             }

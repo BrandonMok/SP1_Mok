@@ -76,7 +76,7 @@
                         $allVenues = $db->getAllVenues();   // get all venues
 
                         echo "<p class='section-heading'>Venues</p>";
-                        echo "<a href='./venueManagement.php?{}'>
+                        echo "<a href='./venueManagement.php?action=add'>
                                     <div class='add-btn'>Add Venue</div>
                                 </a>";
 

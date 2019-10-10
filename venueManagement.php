@@ -30,13 +30,15 @@
                                 echo "<h2 class='section-heading'>Edit Venue</h2>";
                                 $venue = $db->getVenue($id)[0];   // venue object
 
+                                // Store original values to compare to on POST
+                                // Don't want to keep querying same object
                                 $originalValues = array(
                                     "name" => $venue->getName(),
                                     "capacity" => $venue->getCapacity()
                                 );
                                 $originalValues = json_encode($originalValues);
 
-
+                                // EDIT FORM
                                 $editForm = "<div id='account-form-container'>
                                                 <form id='user-edit-form' name='user-edit-form' action='./venueManagement.php?id={$venue->getIdVenue()}&action=edit' method='POST'>
                                                     <div id='user-edit-labels'>
@@ -60,7 +62,7 @@
                                     $decision = $_GET['confirm'];
 
                                     if($decision == 'yes'){
-                                        $delete = $db->deleteVenue($venue->getIdVenue());
+                                        $delete = $db->deleteVenue($_GET["id"]);
 
                                         if($delete > 0){ // if rowcount wasn't 0 -> delete user
                                             header('Location: admin.php');
@@ -117,19 +119,17 @@
                             echo "<h2 class='section-heading'>Add Venue</h2>";
 
                             $addForm = "<div id='account-form-container'>
-                                            <form class='user-edit-form' name='user-edit-form' action='./venueManagement.php?&action=add' method='POST'>
-                                                    <div id='user-edit-labels'>
-                                                        <label>ID</label><br/>
-                                                        <label>Name</label><br/>
-                                                        <label>Password</label><br/>
-                                                        <label>Role</label><br/>                                                   
-                                                    </div>
-                                                    <div id='user-edit-inputs'>
-                                                        <input type='text' name='id' readonly='readonly' placeholder='Auto-increment'><br/>
-                                                        <input type='text' name='id'><br/>
-                                                        <input type='text' name='name'><br/>
-                                                        <input type='text' name='capacity'><br/>
-                                                    </div><br/>";
+                                            <form class='user-edit-form' name='add-form' action='./venueManagement.php?&action=add' method='POST'>
+                                                <div id='user-edit-labels'>
+                                                    <label>ID</label><br/>
+                                                    <label>Name</label><br/>
+                                                    <label>Capacity</label><br/>
+                                                </div>
+                                                <div id='user-edit-inputs'>
+                                                    <input type='text' name='id' readonly='readonly' placeholder='Auto-increment'><br/>
+                                                    <input type='text' name='name'><br/>
+                                                    <input type='text' name='capacity'><br/>
+                                                </div><br/>";
 
                             $addForm .= "<input name='submit' id='submit-btn' type='submit' value='Submit'/></form></div>";
                             echo $addForm;
@@ -153,8 +153,6 @@
 
 
 
-
-
              // CATCH THE POST REQUESTS
              if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 if(isset($_GET["action"]) && !empty($_GET["action"])){
@@ -164,55 +162,42 @@
                         $capacity = sanitizeString($_POST["capacity"]);
                         $originalValues = json_decode($_POST["originalValues"], true); 
 
-                        $dataFields = array();
-                        $dataFields["area"] = "venue";
-                        $dataFields["fields"] = array(
-                            "id" => $id,
-                            "name" => $name,
-                            "capacity" => $capacity
-                        );
-                        $dataFields["method"] = array(
-                            "update" => "updateVenue"
-                        );
-                        $dataFields["originalValues"] = $originalValues;
-                        editPost($dataFields);
+                        // Extra validation
+                        if(alphabetic($name) == 0 || numbers($name) == 1){
+                            // ERROR: No letters and has numbers
+                            echo "<p class='form-error-text'>** Please enter a valid name!</p>";
+                        }
+                        else if(numbers($capacity) == 0 || alphabetic($capacity) == 1){
+                            // ERROR: Capacity has no numbers or capacity has letters
+                            echo "<p class='form-error-text'>** Please enter a valid capacity!</p>";
+                        }
+                        else{
+                            $dataFields = array();
+                            $dataFields["area"] = "venue";
+                            $dataFields["fields"] = array(
+                                "id" => $id,
+                                "name" => $name,
+                                "capacity" => $capacity
+                            );
+                            $dataFields["method"] = array(
+                                "update" => "updateVenue"
+                            );
+                            $dataFields["originalValues"] = $originalValues;
+                            editPost($dataFields);
+                        }
                     }
                     else if($_GET["action"] == "add") {
                         $name = sanitizeString($_POST["name"]);
                         $capacity = sanitizeString($_POST["capacity"]);
-                        $changesArray = array();
 
-                        if(numbers($capacity)){  // check to see if number, if not don't proceed
-                            $venue = $db->getVenue($_GET["id"])[0]; 
-                    
-                            if(!empty($name) && isset($name) && $name != $venue->getName()){
-                                $changesArray["name"] = $name;
-                            }
-                            if(!empty($capacity) && isset($capacity) && $capacity != $venue->getCapacity()){
-                                $changesArray["capacity"] = $capacity;
-                            }
-
-                        
-                            // If changes were made!
-                            if(!empty($changesArray)){
-                                $rowCount = $db->insertVenue($changesArray["name"], $changesArray['capacity']);
-
-                                if($rowCount > 0){
-                                    header("Location: admin.php");
-                                    exit;
-                                }
-                                else{
-                                    echo "<p class='form-error-text '>** Editing venue failed!</p>";
-                                }
-                            }
-                            else{
-                                echo "<p class='form-error-text '>** No changes made to venue!</p>";
-                            }
-                        }
-                        else {
-                            // not a number 
-                            echo "<p class='form-error-text'>** Invalid Capacity Value!</p>";
-                        }
+                        $dataFields = array();
+                        $dataFields["area"] = "venue";
+                        $dataFields["fields"]["name"] = array("type" => "s", "value" => $name);
+                        $dataFields["fields"]["capacity"] = array("type" => "i", "value" => $capacity);
+                        $dataFields["method"] = array(
+                            "add" => "addVenue"
+                        );
+                        addPost($dataFields);
                     }
                 }
             }

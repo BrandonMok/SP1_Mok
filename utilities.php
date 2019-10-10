@@ -69,31 +69,31 @@
 
 
 
-    function userManagementForm(){
-        global $db;
-        if(isset($_GET['action'])){
-            if($_GET['action'] == "add"){
-                $addForm = "<div id='account-form-container'>
-                            <form id='user-edit-form' name='user-edit-form' action='./accountManagement.php?&action=add' method='POST'>
-                                    <div id='user-edit-labels'>
-                                        <label>ID</label><br/>
-                                        <label>Name</label><br/>
-                                        <label>Password</label><br/>
-                                        <label>Role</label><br/>                                                   
-                                    </div>
-                                    <div id='user-edit-inputs'>
-                                        <input type='text' name='id' readonly='readonly' placeholder='Auto-increment'><br/>
-                                        <input type='text' name='name'><br/>
-                                        <input type='text' name='password'><br/>
-                                        <input type='text' name='role'><br/>
-                                    </div><br/>";
+    // function userManagementForm(){
+    //     global $db;
+    //     if(isset($_GET['action'])){
+    //         if($_GET['action'] == "add"){
+    //             $addForm = "<div id='account-form-container'>
+    //                         <form id='user-edit-form' name='user-edit-form' action='./accountManagement.php?&action=add' method='POST'>
+    //                                 <div id='user-edit-labels'>
+    //                                     <label>ID</label><br/>
+    //                                     <label>Name</label><br/>
+    //                                     <label>Password</label><br/>
+    //                                     <label>Role</label><br/>                                                   
+    //                                 </div>
+    //                                 <div id='user-edit-inputs'>
+    //                                     <input type='text' name='id' readonly='readonly' placeholder='Auto-increment'><br/>
+    //                                     <input type='text' name='name'><br/>
+    //                                     <input type='text' name='password'><br/>
+    //                                     <input type='text' name='role'><br/>
+    //                                 </div><br/>";
 
-                $addForm .= "<input name='submit' id='submit-btn' type='submit' value='Submit'/></form></div>";
+    //             $addForm .= "<input name='submit' id='submit-btn' type='submit' value='Submit'/></form></div>";
                                 
-                echo $addForm;
-            }
-        }
-    }
+    //             echo $addForm;
+    //         }
+    //     }
+    // }
 
 
     /**
@@ -161,7 +161,6 @@
                 if(!empty($changesArray)){
                     $rowCount = call_user_func_array(array($db, $fields["method"]["update"] ), array($changesArray));
 
-
                     if($rowCount > 0){
                         header("Location: admin.php");
                         exit;
@@ -170,8 +169,66 @@
                         echo "<p class='form-error-text '>** Editing {$fields['area']} failed!</p>";
                     }
                 }
+            }
+        }
 
-                unset($_SESSION["initialFormValues"]); // unset session variable array of initial value
+
+
+        /**
+         * addPost
+         * @param $fields
+         * $fields['area'] = string
+         * $fields['fields'] = array(str, str, str, ...); 
+         * $fields['method'] = array(string of method name);
+         */
+        function addPost($fields){
+            global $db;
+            if($_GET["action"] == "add"){
+                $type = "";
+                $flag = true;
+                $paramArr = array();
+
+                foreach($fields["fields"] as $k => $v){
+                    foreach($fields["fields"][$k] as $key => $value){
+                        // if the key == type
+                        if($key == "type"){
+                            switch($value){
+                                case "i":
+                                    $type = "i";
+                                    break;
+                                case "s":
+                                    $type = "s";
+                                    break;
+                            }
+                        }
+                        else {
+                            if($type == "i"){
+                                if(is_numeric($value) && intval($value) >= 0 && $value != ""){
+                                    $paramArr[$k] = $value;
+                                }
+                                else {
+                                    $flag = false;
+                                }
+                            }
+                            else if($type == "s"){
+                                $paramArr[$k] = $value;
+                            }
+                        }
+                    }// end foreach
+                }// end foreach
+
+
+                if(!empty($paramArr) && $flag == true){
+                    $rowCount = call_user_func_array(array($db, $fields["method"]["add"]), array($paramArr));
+
+                    if($rowCount > 0){
+                        header("Location: admin.php");
+                        exit;
+                    }
+                    else{
+                        echo "<p class='form-error-text '>** Adding {$fields['area']} failed!</p>";
+                    }
+                }
             }
         }
 
