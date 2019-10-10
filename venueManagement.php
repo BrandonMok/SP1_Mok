@@ -31,7 +31,7 @@
                                 $venue = $db->getVenue($id)[0];   // venue object
 
                                 // Store original values to compare to on POST
-                                // Don't want to keep querying same object
+                                // Don't want to keep querying same object when doing post logic
                                 $originalValues = array(
                                     "name" => $venue->getName(),
                                     "capacity" => $venue->getCapacity()
@@ -59,25 +59,15 @@
                             else if($action == "delete"){
                                 // Process confirm query from URL only when after clicking "yes" or "no" button
                                 if(isset($_GET['confirm']) && !empty($_GET['confirm'])){
-                                    $decision = $_GET['confirm'];
-
-                                    if($decision == 'yes'){
-                                        $delete = $db->deleteVenue($_GET["id"]);
-
-                                        if($delete > 0){ // if rowcount wasn't 0 -> delete user
-                                            header('Location: admin.php');
-                                            exit;  
-                                        }
-                                        else{
-                                            // ERROR w/the delete occured
-                                            echo "<h2>Deleting selected venue failed!</h2>";
-                                        }
-                                    }
-                                    else{
-                                        // user chose NO to deleting user
-                                        header("Location: admin.php");
-                                        exit;
-                                    }
+                                    $dataFields = array();
+                                    $dataFields["area"] = "venue";
+                                    $dataFields["fields"] = array(
+                                        "id" => $id,
+                                    );
+                                    $dataFields["method"] = array(
+                                        "delete" => "deleteVenue"
+                                    );
+                                    deleteAction($dataFields);
                                 }
 
                                 $venue = $db->getVenue($id)[0];   // venue object
@@ -145,16 +135,17 @@
                     header("Location: events.php");
                     exit;
                 }
-            }
+            }// end if logged in
             else {
                 header("Location: login.php");
                 exit;
             }
 
 
+            
 
-             // CATCH THE POST REQUESTS
-             if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            /** -------------------- POST LOGIC --------------------*/
+            if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 if(isset($_GET["action"]) && !empty($_GET["action"])){
                     if($_GET["action"] == "edit"){
                         $id = $_GET["id"];

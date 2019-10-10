@@ -30,6 +30,9 @@
                                 echo "<h2 class='section-heading'>Edit</h2>";
 
                                 $user = $db->getUser($_GET['id'])[0]; 
+
+                                // Store original values to compare to on POST
+                                // Don't want to keep querying same object when doing post logic
                                 $originalValues = array(
                                     "name" => $user->getName(),
                                     "password" => $user->getPassword(),
@@ -66,14 +69,14 @@
                             }
                             else if($action == "delete"){ 
                                 // if delete option was chosen, check for confirm variable in URL that's set when clicking Yes/No
-                                if(isset($_GET['confirm']) && !empty($_GET['confirm'])){
-                                    $decision = $_GET['confirm'];
+                                if(isset($_GET["confirm"]) && !empty($_GET["confirm"])){
+                                    $decision = $_GET["confirm"];
 
-                                    if($decision == 'yes'){
+                                    if($decision == "yes"){
                                         $delete = $db->deleteUser($_GET["id"]);
 
                                         if($delete > 0){ // if rowcount wasn't 0 -> delete user
-                                            header('Location: admin.php');
+                                            header("Location: admin.php");
                                             exit;  
                                         }
                                         else{
@@ -86,6 +89,16 @@
                                         header("Location: admin.php");
                                         exit;
                                     }
+
+                                    // $dataFields = array();
+                                    // $dataFields["area"] = "user";
+                                    // $dataFields["fields"] = array(
+                                    //     "id" => $id,
+                                    // );
+                                    // $dataFields["method"] = array(
+                                    //     "delete" => "deleteUser"
+                                    // );
+                                    // deleteAction($dataFields);
                                 }
 
                                 // Get user now to display delete information
@@ -221,7 +234,7 @@
                             $dataFields["fields"] = array(
                                 "id" => $id,
                                 "name" => $name,
-                                "password" => $password,
+                                "password" => $password, // password exists, value just now shown on form for privacy & security
                                 "role" => $role
                             );
                             $dataFields["method"] = array(
@@ -265,7 +278,7 @@
                         }
 
                         // If changes were made!
-                        if(!empty($changesArray)){
+                        if(!empty($changesArray) && count($changesArray) == 3){
                             $rowCount = $db->insertUser($changesArray["name"], $changesArray["password"], $changesArray["role"]);
 
                             if($rowCount > 0){

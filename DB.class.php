@@ -192,7 +192,7 @@
          * @param $idattendee
          * Deletes a user by id
          */
-        function deleteUser($idattendee){
+        function deleteUser($idattendee){ //$idattendee
             try{
                 $query = "DELETE FROM attendee WHERE idattendee = :id";
                 $stmt = $this->db->prepare($query);
@@ -288,6 +288,7 @@
 
          /**
          * addVenue()
+         * $data = array();
          * Adds a new venue
          */
         function addVenue($data){
@@ -309,6 +310,7 @@
         /**
          * editVenue
          * @param $data
+         * $data = array()
          * Edits/Updates a venue given an array of data
          */
         function updateVenue($data){

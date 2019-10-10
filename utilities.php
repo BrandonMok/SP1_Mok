@@ -2,7 +2,6 @@
     require_once("DB.class.php");
     $db = new DB(); // One DB object to use 
 
-
     /**
      * reusableLinks
      * Reusable tags to common links (i.e. css, fontawesome, fonts, etc..)
@@ -66,35 +65,6 @@
             echo $headerSTR;
         }
     }
-
-
-
-    // function userManagementForm(){
-    //     global $db;
-    //     if(isset($_GET['action'])){
-    //         if($_GET['action'] == "add"){
-    //             $addForm = "<div id='account-form-container'>
-    //                         <form id='user-edit-form' name='user-edit-form' action='./accountManagement.php?&action=add' method='POST'>
-    //                                 <div id='user-edit-labels'>
-    //                                     <label>ID</label><br/>
-    //                                     <label>Name</label><br/>
-    //                                     <label>Password</label><br/>
-    //                                     <label>Role</label><br/>                                                   
-    //                                 </div>
-    //                                 <div id='user-edit-inputs'>
-    //                                     <input type='text' name='id' readonly='readonly' placeholder='Auto-increment'><br/>
-    //                                     <input type='text' name='name'><br/>
-    //                                     <input type='text' name='password'><br/>
-    //                                     <input type='text' name='role'><br/>
-    //                                 </div><br/>";
-
-    //             $addForm .= "<input name='submit' id='submit-btn' type='submit' value='Submit'/></form></div>";
-                                
-    //             echo $addForm;
-    //         }
-    //     }
-    // }
-
 
     /**
      * ['th'] = array(th, th, th);
@@ -174,63 +144,119 @@
 
 
 
-        /**
-         * addPost
-         * @param $fields
-         * $fields['area'] = string
-         * $fields['fields'] = array(str, str, str, ...); 
-         * $fields['method'] = array(string of method name);
-         */
-        function addPost($fields){
-            global $db;
-            if($_GET["action"] == "add"){
-                $type = "";
-                $flag = true;
-                $paramArr = array();
+    /**
+     * addPost
+     * @param $fields
+     * $fields = array();
+     * $fields['area'] = string
+     * $fields['fields'] = array("key" => array("type" => value, "value" => value), "key" => array(), ...) 
+     * $fields['method'] = array(string of method name);
+     */
+    function addPost($fields){
+        global $db;
+        if($_GET["action"] == "add"){
+            $type = "";
+            $flag = true;
+            $msg = "";
+            $paramArr = array();
 
-                foreach($fields["fields"] as $k => $v){
-                    foreach($fields["fields"][$k] as $key => $value){
-                        // if the key == type
-                        if($key == "type"){
-                            switch($value){
-                                case "i":
-                                    $type = "i";
-                                    break;
-                                case "s":
-                                    $type = "s";
-                                    break;
+            foreach($fields["fields"] as $k => $v){
+                foreach($fields["fields"][$k] as $key => $value){
+                    // if the key == type
+                    if($key == "type"){
+                        switch($value){
+                            case "i":
+                                $type = "i";
+                                break;
+                            case "s":
+                                $type = "s";
+                                break;
+                        }
+                    }
+                    else {
+                        if($type == "i"){
+                            if(is_numeric($value) && intval($value) >= 0 && $value != ""){
+                                $paramArr[$k] = intval($value);
+                            }
+                            else {
+                                $flag = false;
+                                $msg = "<p class='form-error-text center-element'>Invalid input!</p>";
                             }
                         }
-                        else {
-                            if($type == "i"){
-                                if(is_numeric($value) && intval($value) >= 0 && $value != ""){
-                                    $paramArr[$k] = $value;
-                                }
-                                else {
-                                    $flag = false;
-                                }
-                            }
-                            else if($type == "s"){
+                        else if($type == "s"){
+                            if(alphaNumeric($value)){
                                 $paramArr[$k] = $value;
                             }
+                            else {
+                                $flag = false;
+                                $msg = "<p class='form-error-text center-element'>Invalid input!</p>";
+                            }
                         }
-                    }// end foreach
+                    }
                 }// end foreach
+            }// end foreach
 
 
-                if(!empty($paramArr) && $flag == true){
-                    $rowCount = call_user_func_array(array($db, $fields["method"]["add"]), array($paramArr));
+            if(!empty($paramArr) && $flag == true){
+                $rowCount = call_user_func_array(array($db, $fields["method"]["add"]), array($paramArr));
 
-                    if($rowCount > 0){
+                if($rowCount > 0){
+                    header("Location: admin.php");
+                    exit;
+                }
+                else{
+                    echo "<p class='form-error-text'>** Adding {$fields['area']} failed!</p>";
+                }
+            }
+            else {
+                // error occured with formats
+                echo $msg;
+            }
+        }
+    }
+
+
+    /**
+     * deleteAction
+     * @param $data
+     * $data = array();
+     * $data["area"] = string of area
+     * $data["fields"] = array("key" => "value")
+     * $data["method"] = array();
+     */
+    function deleteAction($data){
+        global $db;
+        if(isset($_GET["action"]) && $_GET["action"] == "delete"){
+            if(isset($_GET["confirm"]) && !empty($_GET["confirm"])){
+                $decision = $_GET["confirm"];
+
+                var_dump($data["fields"]["id"]);
+                var_dump($data["method"]["delete"]);
+
+
+                if($decision == "yes"){
+                    $delete = call_user_func_array(array($db, $data["method"]["delete"]), array($data["fields"]["id"]));
+
+
+                    if($delete > 0){ // if rowcount wasn't 0 -> delete user
                         header("Location: admin.php");
-                        exit;
+                        exit;  
                     }
                     else{
-                        echo "<p class='form-error-text '>** Adding {$fields['area']} failed!</p>";
+                        // ERROR w/the delete occured
+                        echo "<h2>Deleting selected {$data["area"]} failed!</h2>";
                     }
+                }
+                else{
+                    // user chose NO to deleting user
+                    header("Location: admin.php");
+                    exit;
                 }
             }
         }
+    }
+
+
 
 
 
