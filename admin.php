@@ -56,11 +56,11 @@
                             else{
                                 $tableSTR .= " <td><a href='./accountManagement.php?id={$v->getIdAttendee()}&action=delete'>Delete</a></td></tr>";
                             }
-                        }            
+                        }// end foreach            
 
                         $tableSTR .= "</table></div>";
                         echo $tableSTR;
-
+                    }// end of count users
 
 
                         /* -------------------- VENUES -------------------- */
@@ -74,41 +74,95 @@
                         // ));
 
                         $allVenues = $db->getAllVenues();   // get all venues
+                        if(count($allVenues) > 0){
+                            echo "<p class='section-heading'>Venues</p>";
+                            echo "<a href='./venueManagement.php?action=add'>
+                                        <div class='add-btn'>Add Venue</div>
+                                    </a>";
 
-                        echo "<p class='section-heading'>Venues</p>";
-                        echo "<a href='./venueManagement.php?action=add'>
-                                    <div class='add-btn'>Add Venue</div>
+                            $venueTable = "<div class='admin-table-container'>
+                                            <table class='admin-table'>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Name</th>
+                                                    <th>Capacity</th>
+                                                    <th>Edit</th>
+                                                    <th>Delete</th>
+                                                </tr>";
+                                                
+
+                            if(count($allVenues) > 0){
+                                foreach($allVenues as $v){
+                                    $venueTable .= "<tr>    
+                                                        <td>{$v->getIdVenue()}</td>
+                                                        <td>{$v->getName()}</td>
+                                                        <td>{$v->getCapacity()}</td>
+                                                        <td><a href='./venueManagement.php?id={$v->getIdVenue()}&action=edit'>Edit</a></td>
+                                                        <td><a href='./venueManagement.php?id={$v->getIdVenue()}&action=delete'>Delete</a></td>
+                                                    </tr>";
+                                }
+                                $venueTable .= "</table></div>";
+                                echo $venueTable;
+                            }
+                            else{
+                                echo "<h2>No venues available!</h2>";
+                            }
+                        }// end venues
+                        
+                    
+
+                    /* -------------------- Events -------------------- */
+                    $allEvents = $db->getAllEvents();  
+                    if(count($allEvents) > 0){
+                        echo "<p class='section-heading'>Events</p>";
+                        echo "<a href='./eventManagement.php?action=add'>
+                                    <div class='add-btn'>Add Event</div>
                                 </a>";
 
-                        $venueTable = "<div class='admin-table-container'>
+                        $eventTable = "<div class='admin-table-container'>
                                         <table class='admin-table'>
                                             <tr>
                                                 <th>ID</th>
                                                 <th>Name</th>
-                                                <th>Capacity</th>
+                                                <th>Date Start</th>
+                                                <th>Date End</th>
+                                                <th>Number Allowed</th>
+                                                <th>Venue</th>   
                                                 <th>Edit</th>
-                                                <th>Delete</th>
+                                                <th>Delete</th>               
                                             </tr>";
+
+
+                        /**
+                         * ISSUE WITH VENUE SINCE IT'S IN A DIFFERENT TABLE
+                         * JOIN QUERY? -> But then how does that work with class objects?
+                         */
                                             
 
-                        if(count($allVenues) > 0){
-                            foreach($allVenues as $v){
-                                $venueTable .= "<tr>    
-                                                    <td>{$v->getIdVenue()}</td>
+                        if(count($allEvents) > 0){
+                            foreach($allEvents as $v){
+                                $eventTable .= "<tr>    
+                                                    <td>{$v->getIdEvent()}</td>
                                                     <td>{$v->getName()}</td>
-                                                    <td>{$v->getCapacity()}</td>
-                                                    <td><a href='./venueManagement.php?id={$v->getIdVenue()}&action=edit'>Edit</a></td>
-                                                    <td><a href='./venueManagement.php?id={$v->getIdVenue()}&action=delete'>Delete</a></td>
+                                                    <td>{$v->getDateStart()}</td>
+                                                    <td>{$v->getDateEnd()}</td>
+                                                    <td>{$v->getNumberAllowed()}</td>
+                                                    <td>{}</td>
+                                                    <td><a href='./venueManagement.php?id={$v->getIdEvent()}&action=edit'>Edit</a></td>
+                                                    <td><a href='./venueManagement.php?id={$v->getIdEvent()}&action=delete'>Delete</a></td>
                                                 </tr>";
                             }
-                            $venueTable .= "</table></div>";
-                            echo $venueTable;
+                            $eventTable .= "</table></div>";
+                            echo $eventTable;
                         }
                         else{
-                            echo "<h2>No venues available!</h2>";
+                            echo "<h2>No events available!</h2>";
                         }
-                    }                    
-                }
+                    }// end events
+
+
+
+                }// end if admin
                 else if($_SESSION['role'] == 'event_manager'){
                     // EVENT MANAGER ONLY
 
@@ -116,7 +170,7 @@
 
 
                 }
-            }
+            }// end if logged in
             else{
                 // REDIRECT - User not logged in
                 header('Location: login.php');

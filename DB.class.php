@@ -141,6 +141,7 @@
         /**
          * updateUser
          * @param $data
+         * $data = array("key" => value, "key" => value);
          * Updates a user by a provided array of field & values
          */
         function updateUser($data){
@@ -189,8 +190,9 @@
 
         /**
          * deleteUser
-         * @param $idattendee
-         * $idattendee is an array with only one value of ID
+         * @param $data
+         * $data[0] = $id
+         * $data is an array with only one value of ID
          * Deletes a user by id
          */
         function deleteUser($data){ 
