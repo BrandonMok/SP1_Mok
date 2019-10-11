@@ -22,20 +22,35 @@
                 // ALL roles are allowed to have acess to this page
                 // Using check as an extra precaution
                 if($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'event_manager' || $_SESSION['role'] == 'attendee'){
-                    $allEvents = $db->getAllEvents();
-
                     echo "<p class='section-heading'>Events</p>";
+                    $allEvents = $db->getAllEvents();   // get all events
 
-                    // Check to see the # of events retrieved
+
+                    // Check to see the # of events retrieved, if none then display no events found message
                     if(count($allEvents) > 0){
+                        $allVenues = $db->getAllVenues();   // get all Venues -> used to use name of venue associated with each event
+                        
+                        // Build events container with all events
                         $eventContainer = "<div id='event-container'>";
                         foreach($allEvents as $event){
                             $eventContainer .= "<a href='./registrations.php'>
                                                     <div class='events'>
                                                         <p class='event-headings'>{$event->getName()}</p>
-                                                        <p class='event-timings'>{$event->getDateStart()} - {$event->getDateEnd()}</p>
-                                                        <p>Venue: {$event->getVenue()}</p>
-                                                        <p>Total Allowed: {$event->getNumberAllowed()}</p>
+                                                        <p class='event-timings'>{$event->getDateStart()} - {$event->getDateEnd()}</p>";
+                                                        
+                            // Make sure venues were retrieved to use its name on the events.php page
+                            if(count($allVenues) > 0){
+                                foreach($allVenues as $venue){
+                                    if($venue->getIdVenue() == $event->getIdEvent()){
+                                        $eventContainer .= "<p>{$venue->getName()}</p>"; // get the name
+                                        break;
+                                    }
+                                }
+                            }else{
+                                $eventContainer .= "<p>Venue: TBD</p>"; // use the number if no name associated
+                            }
+
+                            $eventContainer .= "<p>Total Allowed: {$event->getNumberAllowed()}</p>
                                                     </div>
                                                 </a>";
                         }

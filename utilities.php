@@ -41,7 +41,6 @@
                                 </ul>
                             </header>"; 
                 echo $headerSTR;
-
             }
             else {
                 // attendee header
@@ -66,15 +65,12 @@
         }
     }
 
-    /**
-     * ['th'] = array(th, th, th);
-     * ['data'] = obj
-     * ['dataMethods'] = array(method1, method2)
-     * ['editURL'] = 
-     * ['deleteURL']
-     */
+    
     // function adminTables($data){
-    //     var_dump($data['dataMethods']);
+    //     echo "<p class='section-heading'>{$data["class"]}</p>";
+    //     echo "<a href={$data['addURL']}>
+    //             <div class='add-btn'>Add {$data["class"]}</div>
+    //         </a>";
 
     //     // $data will be an array w/alot of necessary data
     //     $table = "<div class='admin-table-container'>
@@ -85,19 +81,23 @@
     //     }
     //     $table .= "</tr>";
 
-    //     include_once("./classes/Venue.class.php");
-    //     foreach($data['data'] as $v){
-    //         $table .= "<tr>";
-    //                 // foreach($data["dataMethods"] as $method){
-    //                 //     $table .= "<td>{$v->$method}</td>";
-    //                 // }
+    //     $class = $data["class"];
+    //     include_once("./classes/{$class}.class.php");
 
+
+    //     foreach($data['data'][0] as $v){
+    //         $table .= "<tr>";
+    //                 foreach($data["dataMethods"] as $method){
+    //                     $methodResults = call_user_func_array(array($class, $method), array());
+    //                     $table .= "<td>{$methodResults}</td>";
+    //                 }
     //         $table .= "<td><a href='{$data['editURL']}'>Edit</a></td>
     //                     <td><a href='{$data['deleteURL']}'>Delete</a></td>
     //                 </tr>";
                  
     //     }
     //     $table .= "</table></div>";
+    //     echo $table;
     // }
 
     

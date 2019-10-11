@@ -63,51 +63,54 @@
                     }// end of count users
 
 
-                        /* -------------------- VENUES -------------------- */
-                        // include_once("./classes/Venue.class.php");
-                        // echo adminTables(array(
-                        //     "th" => array("ID", "Name", "Capacity", "Edit", "Delete"),
-                        //     "data" => $db->getAllVenues(),
-                        //     "dataMethods" => get_class_methods("Venue"),
-                        //     "editURL" => "./venueManagement.php?id={}&action=edit",
-                        //     "deleteURL" => "./venueManagement.php?id={}&action=delete"
-                        // ));
+                    /* -------------------- VENUES -------------------- */
+                    // include_once("./classes/Venue.class.php");
+                    // $venueTable = array();
+                    // $venueTable["class"] = "Venue";
+                    // $venutTable["area"] = "Venues";
+                    // $venueTable["data"] = $db->getAllVenues();
+                    // $venueTable["th"] = array("ID", "Name", "Capacity", "Edit", "Delete");
+                    // $venueTable["dataMethods"] = array("getIdVenue", "getName", "getCapacity");
+                    // $venueTable["addURL"] = "./venueManagement.php?action=add";
+                    // $venueTable["editURL"] = "./venueManagement.php?id={}&action=edit";      // DO SOMETHING WITH SETTING ID // MAYBE PRESET THAN DO A REPLACE with the ID
+                    // $venueTable["deleteURL"] = "./venueManagement.php?id={}&action=delete";
+                    // adminTables($venueTable);
 
-                        $allVenues = $db->getAllVenues();   // get all venues
+                    $allVenues = $db->getAllVenues();   // get all venues
+                    if(count($allVenues) > 0){
+                        echo "<p class='section-heading'>Venues</p>";
+                        echo "<a href='./venueManagement.php?action=add'>
+                                    <div class='add-btn'>Add Venue</div>
+                                </a>";
+
+                        $venueTable = "<div class='admin-table-container'>
+                                        <table class='admin-table'>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Name</th>
+                                                <th>Capacity</th>
+                                                <th>Edit</th>
+                                                <th>Delete</th>
+                                            </tr>";
+                                            
+
                         if(count($allVenues) > 0){
-                            echo "<p class='section-heading'>Venues</p>";
-                            echo "<a href='./venueManagement.php?action=add'>
-                                        <div class='add-btn'>Add Venue</div>
-                                    </a>";
-
-                            $venueTable = "<div class='admin-table-container'>
-                                            <table class='admin-table'>
-                                                <tr>
-                                                    <th>ID</th>
-                                                    <th>Name</th>
-                                                    <th>Capacity</th>
-                                                    <th>Edit</th>
-                                                    <th>Delete</th>
+                            foreach($allVenues as $v){
+                                $venueTable .= "<tr>    
+                                                    <td>{$v->getIdVenue()}</td>
+                                                    <td>{$v->getName()}</td>
+                                                    <td>{$v->getCapacity()}</td>
+                                                    <td><a href='./venueManagement.php?id={$v->getIdVenue()}&action=edit'>Edit</a></td>
+                                                    <td><a href='./venueManagement.php?id={$v->getIdVenue()}&action=delete'>Delete</a></td>
                                                 </tr>";
-                                                
-
-                            if(count($allVenues) > 0){
-                                foreach($allVenues as $v){
-                                    $venueTable .= "<tr>    
-                                                        <td>{$v->getIdVenue()}</td>
-                                                        <td>{$v->getName()}</td>
-                                                        <td>{$v->getCapacity()}</td>
-                                                        <td><a href='./venueManagement.php?id={$v->getIdVenue()}&action=edit'>Edit</a></td>
-                                                        <td><a href='./venueManagement.php?id={$v->getIdVenue()}&action=delete'>Delete</a></td>
-                                                    </tr>";
-                                }
-                                $venueTable .= "</table></div>";
-                                echo $venueTable;
                             }
-                            else{
-                                echo "<h2>No venues available!</h2>";
-                            }
-                        }// end venues
+                            $venueTable .= "</table></div>";
+                            echo $venueTable;
+                        }
+                        else{
+                            echo "<h2>No venues available!</h2>";
+                        }
+                    }// end venues
                         
                     
 
@@ -132,39 +135,46 @@
                                                 <th>Delete</th>               
                                             </tr>";
 
-                        if(count($allEvents) > 0){
-                            foreach($allEvents as $v){
-                                $eventTable .= "<tr>    
-                                                    <td>{$v->getIdEvent()}</td>
-                                                    <td>{$v->getName()}</td>
-                                                    <td>{$v->getDateStart()}</td>
-                                                    <td>{$v->getDateEnd()}</td>
-                                                    <td>{$v->getNumberAllowed()}</td>";
+                        // Cycle through all events to display
+                        foreach($allEvents as $v){
+                            $eventTable .= "<tr>    
+                                                <td>{$v->getIdEvent()}</td>
+                                                <td>{$v->getName()}</td>
+                                                <td>{$v->getDateStart()}</td>
+                                                <td>{$v->getDateEnd()}</td>
+                                                <td>{$v->getNumberAllowed()}</td>";
 
-                                // If venues, match the venue names to event venue ID
-                                if(count($allVenues) > 0){
-                                    foreach($allVenues as $venue){
-                                        if($venue->getIdVenue() == $v->getIdEvent()){
-                                            $eventTable .= "<td>{$venue->getName()}</td>"; // GET THE VENUE NAME
-                                            break;
-                                        }
+                            // If venues, match the venue names to event venue ID
+                            if(count($allVenues) > 0){
+                                $eventWithVenueName = "";
+                                foreach($allVenues as $venue){
+                                    // Find event whose EventID equals VenueID
+                                    if($venue->getIdVenue() == $v->getIdEvent()){
+                                        $eventWithVenueName = "<td>{$venue->getName()}</td>";   // if found, use venue name for display
+                                        break;
+                                    }
+                                    else {
+                                        $eventWithVenueName = "<td>TBD</td>";   // otherwise just use a default TBD
                                     }
                                 }
-                                else {
-                                    $eventTable .= "<td>{$v->getVenue()}</td>";
-                                }
 
-                                $eventTable .= "<td><a href='./venueManagement.php?id={$v->getIdEvent()}&action=edit'>Edit</a></td>
-                                                <td><a href='./venueManagement.php?id={$v->getIdEvent()}&action=delete'>Delete</a></td>
-                                            </tr>";
-                            }// end foreach
-                            $eventTable .= "</table></div>";
-                            echo $eventTable;
-                        }// end if
-                        else{
-                            echo "<h2>No events available!</h2>";
-                        }
-                    }// end events
+                                $eventTable .= $eventWithVenueName; // take found name or TBD to table
+                            }
+                            else {
+                                $eventTable .= "<td>TBD</td>";  // display default TBD if no venues
+                            }
+
+                            // Finish creation of rest of event table
+                            $eventTable .= "<td><a href='./venueManagement.php?id={$v->getIdEvent()}&action=edit'>Edit</a></td>
+                                            <td><a href='./venueManagement.php?id={$v->getIdEvent()}&action=delete'>Delete</a></td>
+                                        </tr>";
+                        }// end foreach
+                        $eventTable .= "</table></div>";
+                        echo $eventTable;
+                    }
+                    else{
+                        echo "<h2>No events available!</h2>";
+                    }
 
 
 
