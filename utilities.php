@@ -253,6 +253,27 @@
     }
 
 
+    
+    function managementAddCheck(){
+        if(isset($_GET["action"]) && !empty($_GET["action"])){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    function managementEditDeleteCheck(){
+        if(isset($_GET["id"]) && !empty($_GET["id"]) && isset($_GET["action"]) && !empty($_GET["action"])){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+
+
 
 
 

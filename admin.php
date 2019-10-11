@@ -165,8 +165,8 @@
                             }
 
                             // Finish creation of rest of event table
-                            $eventTable .= "<td><a href='./venueManagement.php?id={$v->getIdEvent()}&action=edit'>Edit</a></td>
-                                            <td><a href='./venueManagement.php?id={$v->getIdEvent()}&action=delete'>Delete</a></td>
+                            $eventTable .= "<td><a href='./eventManagement.php?id={$v->getIdEvent()}&action=edit'>Edit</a></td>
+                                            <td><a href='./eventManagement.php?id={$v->getIdEvent()}&action=delete'>Delete</a></td>
                                         </tr>";
                         }// end foreach
                         $eventTable .= "</table></div>";
