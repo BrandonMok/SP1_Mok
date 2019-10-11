@@ -21,8 +21,7 @@
             // ADMINS only
             if(isset($_SESSION['userLoggedIn']) && isset($_SESSION['role'])){
                 if($_SESSION['role'] == 'admin'){
-                    if(isset($_GET['id']) && !empty($_GET['id'])) {
-                        if(isset($_GET['action']) && !empty($_GET['action'])){
+                    if(managementEditDeleteCheck()){
                             $id = $_GET['id'];          // In the URL to retrieve the id
                             $action = $_GET['action'];  // In the URL to retrieve the action
 
@@ -118,9 +117,9 @@
                                                 </div>";
                                 echo $optionDiv;
                             }
-                        }
+                        
                     }
-                    else if(isset($_GET['action']) && !empty($_GET['action'])) {
+                    else if(managementAddCheck()) {
                         // If no ID was passed, but an action was -> new user button was clicked
                         if($_GET['action'] == "add"){
                             echo "<h2 class='section-heading'>Add User</h2>";
