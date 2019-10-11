@@ -238,6 +238,101 @@
                 die("There was a problem getting all events!");
             } 
         }
+
+        /**
+         * getEvent
+         * @param $id
+         */
+        function getEvent($id){
+            try{
+                include_once("./classes/Event.class.php");
+                $data = array();
+                $query = "SELECT * FROM event WHERE idevent = :idevent";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute(array(
+                    ":idevent" => $id
+                ));
+                
+                $stmt->setFetchMode(PDO::FETCH_CLASS, "Event");
+                $data = $stmt->fetchAll();
+
+                return $data;
+            }
+            catch(PDOException $e){
+                die("There was a problem getting all events!");
+            } 
+        }
+
+        function deleteEvent($data){
+            try{
+                // delete event
+                // delete all sessions associated to the event
+                $query = "DELETE FROM event WHERE idevent = :idevent";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute(array(
+                    ":idevent" => $data["id"]
+                ));
+
+
+                // NOW DELETE SESSIONS
+                // ALSO DELETE SESSIONS FOR USER SESSSIONS
+                // DELETE ATTENDEE EVENTS
+                
+                return $stmt->rowCount();
+            }
+            catch(PDOException $e){
+                die("There was a problem getting all events!");
+            } 
+        }
+
+
+        /* -------------------- SESSIONS -------------------- */
+        /**
+         * getAllSessions
+         * Retrieves all sessions for all events
+         */
+        function getAllSessions(){
+            try{
+                include_once("./classes/Session.class.php");
+                $data = array();
+                $query = "SELECT * FROM session";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute();
+
+                $stmt->setFetchMode(PDO::FETCH_CLASS, "Session");
+                $data = $stmt->fetchAll();
+
+                return $data;
+            }
+            catch(PDOException $e){
+                die("There was a problem getting all sessions!");
+            }
+        }
+
+        /**
+         * deleteSession
+         * @param $sessionID
+         * Deletes one session by its ID
+         */
+        function deleteSession($sessionID){
+            try{
+                // Delete session 
+                $query = "DELETE FROM session WHERE idsession = :idsession";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute(array(
+                    ":idsession" => $sessionID
+                ));
+
+                return $stmt->rowCount();
+            }
+            catch(PDOException $e){
+                die("There was a problem deleting sessions!");
+            }
+        }
+
+
+
+        
         
 
 
