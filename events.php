@@ -18,10 +18,10 @@
             reusableHeader();
 
             // Verify User logged in before allowing any actions
-            if(isset($_SESSION['userLoggedIn']) && isset($_SESSION['role'])){
+            if(isset($_SESSION["userLoggedIn"]) && isset($_SESSION["role"])){
                 // ALL roles are allowed to have acess to this page
                 // Using check as an extra precaution
-                if($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'event_manager' || $_SESSION['role'] == 'attendee'){
+                if($_SESSION["role"] == "admin" || $_SESSION["role"] == "event_manager" || $_SESSION["role"] == "attendee"){
                     echo "<p class='section-heading'>Events</p>";
                     $allEvents = $db->getAllEvents();   // get all events
 

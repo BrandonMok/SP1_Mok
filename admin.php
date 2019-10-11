@@ -19,8 +19,8 @@
 
             // Admins and event managers only!
             // BUT Admins do everything
-            if(isset($_SESSION['userLoggedIn']) && isset($_SESSION['role'])){
-                if($_SESSION['role'] == 'admin'){
+            if(isset($_SESSION["userLoggedIn"]) && isset($_SESSION["role"])){
+                if($_SESSION["role"] == "admin"){
                     // ADMIN ONLY
 
                     /* -------------------- Users -------------------- */
@@ -179,17 +179,23 @@
 
 
                 }// end if admin
-                else if($_SESSION['role'] == 'event_manager'){
+                else if($_SESSION["role"] == "event_manager"){
                     // EVENT MANAGER ONLY
 
 
 
 
+
+                }
+                else{
+                    // User is an attendee - redirect
+                    header("Location: events.php");
+                    exit;
                 }
             }// end if logged in
             else{
                 // REDIRECT - User not logged in
-                header('Location: login.php');
+                header("Location: login.php");
                 exit;
             }
         ?>  

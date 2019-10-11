@@ -34,16 +34,16 @@
 
             <?php
                 // Don't allow an already logged in user to make another account
-                if(isset($_SERVER['userLoggedIn'])){
+                if(isset($_SERVER["userLoggedIn"])){
                     header('Location: events.php');
                     exit;
                 }
 
                 if($_SERVER["REQUEST_METHOD"] == "POST"){
-                    if(!empty($_POST['registerName']) && !empty($_POST['registerPassword'])){
-                        if(isset($_POST['registerName']) && isset($_POST['registerPassword'])){
-                            $uName = sanitizeString($_POST['registerName']);                        // sanitize
-                            $password = hash('sha256', sanitizeString($_POST['registerPassword'])); // Sanitize + hash password!
+                    if(!empty($_POST["registerName"]) && !empty($_POST["registerPassword"])){
+                        if(isset($_POST["registerName"]) && isset($_POST["registerPassword"])){
+                            $uName = sanitizeString($_POST["registerName"]);                        // sanitize
+                            $password = hash('sha256', sanitizeString($_POST["registerPassword"])); // Sanitize + hash password!
 
                             // Search if user exists - in case of registration, don't want the account to exist in order to create it
                             // verify user (-1 if not found or 1 if found)
@@ -68,7 +68,7 @@
                                     echo "<p class='form-success-text'>Succesfully registered<i class='far fa-thumbs-up'></i></p>";
                                     
 
-                                    header('Location: login.php');
+                                    header("Location: login.php");
                                     exit;
                                 }
                                 else{

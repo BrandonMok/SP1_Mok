@@ -7,8 +7,8 @@
 
 
     // User logged in already, just redirect to events
-    if(!empty($_SESSION['userLoggedIn'])){
-        if($_SESSION['userLoggedIn']  == false){
+    if(!empty($_SESSION["userLoggedIn"])){
+        if($_SESSION["userLoggedIn"]  == false){
             endSession(); // call function to end the session
         }
         else{
@@ -49,37 +49,37 @@
 
             <?php
                 // When user submits form - verify user logged in correclty
-                if($_SERVER['REQUEST_METHOD'] == 'POST'){
-                    if(!empty($_POST['name']) && !empty($_POST['password'])){
-                        if(isset($_POST['name']) && isset($_POST['password'])){
-                            $uName = sanitizeString($_POST['name']);                        // sanitize
-                            $password = hash('sha256', sanitizeString($_POST['password'])); // Sanitize + hash password!
+                if($_SERVER["REQUEST_METHOD"] == "POST"){
+                    if(!empty($_POST["name"]) && !empty($_POST["password"])){
+                        if(isset($_POST["name"]) && isset($_POST["password"])){
+                            $uName = sanitizeString($_POST["name"]);                        // sanitize
+                            $password = hash("sha256", sanitizeString($_POST["password"])); // Sanitize + hash password!
 
                             $userCheck = $db->verifyUser($uName, $password);    // verify user (-1 if not found or 1 if found)
 
-                            $rows = $userCheck['rowCount'];             // rowcount
-                            $role = $userCheck['currentUser']['role'];  // role
-                            $name = $userCheck['currentUser']['name'];  // name
+                            $rows = $userCheck["rowCount"];             // rowcount
+                            $role = $userCheck["currentUser"]["role"];  // role
+                            $name = $userCheck["currentUser"]["name"];  // name
 
 
                             // Only proceed if rows returned (aka found the user)
                             if($rows > 0){
-                                $_SESSION['userLoggedIn'] = true;  // set session variable
-                                $_SESSION['currentUSR'] = $name;
+                                $_SESSION["userLoggedIn"] = true;  // set session variable
+                                $_SESSION["currentUSR"] = $name;
                                 
                                 // Switch to determine role -> store as session variable
                                 switch($role){
-                                    case '1':
-                                        $_SESSION['role'] = 'admin';
+                                    case "1":
+                                        $_SESSION["role"] = "admin";
                                         break;
-                                    case '2':
-                                        $_SESSION['role'] = 'event_manager';
+                                    case "2":
+                                        $_SESSION["role"] = "event_manager";
                                         break;
-                                    case '3':
-                                        $_SESSION['role'] = 'attendee';
+                                    case "3":
+                                        $_SESSION["role"] = "attendee";
                                         break;
                                     default:    
-                                        $_SESSION['role'] = 'attendee'; 
+                                        $_SESSION["role"] = "attendee"; 
                                         break;
                                 }
 

@@ -23,8 +23,8 @@
      */
     function reusableHeader(){
         // Based on roles
-        if(isset($_SESSION['role']) && !empty($_SESSION['role'])){
-            $role = $_SESSION['role'];
+        if(isset($_SESSION["role"]) && !empty($_SESSION["role"])){
+            $role = $_SESSION["role"];
             if($role == "admin" || $role == "event_manager"){
                 $headerSTR = "<header>
                                 <span class='user-welcome'>Hi ".$_SESSION['currentUSR']."</span>
@@ -253,7 +253,7 @@
     }
 
 
-    
+
     function managementAddCheck(){
         if(isset($_GET["action"]) && !empty($_GET["action"])){
             return true;
