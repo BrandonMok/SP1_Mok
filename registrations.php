@@ -28,8 +28,6 @@
                 header('Location: login.php');
                 exit;
             }
-
-            // reusableFooter();
         ?>
     </body>
 </html>

@@ -1,11 +1,15 @@
-- Need to do something with venue since on events it comes back as a number
-
 Registrations.php
 -> put into URL and do a GET for a specific event
+- Have registrations page available
+- click on event -> shows sessions -> once choose session then set event registered and session
+-- Checks for event exists
+-- checks for session exists
 
 VenueManagement.php
 	- Consider having table be done in a utility function?
 		- So event manager can have same table, but ONLY theirs? as another check
 
 
-	
+To consider:
+- When delete an event, delete sessions associated with event
+	-- update to attendee_event and attendee_session to delete

@@ -22,9 +22,9 @@
             if(isset($_SESSION['userLoggedIn']) && isset($_SESSION['role'])){
                 if($_SESSION['role'] == 'admin'){
                     // ADMIN ONLY
-                    echo "<p class='section-heading'>Admin</p>";
 
                     /* -------------------- Users -------------------- */
+                    echo "<p class='section-heading'>Admin</p>";
                     echo "<a href='./accountManagement.php?action=add'>
                                 <div class='add-btn'>Add User</div>
                             </a>";
@@ -132,13 +132,6 @@
                                                 <th>Delete</th>               
                                             </tr>";
 
-
-                        /**
-                         * ISSUE WITH VENUE SINCE IT'S IN A DIFFERENT TABLE
-                         * JOIN QUERY? -> But then how does that work with class objects?
-                         */
-                                            
-
                         if(count($allEvents) > 0){
                             foreach($allEvents as $v){
                                 $eventTable .= "<tr>    
@@ -146,15 +139,28 @@
                                                     <td>{$v->getName()}</td>
                                                     <td>{$v->getDateStart()}</td>
                                                     <td>{$v->getDateEnd()}</td>
-                                                    <td>{$v->getNumberAllowed()}</td>
-                                                    <td>{}</td>
-                                                    <td><a href='./venueManagement.php?id={$v->getIdEvent()}&action=edit'>Edit</a></td>
-                                                    <td><a href='./venueManagement.php?id={$v->getIdEvent()}&action=delete'>Delete</a></td>
-                                                </tr>";
-                            }
+                                                    <td>{$v->getNumberAllowed()}</td>";
+
+                                // If venues, match the venue names to event venue ID
+                                if(count($allVenues) > 0){
+                                    foreach($allVenues as $venue){
+                                        if($venue->getIdVenue() == $v->getIdEvent()){
+                                            $eventTable .= "<td>{$venue->getName()}</td>"; // GET THE VENUE NAME
+                                            break;
+                                        }
+                                    }
+                                }
+                                else {
+                                    $eventTable .= "<td>{$v->getVenue()}</td>";
+                                }
+
+                                $eventTable .= "<td><a href='./venueManagement.php?id={$v->getIdEvent()}&action=edit'>Edit</a></td>
+                                                <td><a href='./venueManagement.php?id={$v->getIdEvent()}&action=delete'>Delete</a></td>
+                                            </tr>";
+                            }// end foreach
                             $eventTable .= "</table></div>";
                             echo $eventTable;
-                        }
+                        }// end if
                         else{
                             echo "<h2>No events available!</h2>";
                         }
