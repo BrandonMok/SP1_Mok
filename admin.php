@@ -50,7 +50,7 @@
                                             <td><a href='./accountManagement.php?id={$v->getIdAttendee()}&action=edit'>Edit</a></td>";          
                                    
                             // Check if user is an admin -> Don't allow admin account to be deleted
-                            if($v->getRole() == 1){
+                            if($v->getRole() == 1 && $v->getIdAttendee() == 1){
                                 $tableSTR .= "<td></td></tr>";
                             }
                             else{
