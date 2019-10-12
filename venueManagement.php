@@ -120,7 +120,7 @@
                             if($_GET["action"] == "add"){
                                 echo "<h2 class='section-heading'>Add Venue</h2>";
                                 $addForm = "<div class='edit-add-form-container'>
-                                                <form class='user-edit-form' name='user-edit-form' action='./venueManagement.php?&action=add' method='POST'>
+                                                <form id='user-edit-form' name='user-edit-form' action='./venueManagement.php?&action=add' method='POST'>
                                                     <div id='user-edit-labels'>
                                                         <label>ID</label>
                                                         <label>Name</label>
