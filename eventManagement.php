@@ -41,8 +41,8 @@
                                 );
                                 $originalValues = json_encode($originalValues);
 
-                                // EDIT VENUE SECTION
-                                echo "<h2 class='section-heading'>Edit Venue</h2>";
+                                // EDIT Event SECTION
+                                echo "<h2 class='section-heading'>Edit Event</h2>";
 
                                 $eventEditTable = "<div id='account-form-container'>
                                                     <form id='user-edit-form' name='user-edit-form' action='./eventManagement.php?id={$event->getIdEvent()}&action=edit' method='POST'>
@@ -55,27 +55,25 @@
                                                             <label>Venue</label>   
                                                         </div>
                                                         <div id='user-edit-inputs'>
-                                                            <input type='text' name='id' value='{$event->getIdEvent()}' readonly='readonly'><br/>
-                                                            <input type='text' name='name' value='{$event->getName()}'><br/>
-                                                            <input type='text' name='datestart' value='{$event->getDateStart()}'><br/>
-                                                            <input type='text' name='dateend' value='{$event->getDateEnd()}'><br/>
-                                                            <input type='text' name='numberallowed' value='{$event->getNumberAllowed()}'><br/>
-                                                            <input type='text' name='venue' value='{$event->getVenue()}'><br/>
-                                                        </div><br/>
+                                                            <input type='text' name='id' value='{$event->getIdEvent()}' readonly='readonly'>
+                                                            <input type='text' name='name' value='{$event->getName()}'>
+                                                            <input type='text' name='datestart' value='{$event->getDateStart()}'>
+                                                            <input type='text' name='dateend' value='{$event->getDateEnd()}'>
+                                                            <input type='text' name='numberallowed' value='{$event->getNumberAllowed()}'>
+                                                            <input type='text' name='venue' value='{$event->getVenue()}'>
+                                                        </div>
                                                         <input type='hidden' name='originalValues' value='{$originalValues}'>";
                                                     
                                 $eventEditTable .= "<input name='submit' id='submit-btn' type='submit' value='Submit'/></form></div>";
                                 echo $eventEditTable;
-
-
-
-
-
-                            }
+                            }// end if EDIT
                             else if($_GET["action"] == "delete"){
                                 // DELETE
 
-                            }
+
+
+
+                            }// end if DELETE
                             else {
                                 // REDIRECT: something else besides edit or delete was passed
                                 redirect("admin");
@@ -133,7 +131,7 @@
 
                     }
                     else if($_GET["action"] == "add") {
-                        
+
                     }
                 }
             }// end if POST

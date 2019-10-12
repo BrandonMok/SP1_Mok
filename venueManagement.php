@@ -45,15 +45,15 @@
                                 $editForm = "<div id='account-form-container'>
                                                 <form id='user-edit-form' name='user-edit-form' action='./venueManagement.php?id={$venue->getIdVenue()}&action=edit' method='POST'>
                                                     <div id='user-edit-labels'>
-                                                        <label>ID</label><br/>
-                                                        <label>Name</label><br/>
-                                                        <label>Capacity</label><br/>
+                                                        <label>ID</label>
+                                                        <label>Name</label>
+                                                        <label>Capacity</label>
                                                     </div>
                                                     <div id='user-edit-inputs'>
-                                                        <input type='text' name='id' value='{$venue->getIdVenue()}' readonly='readonly'><br/>
-                                                        <input type='text' name='name' value='{$venue->getName()}'><br/>
-                                                        <input type='text' name='capacity' value='{$venue->getCapacity()}'><br/>
-                                                    </div><br/>
+                                                        <input type='text' name='id' value='{$venue->getIdVenue()}' readonly='readonly'>
+                                                        <input type='text' name='name' value='{$venue->getName()}'>
+                                                        <input type='text' name='capacity' value='{$venue->getCapacity()}'>
+                                                    </div>
                                                     <input type='hidden' name='originalValues' value='{$originalValues}'>";
                                                     
                                 $editForm .= "<input name='submit' id='submit-btn' type='submit' value='Submit'/></form></div>";

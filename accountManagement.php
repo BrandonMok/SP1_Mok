@@ -43,20 +43,20 @@
                             $editForm = "<div id='account-form-container'>
                                             <form id='user-edit-form' name='user-edit-form' action='./accountManagement.php?id={$user->getIdAttendee()}&action=edit' method='POST'>
                                                 <div id='user-edit-labels'>
-                                                    <label>ID</label><br/>
-                                                    <label>Name</label><br/>
-                                                    <label>Password</label><br/>
-                                                    <label>Role</label><br/>                                                   
+                                                    <label>ID</label>
+                                                    <label>Name</label>
+                                                    <label>Password</label>
+                                                    <label>Role</label>                                                   
                                                 </div>
                                                 <div id='user-edit-inputs'>
-                                                    <input type='text' name='id' value='{$user->getIdAttendee()}' readonly='readonly'><br/>
-                                                    <input type='text' name='name' value='{$user->getName()}'><br/>
-                                                    <input type='text' name='password'><br/>";
+                                                    <input type='text' name='id' value='{$user->getIdAttendee()}' readonly='readonly'>
+                                                    <input type='text' name='name' value='{$user->getName()}'>
+                                                    <input type='text' name='password'>";
             
                             
                             // Don't let superadmin to change roles -> NEED to have one SUPERADMIN account
                             if($user->getRole() == "1" && $user->getIdAttendee() == 1){
-                                $editForm .= "<input type='text' name='role' value='{$user->getRole()}' readonly='readonly'><br/></div>";
+                                $editForm .= "<input type='text' name='role' value='{$user->getRole()}' readonly='readonly'></div>";
                             }
                             else{
                                 $editForm .= "<input type='text' name='role' value='{$user->getRole()}'><br/></div><br/>";

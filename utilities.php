@@ -266,7 +266,6 @@
             return false;
         }
     }
-
     /**
      * managementEditDeleteCheck
      * Checks to see if id and action were set - EDIT and DELETE require both
@@ -281,7 +280,11 @@
     }
 
 
-
+    /**
+     * redirect
+     * @param $page
+     * Reusable redirect function that accepts the page name to redirect to
+     */
     function redirect($page){
         switch($page){
             case "admin":

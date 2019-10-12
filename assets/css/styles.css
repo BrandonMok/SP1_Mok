@@ -202,7 +202,6 @@ div#back-arrow-container {
 }
 
 /** Admin - account management (page w/specific chosen user) */
-/* Add */
 .add-btn {
     margin: 0 1.5em;
     border: 2px solid #29E789;
@@ -229,13 +228,19 @@ div#back-arrow-container {
 #user-edit-form > div input {
     font-size: 1.2em;
 }
+/* Div to hold labels */
 #user-edit-labels {
     display: inline-block;
     text-align: left;
 }
+/* Div to hold inputs */
 #user-edit-inputs {
     margin-left: 1em;
     display: inline-block;
+}
+/** The actual label & inputs inside the div */
+#user-edit-labels > label, #user-edit-inputs > input {
+    display: block;
 }
 
 
