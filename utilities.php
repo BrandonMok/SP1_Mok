@@ -282,7 +282,19 @@
 
 
 
-
+    function redirect($page){
+        switch($page){
+            case "admin":
+                header("Location: admin.php");
+                exit;
+            case "events":
+                header("Location: events.php");
+                exit;
+            case "login":
+                header("Location: login.php");
+                exit;
+        }
+    }
 
 
 

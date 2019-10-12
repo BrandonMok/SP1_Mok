@@ -123,8 +123,7 @@
                         }
                         else {
                             // REDIRECT: something else besides edit or delete was passed
-                            header("Location: admin.php");
-                            exit;
+                            redirect("admin");
                         }
                     }// end if edit/delete allowed
                     else if(managementAddCheck()){
@@ -151,26 +150,22 @@
                         }
                         else{
                             // REDIRECT: Action is something else
-                            header("Location: admin.php");
-                            exit;
+                            redirect("admin");
                         }
                     }
                     else{
                         // REDIRECT: something else besides edit or delete was passed
-                        header("Location: admin.php");
-                        exit;
+                        redirect("admin");
                     }
                 }// end if admin
                 else {
                     // REDIRECT: User isn't an admin
-                    header("Location: events.php");
-                    exit;
+                    redirect("events");
                 }
             }// end of if loggedin
             else {
                 // REDIRECT: User not logged in
-                header("Location: login.php");
-                exit;
+                redirect("login");
             }
 
             

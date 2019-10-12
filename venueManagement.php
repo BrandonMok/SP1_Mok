@@ -111,8 +111,7 @@
                             }
                             else {
                                 // action is something else
-                                header("Location: admin.php");
-                                exit;
+                                redirect("admin");
                             }
                         }// end if edit/delete allowed
                         else if(managementAddCheck()){
@@ -137,14 +136,12 @@
                             }
                             else{
                                 // REDIRECT: Action is something else
-                                header("Location: admin.php");
-                                exit;
+                                redirect("admin");
                             }
                         }// end if action was the only set
                         else{
-                             // REDIRECT: something else besides edit or delete was passed
-                            header("Location: admin.php");
-                            exit;
+                            // REDIRECT: something else besides edit or delete was passed
+                            redirect("admin");
                         }
                     }
                     else if($_SESSION["role"] == "event_manager"){
@@ -156,13 +153,12 @@
                 }// end if admin or event manager
                 else {
                     // REDIRECT: User is an attendee
-                    header("Location: events.php");
-                    exit;
+                    redirect("events");
                 }
             }// end if logged in
             else {
-                header("Location: login.php");
-                exit;
+                // REDIRECT: User not logged in
+                redirect("login");
             }
 
 
