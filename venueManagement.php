@@ -42,7 +42,7 @@
                                 echo "<h2 class='section-heading'>Edit Venue</h2>";
 
                                 // Edit form
-                                $editForm = "<div id='account-form-container'>
+                                $editForm = "<div class='edit-add-form-container' >
                                                 <form id='user-edit-form' name='user-edit-form' action='./venueManagement.php?id={$venue->getIdVenue()}&action=edit' method='POST'>
                                                     <div id='user-edit-labels'>
                                                         <label>ID</label>
@@ -54,9 +54,10 @@
                                                         <input type='text' name='name' value='{$venue->getName()}'>
                                                         <input type='text' name='capacity' value='{$venue->getCapacity()}'>
                                                     </div>
-                                                    <input type='hidden' name='originalValues' value='{$originalValues}'>";
-                                                    
-                                $editForm .= "<input name='submit' id='submit-btn' type='submit' value='Submit'/></form></div>";
+                                                    <input type='hidden' name='originalValues' value='{$originalValues}'><br/>
+                                                    <input name='submit' id='submit-btn' type='submit' value='Submit'/>
+                                                </form>
+                                            </div>";
                                 echo $editForm;
                             }
                             else if($_GET["action"] == "delete"){
@@ -118,20 +119,21 @@
                             // Add 
                             if($_GET["action"] == "add"){
                                 echo "<h2 class='section-heading'>Add Venue</h2>";
-                                $addForm = "<div id='account-form-container'>
-                                                <form class='user-edit-form' name='add-form' action='./venueManagement.php?&action=add' method='POST'>
+                                $addForm = "<div class='edit-add-form-container'>
+                                                <form class='user-edit-form' name='user-edit-form' action='./venueManagement.php?&action=add' method='POST'>
                                                     <div id='user-edit-labels'>
-                                                        <label>ID</label><br/>
-                                                        <label>Name</label><br/>
-                                                        <label>Capacity</label><br/>
+                                                        <label>ID</label>
+                                                        <label>Name</label>
+                                                        <label>Capacity</label>
                                                     </div>
                                                     <div id='user-edit-inputs'>
-                                                        <input type='text' name='id' readonly='readonly' placeholder='Auto-increment'><br/>
-                                                        <input type='text' name='name'><br/>
-                                                        <input type='text' name='capacity'><br/>
-                                                    </div><br/>";
-    
-                                $addForm .= "<input name='submit' id='submit-btn' type='submit' value='Submit'/></form></div>";
+                                                        <input type='text' name='id' readonly='readonly' placeholder='Auto-increment'>
+                                                        <input type='text' name='name'>
+                                                        <input type='text' name='capacity'>
+                                                    </div><br/>
+                                                    <input name='submit' id='submit-btn' type='submit' value='Submit'/>
+                                                </form>
+                                            </div>";
                                 echo $addForm;
                             }
                             else{

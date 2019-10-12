@@ -40,7 +40,7 @@
                             );
                             $originalValues = json_encode($originalValues);
 
-                            $editForm = "<div id='account-form-container'>
+                            $editForm = "<div class='edit-add-form-container' >
                                             <form id='user-edit-form' name='user-edit-form' action='./accountManagement.php?id={$user->getIdAttendee()}&action=edit' method='POST'>
                                                 <div id='user-edit-labels'>
                                                     <label>ID</label>
@@ -59,10 +59,10 @@
                                 $editForm .= "<input type='text' name='role' value='{$user->getRole()}' readonly='readonly'></div>";
                             }
                             else{
-                                $editForm .= "<input type='text' name='role' value='{$user->getRole()}'><br/></div><br/>";
+                                $editForm .= "<input type='text' name='role' value='{$user->getRole()}'></div>";
                             }
             
-                            $editForm .= "<input type='hidden' name='originalValues' value='{$originalValues}'>";
+                            $editForm .= "<input type='hidden' name='originalValues' value='{$originalValues}'><br/>";
                             $editForm .= "<input name='submit' id='submit-btn' type='submit' value='Submit'/></form></div>";
                             echo $editForm;
                         }
@@ -130,24 +130,25 @@
                         // Add 
                         if($_GET["action"] == "add"){
                             echo "<h2 class='section-heading'>Add User</h2>";
-                            $addForm = "<div id='account-form-container'>
-                                        <form id='user-edit-form' name='user-edit-form' action='./accountManagement.php?&action=add' method='POST'>
+                            $addForm = "<div class='edit-add-form-container'>
+                                            <form id='user-edit-form' name='user-edit-form' action='./accountManagement.php?&action=add' method='POST'>
                                                 <div id='user-edit-labels'>
-                                                    <label>ID</label><br/>
-                                                    <label>Name</label><br/>
-                                                    <label>Password</label><br/>
-                                                    <label>Role</label><br/>                                                   
+                                                    <label>ID</label>
+                                                    <label>Name</label>
+                                                    <label>Password</label>
+                                                    <label>Role</label>                                                   
                                                 </div>
                                                 <div id='user-edit-inputs'>
-                                                    <input type='text' name='id' readonly='readonly' placeholder='Auto-increment'><br/>
-                                                    <input type='text' name='name'><br/>
-                                                    <input type='text' name='password'><br/>
-                                                    <input type='text' name='role'><br/>
-                                                </div><br/>";
-    
-                            $addForm .= "<input name='submit' id='submit-btn' type='submit' value='Submit'/></form></div>";
+                                                    <input type='text' name='id' readonly='readonly' placeholder='Auto-increment'>
+                                                    <input type='text' name='name'>
+                                                    <input type='text' name='password'>
+                                                    <input type='text' name='role'>
+                                                </div><br/>
+                                                <input name='submit' id='submit-btn' type='submit' value='Submit'/>
+                                            </form>
+                                        </div>";
                             echo $addForm;
-                        }
+                        }// end if action was the only set
                         else{
                             // REDIRECT: Action is something else
                             redirect("admin");

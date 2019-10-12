@@ -44,7 +44,7 @@
                                 // EDIT Event SECTION
                                 echo "<h2 class='section-heading'>Edit Event</h2>";
 
-                                $eventEditTable = "<div id='account-form-container'>
+                                $eventEditTable = "<div class='edit-add-form-container'>
                                                     <form id='user-edit-form' name='user-edit-form' action='./eventManagement.php?id={$event->getIdEvent()}&action=edit' method='POST'>
                                                         <div id='user-edit-labels'>
                                                             <label>ID</label>
@@ -62,9 +62,10 @@
                                                             <input type='text' name='numberallowed' value='{$event->getNumberAllowed()}'>
                                                             <input type='text' name='venue' value='{$event->getVenue()}'>
                                                         </div>
-                                                        <input type='hidden' name='originalValues' value='{$originalValues}'><br/>";
-                                                    
-                                $eventEditTable .= "<input name='submit' id='submit-btn' type='submit' value='Submit'/></form></div>";
+                                                        <input type='hidden' name='originalValues' value='{$originalValues}'><br/>
+                                                        <input name='submit' id='submit-btn' type='submit' value='Submit'/>
+                                                    </form>
+                                                </div>";
                                 echo $eventEditTable;
                             }// end if EDIT
                             else if($_GET["action"] == "delete"){
