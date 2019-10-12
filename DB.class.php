@@ -197,13 +197,20 @@
          */
         function deleteUser($data){ 
             try{
-                $query = "DELETE FROM attendee WHERE idattendee = :idattendee";
-                $stmt = $this->db->prepare($query);
-                $stmt->execute(array(
-                    ":idattendee" => $data[0]
-                ));
+                // Make sure the superadmin account CANNOT be deleted
+                if($data[0] == 1){ // if id = superadmin's
+                    return 0;
+                }
+                else{
+                    // UserID isn't the superadmin's
+                    $query = "DELETE FROM attendee WHERE idattendee = :idattendee";
+                    $stmt = $this->db->prepare($query);
+                    $stmt->execute(array(
+                        ":idattendee" => $data[0]
+                    ));
 
-                return $stmt->rowCount();
+                    return $stmt->rowCount();
+             }
             }
             catch(PDOException $e){
                 die("There was a problem deleting user!");
