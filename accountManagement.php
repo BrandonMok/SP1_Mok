@@ -191,7 +191,6 @@
                             $password = hash('sha256', $password);
                         }
 
-                        // Switch to allow the right assignment
                         // Can pass in either the number or text equilavent
                         // Either way, sets it as a number from text input
                         switch($role){
@@ -237,57 +236,45 @@
                             $dataFields["originalValues"] = $originalValues;
                             editPost($dataFields);
                         }
-                    }
+                    }// end if EDIT
                     else if($_GET["action"] == "add") {
                         $name = sanitizeString($_POST["name"]);
                         $password = sanitizeString($_POST["password"]);
                         $role = sanitizeString($_POST["role"]);
 
-                        $changesArray = array();
-                    
-                        if(!empty($name) && isset($name)){
-                            $changesArray["name"] = $name;
-                        }
-                        if(!empty($password) && isset($password) && $password != ""){
-                            $password = hash('sha256', $password);
-                            $changesArray["password"] = $password;
-                        }
-                        if(!empty($role) && isset($role)){
-                            switch($role){
-                                case 1: 
-                                case "admin":
-                                    $changesArray["role"] = 1;
-                                    break;
-                                case 2:
-                                case "event_manager":
-                                case "event manager":
-                                    $changesArray["role"] = 2;
-                                    break;
-                                case 3:
-                                case "attendee":
-                                    $changesArray["role"] = 3;
-                                    break;
-                            }
+                        switch($role){
+                            case 1: 
+                            case "admin":
+                                $role = 1;
+                                break;
+                            case 2:
+                            case "event_manager":
+                            case "event manager":
+                                $role = 2;
+                                break;
+                            case 3:
+                            case "attendee":
+                                $role = 3;
+                                break;
+                            default: 
+                                $role = 3;
+                                break;
                         }
 
-                        // If changes were made!
-                        if(!empty($changesArray) && count($changesArray) == 3){
-                            $rowCount = $db->insertUser($changesArray["name"], $changesArray["password"], $changesArray["role"]);
 
-                            if($rowCount > 0){
-                                header("Location: admin.php");
-                                exit;
-                            }
-                            else{
-                                echo "<p class='form-error-text '>** Editing user failed!</p>";
-                            }
-                        }
-                        else{
-                            echo "<p class='form-error-text '>** No changes made to user!</p>";
-                        }
-                    }
-                }
-            }
+                        // Use reusable addPOST processing function
+                        $dataFields = array();
+                        $dataFields["area"] = "user";
+                        $dataFields["fields"]["name"] = array("type" => "s", "value" => $name);
+                        $dataFields["fields"]["password"] = array("type" => "s", "value" => hash('sha256', $password));
+                        $dataFields["fields"]["role"] = array("type" => "i", "value" => $role);
+                        $dataFields["method"] = array(
+                            "add" => "insertUser"
+                        );
+                        addPost($dataFields);
+                    }// end if ADD
+                }// end if ACTION
+            }// end if POST
         ?>
     </body>
 </html>       

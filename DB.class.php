@@ -116,19 +116,19 @@
 
         /**
          * insertUser
-         * @param $name
-         * @param $password
-         * Inserts a new user - ATTENDEE ROLE by DEFAULT unless admin changes it
+         * @param $data
+         * $DATA contains necessary fields to add a user
+         * Inserts a new user 
          */
-        function insertUser($name, $password, $role = 3){
+        function insertUser($data){
             try{
                 $query = "INSERT INTO attendee (name,password,role) 
                             VALUES (:name, :password, :role)";
                 $stmt = $this->db->prepare($query);
                 $stmt->execute(array(
-                    ":name" => $name,
-                    ":password" => $password,
-                    ":role" => $role
+                    ":name" => $data["name"],
+                    ":password" => $data["password"],
+                    ":role" => $data["role"]
                 ));
 
                 return $this->db->lastInsertId();

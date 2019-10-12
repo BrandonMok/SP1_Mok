@@ -56,17 +56,21 @@
                             }
                             else{
                                 // Able to make a new account
-                                $id = $db->insertUser($uName, $password);
+                                $newUser = array();
+                                $newUser["name"] = $uName;
+                                $newUser["password"] = $password;
+                                $newUser["role"] = 3; // set to attendee, only allow admin to change user account roles
+
+                                // $id = $db->insertUser($uName, $password);
+                                $id = $db->insertUser($newUser);
+
                                 if($id > 0){
-                            
                                     // make custom full screen to display account created successfully?
                                     // white rounded box
                                     // green check mark
-                                    // txt underneath
                                     // sleep()
 
                                     echo "<p class='form-success-text'>Succesfully registered<i class='far fa-thumbs-up'></i></p>";
-                                    
 
                                     header("Location: login.php");
                                     exit;
