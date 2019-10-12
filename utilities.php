@@ -278,7 +278,6 @@
 
 
 
-
     /**
      * End the session
      */

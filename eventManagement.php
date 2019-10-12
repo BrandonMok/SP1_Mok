@@ -17,38 +17,52 @@
         <?php 
             reusableHeader();
 
-            // Verify User logged in before allowing any actions
+            // Verify User logged in before allowing any actions 
+            // ONLY ADMIN and EVENT MANAGER 
             if(isset($_SESSION["userLoggedIn"]) && isset($_SESSION["role"])){
-                // admin processes - all add/edit/delete
-                if($_SESSION["role"] == "admin"){
-                    // Check if both ID and Action were passed = edit and delete processes can continue
-                    if(managementEditDeleteCheck()){
-                        // Edit and Delete
+                if($_SESSION["role"] == "admin" || $_SESSION["role"] == "event_manager"){
+                    // Distinguish which user role to allow specific functions
+                    if($_SESSION["role"] == "admin"){
+                        // Check if both ID and Action were passed = edit and delete processes can continue
+                        if(managementEditDeleteCheck()){
+                            if($_GET["action"] == "edit"){
+                                // EDIT
 
-                        if($_GET["action"] == "edit"){
+                            }
+                            else if($_GET["action"] == "delete"){
+                                // DELETE
 
+                            }
+                            else {
+                                // REDIRECT: something else besides edit or delete was passed
+                                header("Location: admin.php");
+                                exit;
+                            }
+                        }// end if edit/delete allowed
+                        else if(managementAddCheck()){
+                            // Add 
+                            
                         }
-                        else if($_GET["action"] == "delete"){
-
+                        else{
+                            // Something other action passed
+                            header("Location: admin.php");
+                            exit;
                         }
                     }
-                    else if(managementAddCheck()){
-                        // Add 
+                    else if($_SESSION["role"] == "event_manager"){
+                        // EVENT MANAGER
+
+
                     }
-
-                }
-                else if($_SESSION["role"] == "event_manager"){
-                    // Event Manager can only add/edit/delete THEIR OWN events
-
                 }
                 else {
-                    // Case when user is an attendee - redirect
-                    Location("Location: events.php");
+                    // REDIRECT: User is an attendee
+                    header("Location: events.php");
                     exit;
                 }
             }// end if logged in
             else {
-                // User not logged in - redirect
+                // REDIRECT: User not logged in
                 header("Location: login.php");
                 exit;
             }
