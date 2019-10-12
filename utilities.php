@@ -175,7 +175,7 @@
                     }
                     else {
                         if($type == "i"){
-                            if(is_numeric($value) && intval($value) >= 0 && $value != ""){
+                            if(is_numeric($value) && intval($value) >= 0){  // check if is numeric and is greater than 0
                                 $paramArr[$k] = intval($value);
                             }
                             else {

@@ -144,6 +144,7 @@
                         // EVENT MANAGER
 
 
+
                     }
                 }// end if admin or event manager
                 else {
@@ -169,34 +170,37 @@
                         $capacity = sanitizeString($_POST["capacity"]);
                         $originalValues = json_decode($_POST["originalValues"], true); 
 
-                        // Extra validation
+                        // Specific extra validation before passing into reusable edit post check
                         if(alphabetic($name) == 0 || numbers($name) == 1){
                             // ERROR: No letters and has numbers
                             echo "<p class='form-error-text'>** Please enter a valid name!</p>";
                         }
-                        else if(numbers($capacity) == 0 || alphabetic($capacity) == 1){
-                            // ERROR: Capacity has no numbers or capacity has letters
-                            echo "<p class='form-error-text'>** Please enter a valid capacity!</p>";
+                        if($capacity == "" || empty($capacity)){ // if capacity is empty, simply set to 0
+                            $capacity = 0;
                         }
-                        else{
-                            // Perform EDIT POST REQUEST Processing
-                            $dataFields = array();
-                            $dataFields["area"] = "venue";
-                            $dataFields["fields"] = array(
-                                "id" => $id,
-                                "name" => $name,
-                                "capacity" => $capacity
-                            );
-                            $dataFields["method"] = array(
-                                "update" => "updateVenue"
-                            );
-                            $dataFields["originalValues"] = $originalValues;
-                            editPost($dataFields);
-                        }
+
+                        // Perform EDIT POST REQUEST Processing
+                        $dataFields = array();
+                        $dataFields["area"] = "venue";
+                        $dataFields["fields"] = array(
+                            "id" => $id,
+                            "name" => $name,
+                            "capacity" => $capacity
+                        );
+                        $dataFields["method"] = array(
+                            "update" => "updateVenue"
+                        );
+                        $dataFields["originalValues"] = $originalValues;
+                        editPost($dataFields);
                     }
                     else if($_GET["action"] == "add") {
                         $name = sanitizeString($_POST["name"]);
                         $capacity = sanitizeString($_POST["capacity"]);
+
+                        // Special case for CAPACITY (allowed to be null) -> will set to 0 if null was passed though
+                        if($capacity == "" || empty($capacity)){
+                            $capacity = 0;
+                        }
 
                         // Perform ADD POST REQUEST Processing
                         $dataFields = array();

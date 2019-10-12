@@ -5,11 +5,14 @@ Registrations.php
 -- Checks for event exists
 -- checks for session exists
 
-VenueManagement.php
-	- Consider having table be done in a utility function?
-		- So event manager can have same table, but ONLY theirs? as another check
-
 
 To consider:
 - When delete an event, delete sessions associated with event
 	-- update to attendee_event and attendee_session to delete
+	
+	
+Delete event
+- Delete all sessions
+- delete the attendee_event objects
+- delete attendee_session objects
+- delete manager_event objects
