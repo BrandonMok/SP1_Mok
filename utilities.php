@@ -254,6 +254,10 @@
 
 
 
+    /**
+     * managementAddCheck
+     * Checks to see if the action in URL is set - used to double check for add action
+     */
     function managementAddCheck(){
         if(isset($_GET["action"]) && !empty($_GET["action"])){
             return true;
@@ -263,6 +267,10 @@
         }
     }
 
+    /**
+     * managementEditDeleteCheck
+     * Checks to see if id and action were set - EDIT and DELETE require both
+     */
     function managementEditDeleteCheck(){
         if(isset($_GET["id"]) && !empty($_GET["id"]) && isset($_GET["action"]) && !empty($_GET["action"])){
             return true;

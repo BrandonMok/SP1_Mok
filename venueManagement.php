@@ -117,23 +117,30 @@
                         }// end if edit/delete allowed
                         else if(managementAddCheck()){
                             // Add 
-                            echo "<h2 class='section-heading'>Add Venue</h2>";
-                            $addForm = "<div id='account-form-container'>
-                                            <form class='user-edit-form' name='add-form' action='./venueManagement.php?&action=add' method='POST'>
-                                                <div id='user-edit-labels'>
-                                                    <label>ID</label><br/>
-                                                    <label>Name</label><br/>
-                                                    <label>Capacity</label><br/>
-                                                </div>
-                                                <div id='user-edit-inputs'>
-                                                    <input type='text' name='id' readonly='readonly' placeholder='Auto-increment'><br/>
-                                                    <input type='text' name='name'><br/>
-                                                    <input type='text' name='capacity'><br/>
-                                                </div><br/>";
-
-                            $addForm .= "<input name='submit' id='submit-btn' type='submit' value='Submit'/></form></div>";
-                            echo $addForm;
-                        }
+                            if($_GET["action"] == "add"){
+                                echo "<h2 class='section-heading'>Add Venue</h2>";
+                                $addForm = "<div id='account-form-container'>
+                                                <form class='user-edit-form' name='add-form' action='./venueManagement.php?&action=add' method='POST'>
+                                                    <div id='user-edit-labels'>
+                                                        <label>ID</label><br/>
+                                                        <label>Name</label><br/>
+                                                        <label>Capacity</label><br/>
+                                                    </div>
+                                                    <div id='user-edit-inputs'>
+                                                        <input type='text' name='id' readonly='readonly' placeholder='Auto-increment'><br/>
+                                                        <input type='text' name='name'><br/>
+                                                        <input type='text' name='capacity'><br/>
+                                                    </div><br/>";
+    
+                                $addForm .= "<input name='submit' id='submit-btn' type='submit' value='Submit'/></form></div>";
+                                echo $addForm;
+                            }
+                            else{
+                                // REDIRECT: Action is something else
+                                header("Location: admin.php");
+                                exit;
+                            }
+                        }// end if action was the only set
                         else{
                              // REDIRECT: something else besides edit or delete was passed
                             header("Location: admin.php");

@@ -41,8 +41,15 @@
                         }// end if edit/delete allowed
                         else if(managementAddCheck()){
                             // Add 
-                            
-                        }
+                            if($_GET["action"] == "add"){
+
+                            }
+                            else{
+                                // REDIRECT: Action is something else
+                                header("Location: admin.php");
+                                exit;
+                            }
+                        }// end if action was the only set
                         else{
                             // Something other action passed
                             header("Location: admin.php");
