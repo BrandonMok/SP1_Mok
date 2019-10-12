@@ -299,6 +299,19 @@
         }
     }
 
+    /**
+     * adminAddBtns
+     * @param $data
+     * $data['url'] = url
+     * $data['area'] = area
+     * Reusable function to create the "ADD {insert area here}" button to create new object
+     */
+    function adminAddBtns($data){
+        echo "<a href={$data['url']}>
+                <div class='add-btn'>Add {$data['area']}</div>
+            </a>";
+    }
+
 
 
     /**

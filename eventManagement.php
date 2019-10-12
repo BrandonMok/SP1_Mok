@@ -62,7 +62,7 @@
                                                             <input type='text' name='numberallowed' value='{$event->getNumberAllowed()}'>
                                                             <input type='text' name='venue' value='{$event->getVenue()}'>
                                                         </div>
-                                                        <input type='hidden' name='originalValues' value='{$originalValues}'>";
+                                                        <input type='hidden' name='originalValues' value='{$originalValues}'><br/>";
                                                     
                                 $eventEditTable .= "<input name='submit' id='submit-btn' type='submit' value='Submit'/></form></div>";
                                 echo $eventEditTable;

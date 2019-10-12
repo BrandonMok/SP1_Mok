@@ -25,9 +25,13 @@
 
                     /* -------------------- Users -------------------- */
                     echo "<p class='section-heading'>Admin</p>";
-                    echo "<a href='./accountManagement.php?action=add'>
-                                <div class='add-btn'>Add User</div>
-                            </a>";
+
+                    // Call reusable function to create the add btn
+                    adminAddBtns(array(
+                        "url" => "./accountManagement.php?action=add",
+                        "area" => "User"
+                    ));
+                        
 
                     $allUsers = $db->getAllUsers();
                     if(count($allUsers) > 0){
@@ -76,13 +80,17 @@
                     // $venueTable["deleteURL"] = "./venueManagement.php?id={}&action=delete";
                     // adminTables($venueTable);
 
+                    echo "<p class='section-heading'>Venues</p>";
+
+                    // Call reusable function to create the add btn
+                    adminAddBtns(array(
+                        "url" => "./venueManagement.php?action=add",
+                        "area" => "Venue"
+                    ));
+
                     $allVenues = $db->getAllVenues();   // get all venues
                     if(count($allVenues) > 0){
-                        echo "<p class='section-heading'>Venues</p>";
-                        echo "<a href='./venueManagement.php?action=add'>
-                                    <div class='add-btn'>Add Venue</div>
-                                </a>";
-
+                        // Build venue table
                         $venueTable = "<div class='admin-table-container'>
                                         <table class='admin-table'>
                                             <tr>
@@ -92,36 +100,36 @@
                                                 <th>Edit</th>
                                                 <th>Delete</th>
                                             </tr>";
-                                            
 
-                        if(count($allVenues) > 0){
-                            foreach($allVenues as $v){
-                                $venueTable .= "<tr>    
-                                                    <td>{$v->getIdVenue()}</td>
-                                                    <td>{$v->getName()}</td>
-                                                    <td>{$v->getCapacity()}</td>
-                                                    <td><a href='./venueManagement.php?id={$v->getIdVenue()}&action=edit'>Edit</a></td>
-                                                    <td><a href='./venueManagement.php?id={$v->getIdVenue()}&action=delete'>Delete</a></td>
-                                                </tr>";
-                            }
-                            $venueTable .= "</table></div>";
-                            echo $venueTable;
+                        foreach($allVenues as $v){
+                            $venueTable .= "<tr>    
+                                                <td>{$v->getIdVenue()}</td>
+                                                <td>{$v->getName()}</td>
+                                                <td>{$v->getCapacity()}</td>
+                                                <td><a href='./venueManagement.php?id={$v->getIdVenue()}&action=edit'>Edit</a></td>
+                                                <td><a href='./venueManagement.php?id={$v->getIdVenue()}&action=delete'>Delete</a></td>
+                                            </tr>";
                         }
-                        else{
-                            echo "<h2>No venues available!</h2>";
-                        }
-                    }// end venues
+                        $venueTable .= "</table></div>";
+                        echo $venueTable;
+                    }// end if count venues 
+                    else {
+                        echo "<h2>No venues available!</h2>";
+                    }
                         
                     
 
                     /* -------------------- Events -------------------- */
+                    echo "<p class='section-heading'>Events</p>";
+                    // Call reusable function to create the add btn
+                    adminAddBtns(array(
+                        "url" => "./eventManagement.php?action=add",
+                        "area" => "Event"
+                    ));
+
                     $allEvents = $db->getAllEvents();  
                     if(count($allEvents) > 0){
-                        echo "<p class='section-heading'>Events</p>";
-                        echo "<a href='./eventManagement.php?action=add'>
-                                    <div class='add-btn'>Add Event</div>
-                                </a>";
-
+                        // Build event table
                         $eventTable = "<div class='admin-table-container'>
                                         <table class='admin-table'>
                                             <tr>
@@ -156,8 +164,7 @@
                                     else {
                                         $eventWithVenueName = "<td>TBD</td>";   // otherwise just use a default TBD
                                     }
-                                }
-
+                                }// end foreach
                                 $eventTable .= $eventWithVenueName; // take found name or TBD to table
                             }
                             else {
