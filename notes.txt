@@ -26,8 +26,9 @@ EditPOST
   so can do all validations and checks in the intended function
   
   
-ManagementAddCheck 
-- code inside the management pages may be able to use a function to create the table
-
-
-For the EDIT, might not want to do as a hidden form input bc can see it under dev tools
+ !!!!! 
+Consider making a reusable function:
+	ManagementAddCheck 
+	- code inside the management pages may be able to use a function to create the table
+	Action == DELETE code
+	- pass necessary info

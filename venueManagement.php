@@ -108,7 +108,6 @@
                                                     </a>
                                                 </div>";
                                 echo $optionDiv;
-
                             }
                             else {
                                 // action is something else

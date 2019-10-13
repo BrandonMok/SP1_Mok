@@ -71,10 +71,57 @@
                             }// end if EDIT
                             else if($_GET["action"] == "delete"){
                                 // DELETE
+                                $id = $_GET["id"];              // ID of venue passed in URL
 
+                                // if delete option was chosen, check for confirm variable in URL that's set when clicking Yes/No
+                                if(isset($_GET['confirm']) && !empty($_GET['confirm'])){
+                                    $dataFields = array();
+                                    $dataFields["area"] = "event";
+                                    $dataFields["fields"] = array(
+                                        "id" => $id,
+                                    );
+                                    $dataFields["method"] = array(
+                                        "delete" => "deleteEvent"
+                                    );
+                                    deleteAction($dataFields);
+                                }
 
+                                $event = $db->getevent($id)[0];   // event object
+                                // event SPECIFIC TABLE W/btns
+                                echo "<h2 class='section-heading'>Delete event</h2>";
+                                $deleteInfo = "<div class='admin-table-container'>
+                                                <table class='admin-table'>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>Name</th>
+                                                        <th>Date Start</th>
+                                                        <th>Date End</th>
+                                                        <th>Number Allowed</th>
+                                                        <th>Venue</th> 
+                                                    </tr>
+                                                    <tr>
+                                                        <td>{$event->getIdevent()}</td>
+                                                        <td>{$event->getName()}</td>
+                                                        <td>{$event->getDateStart()}</td>
+                                                        <td>{$event->getDateEnd()}</td>
+                                                        <td>{$event->getNumberAllowed()}</td>
+                                                        <td>{$event->getVenue()}</td>
+                                                    </tr>
+                                                </table>
+                                            </div>";
+                                echo $deleteInfo;
 
-
+                                // Yes & no options to delete action
+                                echo "<h2 class='section-heading'>Are you sure you want to delete the selected event?</h2><br/>";
+                                $optionDiv = "<div id='confirm-delete-container' class='center-element'>
+                                                    <a href='./eventManagement.php?id={$event->getIdevent()}&action=delete&confirm=yes'>
+                                                        <div class='delete-btn' id='confirm-delete-btn'>Yes</div>
+                                                    </a>
+                                                    <a href='./eventManagement.php?id={$event->getIdevent()}&action=delete&confirm=no'>
+                                                        <div class='delete-btn' id='deny-delete-btn'>No</div>
+                                                    </a>
+                                                </div>";
+                                echo $optionDiv;
                             }// end if DELETE
                             else {
                                 // REDIRECT: something else besides edit or delete was passed
@@ -222,22 +269,10 @@
 
                         // CHECK: if all inputs were given a value
                         if(isset($name) && isset($datestart) && isset($dateend) && isset($name) && isset($numberAllowed) && isset($venue)){
-                            $venueExists = true; // Flag used to test if specific validation passed/failed
-
-                            if(is_numeric($venue)){
-                                $findVenue = $db->getVenue(intval($venue));
-                                if($findVenue == 0 || $findVenue == -1 ){
-                                    $venueExists = false;
-                                }
-                            }
-                            else {
-                                $venueExists = false;
-                            }
-
-
-                            // Only if the inputs passed SPECIFIC validations
-                            if($venueExists){
+                            // Only if the venue exists to associate with, then add 
+                            if($db->getVenue(intval($venue)) > 0){
                                 // Perform ADD POST REQUEST Processing
+                                // addPost() will handle making sure names are alphabetic, dates follow format, and numberallowed/venue are > 0
                                 $dataFields = array();
                                 $dataFields["area"] = "event";
                                 $dataFields["fields"]["name"] = array("type" => "s", "value" => $name);
