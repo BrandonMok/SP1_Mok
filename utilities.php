@@ -184,17 +184,20 @@
                             }
                             else {
                                 $flag = false;
-                                $msg = "<p class='form-error-text center-element'>Invalid input!</p>";
+                                $msg = "<p class='form-error-text center-element'>Invalid input! number</p>";
                             }
                         }
-                        else if($type == "s"){
-                            if(alphaNumeric($value)){
+                        else if($type == "s"){      // s = string
+                            // var_dump($k);
+                            // var_dump($v);
+
+                            // if(alphabetic($value) || alphabeticSpace($value)){
                                 $paramArr[$k] = $value;
-                            }
-                            else {
-                                $flag = false;
-                                $msg = "<p class='form-error-text center-element'>Invalid input!</p>";
-                            }
+                            // }
+                            // else {
+                            //     $flag = false;
+                            //     $msg = "<p class='form-error-text center-element'>Invalid input! string here</p>";
+                            // }
                         }
                         else if($type == "date"){
                             if(date3($value)){
@@ -202,7 +205,7 @@
                             }
                             else{
                                 $flag = false;
-                                $msg = "<p class='form-error-text center-element'>Invalid input!</p>";
+                                $msg = "<p class='form-error-text center-element'>Invalid input! date</p>";
                             }
                         }
                     }
@@ -245,7 +248,6 @@
 
                 if($decision == "yes"){
                     $delete = call_user_func_array(array($db, $data["method"]["delete"]), array($data["fields"]["id"]));
-
 
                     if($delete > 0){ // if rowcount wasn't 0 -> delete user
                         header("Location: admin.php");

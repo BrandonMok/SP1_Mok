@@ -72,7 +72,6 @@
         function getAllUsers(){
             try{
                 include_once("./classes/Attendee.class.php"); // include the attendee class file
-
                 $data = array();
                 $query = "SELECT * FROM attendee";
                 $stmt = $this->db->prepare($query);
@@ -180,7 +179,6 @@
                     $stmt->bindParam($k, $v);
                 }
                 $stmt->execute($updateArr);
-
                 return $stmt->rowCount(); // return the # of rows affected
             }
             catch(PDOException $e){
@@ -208,7 +206,6 @@
                     $stmt->execute(array(
                         ":idattendee" => $data[0]
                     ));
-
                     return $stmt->rowCount();
              }
             }
@@ -373,6 +370,25 @@
         }
 
         /**
+         * deleteManagerEvent
+         * Delete manager event
+         */
+        function deleteManagerEvent($eventID){
+            try{
+                $query = "DELETE FROM manager_event WHERE event = :event";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute(array(
+                    ":event" => $eventID
+                ));
+                echo "<p></p>HERE";
+                return $stmt->rowCount();
+            }
+            catch(PDOException $e){
+                die("There was a problem deleting manager event!");
+            } 
+        }
+
+        /**
          * deleteAttendeeEvent
          * Deletes the attendeEvent records 
          */
@@ -386,35 +402,40 @@
                 return $stmt->rowCount();
             }
             catch(PDOException $e){
-                die("There was a deleting attendee event!");
+                die("There was a problem deleting attendee event!");
             } 
         }
 
         /**
-         * deleteAttendeeSessions
-         * Deletes the attendeSessio records 
+         * deleteEventAndSession
+         * @param $data
+         * Function to delete an event, the attendee & manager events tied to that event, and attendee sessions tied to event
          */
-        function deleteAttendeeSessions($data){
+        function deleteEventAndSession($eventID){
             try{
-                $query = "DELETE FROM attendee_session WHERE session = :session";
-                $stmt = $this->db->prepare($query);
-                $stmt->execute(array(
-                    ":session" => $data["session"]
-                ));
-                return $stmt->rowCount();
+                // Deleting events
+                $deleteAttendeeEvent = $this->db->deleteAttendeeEvent($eventID); // delete attendee object
+                $deleteManagerEvent = $this->db->deleteManagerEvent($eventID);   // delete manager event object
+                $deleteEvent = $this->db->deleteEvent($eventID);                 // delete entire event
+
+                // Deleting session
+                $deleteAttendeeSession = $this->db->deleteAllSessionsPerEvent($eventID); 
+                $deleteSession = $this->db->deleteSession($eventID);  // uses EVENT ID it's associated with
+
+
+                // CHECK: If deletes performed correctly 
+                if(($deleteAttendeeEvent != 0 || $deleteManagerEvent != 0) && $deleteEvent != 0 && $deleteAttendeeSession != 0 && $deleteSession != 0){
+
+                }
+                else {
+                    // ERROR: Something went wrong with deleting
+
+                }
+
             }
             catch(PDOException $e){
-                die("There was a deleting attendee session!");
+                die("There was a deleting the event and its associated sessions!");
             } 
-        }
-
-
-
-        function deleteEventAndSession(){
-            // calls delete event
-            // calls delete attendee events
-            // calls delete attendee sessions
-
         }
         
 
@@ -447,9 +468,52 @@
         }
 
         /**
+         * getSesssion
+         * @param $data
+         * Retrieves a session by its ID, so only 1 or 0 retrieved
+         */
+        function getSession($data){
+            try{
+                include_once("./classes/Session.class.php");
+                $query = "SELECT * FROM session WHERE idsession = :idsession";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute(array(
+                    ":idsession" => $data["idsession"]
+                ));
+                $stmt->setFetchMode(PDO::FETCH_CLASS, "Session");
+                $results = $stmt->fetchAll();
+                return $results;
+            }
+            catch(PDOException $e){
+                die("There was a problem retrieving session!");
+            }
+        }
+
+        /**
+         * getAllSessionsPerEvent
+         * Retrieves all sessions associated with a given eventID
+         */
+        // function getAllSessionsPerEvent($eventID){
+        //     try{
+        //         include_once("./classes/Session.class.php");
+        //         $query = "SELECT * FROM session WHERE event = :event";
+        //         $stmt = $this->db->prepare($query);
+        //         $stmt->execute(array(
+        //             ":event" => $eventID
+        //         ));
+        //         $stmt->setFetchMode(PDO::FETCH_CLASS, "Session");
+        //         $results = $stmt->fetchAll();
+        //         return $results;
+        //     }
+        //     catch(PDOException $e){
+        //         die("There was a problem retrieving sessions for the event!");
+        //     }
+        // }
+
+        /**
          * deleteSession
          * @param $sessionID
-         * Deletes one session by its ID
+         * Deletes a SESSION by its ID
          */
         function deleteSession($sessionID){
             try{
@@ -459,11 +523,48 @@
                 $stmt->execute(array(
                     ":idsession" => $sessionID
                 ));
-
                 return $stmt->rowCount();
             }
             catch(PDOException $e){
                 die("There was a problem deleting sessions!");
+            }
+        }
+
+
+        /**
+         * deleteAttendeeSessions
+         * Deletes ATTENDEESESSION records based on sessionID
+         */
+        function deleteAttendeeSessions($data){
+            try{
+                $query = "DELETE FROM attendee_session WHERE session = :session";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute(array(
+                    ":session" => $data["session"]
+                ));
+                return $stmt->rowCount();
+            }
+            catch(PDOException $e){
+                die("There was a problem deleting attendee session!");
+            } 
+        }
+
+
+        /**
+         * deleteAllSessionsPerEvent
+         * Deletes ALL SESSIONS associated with an EVENT
+         */
+        function deleteAllSessionsPerEvent($eventID){
+            try{
+                $query = "DELETE FROM session WHERE event = :event";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute(array(
+                    ":event" => $eventID
+                ));
+                return $stmt->rowCount();
+            }
+            catch(PDOException $e){
+                die("There was a problem deleting all of the event's sessions!");
             }
         }
 
@@ -582,10 +683,7 @@
                 foreach($updateArr as $k => $v){
                     $stmt->bindParam($k, $v);
                 }
-
                 $stmt->execute($updateArr);
-
-
                 return $stmt->rowCount(); // return the # of rows affected
             }
             catch(PDOException $e){
@@ -605,16 +703,11 @@
                 $stmt->execute(array(
                     ":id" => $id
                 ));
-
                 return $stmt->rowCount();
             }
             catch(PDOException $e){
                 die("There was a problem deleting venue!");
             } 
         }
-
-        
-
-
     }// end class
 

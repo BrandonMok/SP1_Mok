@@ -178,7 +178,7 @@
                     if($_GET["action"] == "edit"){
                         $id = $_GET["id"];  // ID on POST isnt' editable, so just use from URL
                         $name = sanitizeString($_POST["name"]);
-                        $password = sanitizeString($_POST["password"]);
+                        $password = hash("sha256", sanitizeString($_POST["password"]));
                         $role = sanitizeString($_POST["role"]);
                         $originalValues = json_decode($_POST["originalValues"], true); 
 
@@ -218,7 +218,7 @@
                             $dataFields["fields"] = array(
                                 "id" => $id,
                                 "name" => $name,
-                                "password" => hash('sha256', $password), // password exists, value just now shown on form for privacy & security
+                                "password" => $password, 
                                 "role" => $role
                             );
                             $dataFields["method"] = array(
@@ -230,7 +230,7 @@
                     }// end if EDIT
                     else if($_GET["action"] == "add") {
                         $name = sanitizeString($_POST["name"]);
-                        $password = sanitizeString($_POST["password"]);
+                        $password = hash("sha256", sanitizeString($_POST["password"]));
                         $role = sanitizeString($_POST["role"]);     // Role is ALLOWED to be null
 
                         // CHECK: if all inputs were given a value
@@ -256,12 +256,11 @@
                                     break;
                             }
     
-    
                             // Use reusable addPOST processing function
                             $dataFields = array();
                             $dataFields["area"] = "user";
                             $dataFields["fields"]["name"] = array("type" => "s", "value" => $name);
-                            $dataFields["fields"]["password"] = array("type" => "s", "value" => hash('sha256', $password));
+                            $dataFields["fields"]["password"] = array("type" => "s", "value" => $password);
                             $dataFields["fields"]["role"] = array("type" => "i", "value" => $role);
                             $dataFields["method"] = array(
                                 "add" => "insertUser"
