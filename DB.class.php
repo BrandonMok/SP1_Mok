@@ -270,6 +270,34 @@
             } 
         }
 
+        /**
+         * addEvent
+         * @param $data
+         */
+        function addEvent($data){
+            try{
+                $query = "INSERT INTO event (name, datestart, dateend, numberallowed, venue)
+                            VALUES (:name, :datestart, :dateend, :numberallowed, :venue)";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute(array(
+                    ":name" => $data["name"],
+                    ":datestart" => $data["datestart"],
+                    ":dateend" => $data["dateend"],
+                    ":numberallowed" => $data["numberallowed"],
+                    ":venue" => $data["venue"]
+                ));
+                return $stmt->rowCount();
+            }
+            catch(PDOException $e){
+                die("There was a problem adding event!");
+            } 
+        }
+
+        /**
+         * deleteEvent
+         * @param $data
+         * $data["id"] = id 
+         */
         function deleteEvent($data){
             try{
                 // delete event

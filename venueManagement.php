@@ -176,7 +176,7 @@
                         $originalValues = json_decode($_POST["originalValues"], true); 
 
                         // Specific extra validation before passing into reusable edit post check
-                        if(alphabetic($name) == 0 || numbers($name) == 1){
+                        if((alphabeticSpace($name) == false || alphabetic($name) == false) || numbers($name) == 1){
                             // ERROR: No letters and has numbers
                             echo "<p class='form-error-text'>** Please enter a valid name!</p>";
                         }

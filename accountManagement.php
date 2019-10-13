@@ -183,9 +183,9 @@
                         $originalValues = json_decode($_POST["originalValues"], true); 
 
                         // Hash password to pass into editPost function
-                        if(!empty($password) && isset($password) && $password != ""){
-                            $password = hash('sha256', $password);
-                        }
+                        // if(!empty($password) && isset($password) && $password != ""){
+                        //     $password = hash('sha256', $password);
+                        // }
 
                         // Can pass in either the number or text equilavent
                         // Either way, sets it as a number from text input
@@ -223,7 +223,7 @@
                             $dataFields["fields"] = array(
                                 "id" => $id,
                                 "name" => $name,
-                                "password" => $password, // password exists, value just now shown on form for privacy & security
+                                "password" => hash('sha256', $password), // password exists, value just now shown on form for privacy & security
                                 "role" => $role
                             );
                             $dataFields["method"] = array(

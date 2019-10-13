@@ -157,7 +157,7 @@
                                 $eventWithVenueName = "";
                                 foreach($allVenues as $venue){
                                     // Find event whose EventID equals VenueID
-                                    if($venue->getIdVenue() == $v->getIdEvent()){
+                                    if($venue->getIdVenue() == $v->getVenue()){
                                         $eventWithVenueName = "<td>{$venue->getName()}</td>";   // if found, use venue name for display
                                         break;
                                     }

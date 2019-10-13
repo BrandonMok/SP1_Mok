@@ -84,10 +84,36 @@
                         else if(managementAddCheck()){
                             // Add 
                             if($_GET["action"] == "add"){
-
-                                // validate date using validation functions
-
-
+                                 // Add 
+                                if($_GET["action"] == "add"){
+                                    echo "<h2 class='section-heading'>Add Event</h2>";
+                                    $addForm = "<div class='edit-add-form-container'>
+                                                    <form id='user-edit-form' name='user-edit-form' action='./eventManagement.php?&action=add' method='POST'>
+                                                        <div id='user-edit-labels'>
+                                                            <label>ID</label>
+                                                            <label>Name</label>
+                                                            <label>Date Start</label>
+                                                            <label>Date End</label>
+                                                            <label>Number Allowed</label>
+                                                            <label>Venue</label>   
+                                                        </div>
+                                                        <div id='user-edit-inputs'>
+                                                            <input type='text' name='id' readonly='readonly' placeholder='Auto-increment'>
+                                                            <input type='text' name='name'>
+                                                            <input type='text' name='datestart' placeholder='yyyy-mm-dd hh:mm:ss'>
+                                                            <input type='text' name='dateend' placeholder='yyyy-mm-dd hh:mm:ss'>
+                                                            <input type='text' name='numberallowed'>
+                                                            <input type='text' name='venue'>
+                                                        </div><br/>
+                                                        <input name='submit' id='submit-btn' type='submit' value='Submit'/>
+                                                    </form>
+                                                </div>";
+                                    echo $addForm;
+                                }
+                                else{
+                                    // REDIRECT: Action is something else
+                                    redirect("admin");
+                                }
                             }
                             else{
                                 // REDIRECT: Action is something else
@@ -189,6 +215,58 @@
                     else if($_GET["action"] == "add") {
                         // validate date!
                         // Validate that venue exists that user is trying to associate with!
+                        $name = sanitizeString($_POST["name"]);
+                        $datestart = sanitizeString($_POST["datestart"]);
+                        $dateend = sanitizeString($_POST["dateend"]);
+                        $numberAllowed = sanitizeString($_POST["numberallowed"]);  
+                        $venue = sanitizeString($_POST["venue"]);    
+
+                        // CHECK: if all inputs were given a value
+                        if(isset($name) && isset($datestart) && isset($dateend) && isset($name) && isset($numberAllowed) && isset($venue)){
+                            $venueExists = true; // Flag used to test if specific validation passed/failed
+
+                            if(is_numeric($venue)){
+                                $findVenue = $db->getVenue(intval($venue));
+                                if($findVenue == 0 || $findVenue == -1 ){
+                                    $venueExists = false;
+                                }
+                            }
+                            else {
+                                $venueExists = false;
+                            }
+
+
+                            // Only if the inputs passed SPECIFIC validations
+                            if($venueExists){
+                                // Perform ADD POST REQUEST Processing
+                                $dataFields = array();
+                                $dataFields["area"] = "event";
+                                $dataFields["fields"]["name"] = array("type" => "s", "value" => $name);
+                                $dataFields["fields"]["datestart"] = array("type" => "date", "value" => $datestart);
+                                $dataFields["fields"]["dateend"] = array("type" => "date", "value" => $dateend);
+                                $dataFields["fields"]["numberallowed"] = array("type" => "i", "value" => $numberAllowed);
+                                $dataFields["fields"]["venue"] = array("type" => "i", "value" => $venue);
+                                $dataFields["method"] = array(
+                                    "add" => "addEvent"
+                                );
+                                addPost($dataFields);
+                            }
+                            else{
+                                // ERROR: Something went wrong with value of inputs
+                                echo "<p class='form-error-text'>** Invalid inputs!</p>";
+                            }
+                        }
+                        else{
+                            // ERROR: No values supplied and/or field missing a value
+                            echo "<p class='form-error-text'>** Invalid inputs!</p>";
+                        }
+                        
+                       
+
+
+
+
+
                     }
                 }// end if ACTION is present
             }// end if POST

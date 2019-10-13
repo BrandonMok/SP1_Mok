@@ -1,5 +1,6 @@
 <?php 
     require_once("DB.class.php");
+    require_once("validations.php");
     $db = new DB(); // One DB object to use 
 
     /**
@@ -171,6 +172,9 @@
                             case "s":
                                 $type = "s";
                                 break;
+                            case "date":
+                                $type = "date";
+                                break;
                         }
                     }
                     else {
@@ -188,6 +192,15 @@
                                 $paramArr[$k] = $value;
                             }
                             else {
+                                $flag = false;
+                                $msg = "<p class='form-error-text center-element'>Invalid input!</p>";
+                            }
+                        }
+                        else if($type == "date"){
+                            if(date3($value)){
+                                $paramArr[$k] = $value;
+                            }
+                            else{
                                 $flag = false;
                                 $msg = "<p class='form-error-text center-element'>Invalid input!</p>";
                             }
