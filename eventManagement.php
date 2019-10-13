@@ -4,6 +4,7 @@
 
     require_once("DB.class.php");
     require_once("utilities.php");
+    require_once("validations.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -129,12 +130,67 @@
             if($_SERVER["REQUEST_METHOD"] == "POST"){
                 if(isset($_GET["action"]) && !empty($_GET["action"])){
                     if($_GET["action"] == "edit"){
+                        // Grab values
+                        $id = $_GET["id"];
+                        $name = sanitizeString($_POST["name"]);
+                        $datestart = sanitizeString($_POST["datestart"]);
+                        $dateend = sanitizeString($_POST["dateend"]);
+                        $numberAllowed = sanitizeString($_POST["numberallowed"]);  
+                        $venue = sanitizeString($_POST["venue"]);            
+                        $originalValues = json_decode($_POST["originalValues"]);      
 
-                    }
+                        $flag = true;
+
+                        if(date3($datestart) == false || date3($dateend) == false){
+                            $flag = false;
+                            echo "<p class='form-error-text'>** Invalid date format!</p>";
+                        }
+                        if(alphabeticSpace($name) == false){
+                            $flag = false;
+                            echo "<p class='form-error-text'>** Invalid: Name contains non-alphabetic characters!</p>";
+                        }
+                        if(is_numeric($numberAllowed) == false){
+                            $flag = false;
+                            echo "<p class='form-error-text'>** Invalid: Number allowed isn't a valid value!</p>";
+                        }
+                        if(is_numeric($venue)){
+                            $findVenue = $db->getVenue(intval($venue));
+                            if($findVenue == 0 || $findVenue == -1 ){
+                                $flag = false;
+                            }
+                        }
+                        else {
+                            $flag = false;
+                        }
+
+
+                        if($flag){
+                            // Perform EDIT POST REQUEST Processing
+                            $dataFields = array();
+                            $dataFields["area"] = "event";
+                            $dataFields["fields"] = array(
+                                "id" => $id,
+                                "name" => $name,
+                                "datestart" => $datestart,
+                                "dateend" => $dateend,
+                                "numberallowed" => $numberAllowed,
+                                "venue" => $venue
+                            );
+                            $dataFields["method"] = array(
+                                "update" => "updateEvent"
+                            );
+                            $dataFields["originalValues"] = $originalValues;
+                            editPost($dataFields);
+                        }
+                        else {
+                            echo "<p class='form-error-text'>** Invalid inputs</p>";
+                        }
+                    }// end EDIT post processing
                     else if($_GET["action"] == "add") {
-
+                        // validate date!
+                        // Validate that venue exists that user is trying to associate with!
                     }
-                }
+                }// end if ACTION is present
             }// end if POST
         ?>
     </body>

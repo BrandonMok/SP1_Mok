@@ -10,9 +10,24 @@ To consider:
 - When delete an event, delete sessions associated with event
 	-- update to attendee_event and attendee_session to delete
 	
-	
 Delete event
 - Delete all sessions
 - delete the attendee_event objects
 - delete attendee_session objects
 - delete manager_event objects
+
+Editing Event:
+- Changing venue, make sure that venue exists in the first place
+- In event updateEvent function, 
+
+
+EditPOST
+- Look into restructuing so that the data array passed in is like the update,
+  so can do all validations and checks in the intended function
+  
+  
+ManagementAddCheck 
+- code inside the management pages may be able to use a function to create the table
+
+
+For the EDIT, might not want to do as a hidden form input bc can see it under dev tools
