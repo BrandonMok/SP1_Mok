@@ -199,26 +199,34 @@
                         editPost($dataFields);
                     }
                     else if($_GET["action"] == "add") {
+                        // Grab & sanitize inputs
                         $name = sanitizeString($_POST["name"]);
-                        $capacity = sanitizeString($_POST["capacity"]);
+                        $capacity = sanitizeString($_POST["capacity"]); // allowed to be null!
 
-                        // Special case for CAPACITY (allowed to be null) -> will set to 0 if null was passed though
-                        if($capacity == "" || empty($capacity)){
-                            $capacity = 0;
+                        // CHECK: if all inputs were given a value
+                        if(isset($name)){
+                            // Special case for CAPACITY (allowed to be null) -> will set to 0 if null was passed though
+                            if($capacity == "" || empty($capacity)){
+                                $capacity = 0;
+                            }
+
+                            // Perform ADD POST REQUEST Processing
+                            $dataFields = array();
+                            $dataFields["area"] = "venue";
+                            $dataFields["fields"]["name"] = array("type" => "s", "value" => $name);
+                            $dataFields["fields"]["capacity"] = array("type" => "i", "value" => $capacity);
+                            $dataFields["method"] = array(
+                                "add" => "addVenue"
+                            );
+                            addPost($dataFields);
                         }
-
-                        // Perform ADD POST REQUEST Processing
-                        $dataFields = array();
-                        $dataFields["area"] = "venue";
-                        $dataFields["fields"]["name"] = array("type" => "s", "value" => $name);
-                        $dataFields["fields"]["capacity"] = array("type" => "i", "value" => $capacity);
-                        $dataFields["method"] = array(
-                            "add" => "addVenue"
-                        );
-                        addPost($dataFields);
-                    }
-                }
-            }
+                        else{
+                            // ERROR: No values supplied and/or field missing a value
+                            echo "<p class='form-error-text'>** Invalid inputs!</p>";
+                        }
+                    }// end action ADD processing
+                }// end if ACTION is present
+            }// end if POST
         ?>
     </body>
 </html>

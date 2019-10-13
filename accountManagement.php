@@ -182,11 +182,6 @@
                         $role = sanitizeString($_POST["role"]);
                         $originalValues = json_decode($_POST["originalValues"], true); 
 
-                        // Hash password to pass into editPost function
-                        // if(!empty($password) && isset($password) && $password != ""){
-                        //     $password = hash('sha256', $password);
-                        // }
-
                         // Can pass in either the number or text equilavent
                         // Either way, sets it as a number from text input
                         switch($role){
@@ -236,38 +231,47 @@
                     else if($_GET["action"] == "add") {
                         $name = sanitizeString($_POST["name"]);
                         $password = sanitizeString($_POST["password"]);
-                        $role = sanitizeString($_POST["role"]);
+                        $role = sanitizeString($_POST["role"]);     // Role is ALLOWED to be null
 
-                        switch($role){
-                            case 1: 
-                            case "admin":
-                                $role = 1;
-                                break;
-                            case 2:
-                            case "event_manager":
-                            case "event manager":
-                                $role = 2;
-                                break;
-                            case 3:
-                            case "attendee":
-                                $role = 3;
-                                break;
-                            default: 
-                                $role = 3;
-                                break;
+                        // CHECK: if all inputs were given a value
+                        if(isset($name) && isset($password)){
+                            // Go through role assignment for right role value
+                            // If role is null (not supplied), then default to attendee
+                            switch($role){
+                                case 1: 
+                                case "admin":
+                                    $role = 1;
+                                    break;
+                                case 2:
+                                case "event_manager":
+                                case "event manager":
+                                    $role = 2;
+                                    break;
+                                case 3:
+                                case "attendee":
+                                    $role = 3;
+                                    break;
+                                default: 
+                                    $role = 3;
+                                    break;
+                            }
+    
+    
+                            // Use reusable addPOST processing function
+                            $dataFields = array();
+                            $dataFields["area"] = "user";
+                            $dataFields["fields"]["name"] = array("type" => "s", "value" => $name);
+                            $dataFields["fields"]["password"] = array("type" => "s", "value" => hash('sha256', $password));
+                            $dataFields["fields"]["role"] = array("type" => "i", "value" => $role);
+                            $dataFields["method"] = array(
+                                "add" => "insertUser"
+                            );
+                            addPost($dataFields);
                         }
-
-
-                        // Use reusable addPOST processing function
-                        $dataFields = array();
-                        $dataFields["area"] = "user";
-                        $dataFields["fields"]["name"] = array("type" => "s", "value" => $name);
-                        $dataFields["fields"]["password"] = array("type" => "s", "value" => hash('sha256', $password));
-                        $dataFields["fields"]["role"] = array("type" => "i", "value" => $role);
-                        $dataFields["method"] = array(
-                            "add" => "insertUser"
-                        );
-                        addPost($dataFields);
+                        else {
+                            // ERROR: No values supplied and/or field missing a value
+                            echo "<p class='form-error-text'>** Invalid inputs!</p>";
+                        }
                     }// end if ADD
                 }// end if ACTION
             }// end if POST

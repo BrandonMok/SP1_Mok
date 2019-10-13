@@ -213,8 +213,7 @@
                         }
                     }// end EDIT post processing
                     else if($_GET["action"] == "add") {
-                        // validate date!
-                        // Validate that venue exists that user is trying to associate with!
+                        // Grab & sanitize inputs
                         $name = sanitizeString($_POST["name"]);
                         $datestart = sanitizeString($_POST["datestart"]);
                         $dateend = sanitizeString($_POST["dateend"]);
@@ -260,14 +259,7 @@
                             // ERROR: No values supplied and/or field missing a value
                             echo "<p class='form-error-text'>** Invalid inputs!</p>";
                         }
-                        
-                       
-
-
-
-
-
-                    }
+                    }// end action ADD processing
                 }// end if ACTION is present
             }// end if POST
         ?>
