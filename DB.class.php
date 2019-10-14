@@ -354,13 +354,13 @@
          * @param $data
          * $data["id"] = id 
          */
-        function deleteEvent($data){
+        function deleteEvent($eventID){
             try{
                 // delete event
                 $query = "DELETE FROM event WHERE idevent = :idevent";
                 $stmt = $this->db->prepare($query);
                 $stmt->execute(array(
-                    ":idevent" => $data["id"]
+                    ":idevent" => $eventID
                 ));
                 return $stmt->rowCount();
             }
@@ -371,6 +371,7 @@
 
         /**
          * deleteManagerEvent
+         * @param $eventID 
          * Delete manager event
          */
         function deleteManagerEvent($eventID){
@@ -380,7 +381,6 @@
                 $stmt->execute(array(
                     ":event" => $eventID
                 ));
-                echo "<p></p>HERE";
                 return $stmt->rowCount();
             }
             catch(PDOException $e){
@@ -390,14 +390,15 @@
 
         /**
          * deleteAttendeeEvent
+         * @param $eventID 
          * Deletes the attendeEvent records 
          */
-        function deleteAttendeeEvent($data){
+        function deleteAttendeeEvent($eventID){
             try{
                 $query = "DELETE FROM attendee_event WHERE event = :event";
                 $stmt = $this->db->prepare($query);
                 $stmt->execute(array(
-                    ":event" => $data["event"]
+                    ":event" => $eventID
                 ));
                 return $stmt->rowCount();
             }
@@ -413,25 +414,38 @@
          */
         function deleteEventAndSession($eventID){
             try{
+                // Array to hold results (value # of rows affected)
+                $sumResults = array();
+
                 // Deleting events
-                $deleteAttendeeEvent = $this->db->deleteAttendeeEvent($eventID); // delete attendee object
-                $deleteManagerEvent = $this->db->deleteManagerEvent($eventID);   // delete manager event object
-                $deleteEvent = $this->db->deleteEvent($eventID);                 // delete entire event
+                $deleteAttendeeEvent = $this->deleteAttendeeEvent($eventID); // delete attendee object if exists
+                $deleteManagerEvent = $this->deleteManagerEvent($eventID);   // delete manager event object if exists
+                $deleteEvent = $this->deleteEvent($eventID);                 // delete entire event
 
                 // Deleting session
-                $deleteAttendeeSession = $this->db->deleteAllSessionsPerEvent($eventID); 
-                $deleteSession = $this->db->deleteSession($eventID);  // uses EVENT ID it's associated with
+                // Need to delete ATTENDEE_SESSIONS too! BUT... Need sessionIDs for those sessions associated w/deleted Event
+                $allSessionsPerEvent = $this->getAllSessionsPerEvent($eventID); // retrieve all relevent sessions from event
+                foreach($allSessionsPerEvent as $k => $v){
+                    // Delete all sessions related to event by grabbing their sessionIDs
+                    $deleteAttendeeSession = $this->deleteAttendeeSessions($v->getIdSession());
+                    $sumResults[] = $deleteAttendeeSession;
+                }   
+                $deleteAllSessions = $this->deleteSessionsPerEvent($eventID);    // delete SESSION objects that exist for the event
 
+                // Add all number value of rows affected into array
+                $sumResults[] = $deleteAttendeeEvent;
+                $sumResults[] = $deleteManagerEvent;
+                $sumResults[] = $deleteEvent;
+                $sumResults[] = $deleteAllSessions;
+                $sum = array_sum($sumResults);
 
-                // CHECK: If deletes performed correctly 
-                if(($deleteAttendeeEvent != 0 || $deleteManagerEvent != 0) && $deleteEvent != 0 && $deleteAttendeeSession != 0 && $deleteSession != 0){
-
+                // return number affected
+                if($sum > 0){
+                    return $sum;
                 }
-                else {
-                    // ERROR: Something went wrong with deleting
-
+                else{
+                    return 0;
                 }
-
             }
             catch(PDOException $e){
                 die("There was a deleting the event and its associated sessions!");
@@ -491,29 +505,30 @@
 
         /**
          * getAllSessionsPerEvent
+         * @param $eventID
          * Retrieves all sessions associated with a given eventID
          */
-        // function getAllSessionsPerEvent($eventID){
-        //     try{
-        //         include_once("./classes/Session.class.php");
-        //         $query = "SELECT * FROM session WHERE event = :event";
-        //         $stmt = $this->db->prepare($query);
-        //         $stmt->execute(array(
-        //             ":event" => $eventID
-        //         ));
-        //         $stmt->setFetchMode(PDO::FETCH_CLASS, "Session");
-        //         $results = $stmt->fetchAll();
-        //         return $results;
-        //     }
-        //     catch(PDOException $e){
-        //         die("There was a problem retrieving sessions for the event!");
-        //     }
-        // }
+        function getAllSessionsPerEvent($eventID){
+            try{
+                include_once("./classes/Session.class.php");
+                $query = "SELECT * FROM session WHERE event = :event";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute(array(
+                    ":event" => $eventID
+                ));
+                $stmt->setFetchMode(PDO::FETCH_CLASS, "Session");
+                $results = $stmt->fetchAll();
+                return $results;
+            }
+            catch(PDOException $e){
+                die("There was a problem retrieving sessions for the event!");
+            }
+        }
 
         /**
          * deleteSession
          * @param $sessionID
-         * Deletes a SESSION by its ID
+         * Deletes A SESSION based on its SESSIONID
          */
         function deleteSession($sessionID){
             try{
@@ -532,29 +547,11 @@
 
 
         /**
-         * deleteAttendeeSessions
-         * Deletes ATTENDEESESSION records based on sessionID
+         * deleteSessionsPerEvent
+         * @param $eventID
+         * Deletes SESSIONS associated with an EVENT based on the EVENTID
          */
-        function deleteAttendeeSessions($data){
-            try{
-                $query = "DELETE FROM attendee_session WHERE session = :session";
-                $stmt = $this->db->prepare($query);
-                $stmt->execute(array(
-                    ":session" => $data["session"]
-                ));
-                return $stmt->rowCount();
-            }
-            catch(PDOException $e){
-                die("There was a problem deleting attendee session!");
-            } 
-        }
-
-
-        /**
-         * deleteAllSessionsPerEvent
-         * Deletes ALL SESSIONS associated with an EVENT
-         */
-        function deleteAllSessionsPerEvent($eventID){
+        function deleteSessionsPerEvent($eventID){
             try{
                 $query = "DELETE FROM session WHERE event = :event";
                 $stmt = $this->db->prepare($query);
@@ -566,6 +563,25 @@
             catch(PDOException $e){
                 die("There was a problem deleting all of the event's sessions!");
             }
+        }
+
+
+        /**
+         * deleteAttendeeSessions
+         * Deletes ATTENDEE_SESSION records based on sessionID
+         */
+        function deleteAttendeeSessions($sessionID){
+            try{
+                $query = "DELETE FROM attendee_session WHERE session = :session";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute(array(
+                    ":session" => $sessionID
+                ));
+                return $stmt->rowCount();
+            }
+            catch(PDOException $e){
+                die("There was a problem deleting attendee session!");
+            } 
         }
 
 
