@@ -65,6 +65,9 @@
                         $tableSTR .= "</table></div>";
                         echo $tableSTR;
                     }// end of count users
+                    else{
+                        echo "<h2 class='center-element'>No users found!</h2>";
+                    }
 
 
                     /* -------------------- VENUES -------------------- */
@@ -114,7 +117,7 @@
                         echo $venueTable;
                     }// end if count venues 
                     else {
-                        echo "<h2>No venues available!</h2>";
+                        echo "<h2 class='center-element'>No venues available!</h2>";
                     }
                         
                     
@@ -180,7 +183,69 @@
                         echo $eventTable;
                     }
                     else{
-                        echo "<h2>No events available!</h2>";
+                        echo "<h2 class='center-element'>No events available!</h2>";
+                    }
+
+
+
+
+                    /* -------------------- Sessions -------------------- */
+                    echo "<p class='section-heading'>Sessions</p>";
+                    // Call reusable function to create the add btn
+                    adminAddBtns(array(
+                        "url" => "./sessionManagement.php?action=add",
+                        "area" => "Session"
+                    ));
+
+                    $allSessions = $db->getAllSessions();  
+                    if(count($allSessions) > 0){
+                        // Build event table
+                        $sessionTable = "<div class='admin-table-container'>
+                                        <table class='admin-table'>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Name</th>
+                                                <th>Number Allowed</th>
+                                                <th>Event</th>   
+                                                <th>Start Date</th>
+                                                <th>End Date</th>  
+                                                <th>Edit</th>    
+                                                <th>Delete</th>             
+                                            </tr>";
+                        
+                        foreach($allSessions as $session){
+                            $sessionTable .= "<tr>
+                                                <td>{$session->getIdSession()}</td>
+                                                <td>{$session->getName()}</td>
+                                                <td>{$session->getNumberAllowed()}</td>";
+                            if(count($allEvents) > 0){
+                                $sessionWithEventName = "";
+                                foreach($allEvents as $event){
+                                    if($event->getIdEvent() == $session->getEvent()){
+                                        $sessionWithEventName = "<td>{$event->getName()}</td>";
+                                        break;
+                                    }
+                                    else {
+                                        $sessionWithEventName = "<td>TBD</td>";
+                                    }
+                                }// end foreach
+                                $sessionTable .= $sessionWithEventName;
+                            }
+                            else {
+                                $sessionTable .= "<td>TBD</td>";
+                            }
+                            // Finish creation of rest of event table
+                            $sessionTable .= "<td>{$session->getStartDate()}</td>
+                                                <td>{$session->getEndDate()}</td>
+                                                <td><a href='./sessionManagement.php?id={$session->getIdSession()}&action=edit'>Edit</a></td>
+                                                <td><a href='./sessionManagement.php?id={$session->getIdSession()}&action=delete'>Delete</a></td>
+                                            </tr>";
+                        }// end foreach session
+                        $sessionTable .= "</table></div>";
+                        echo $sessionTable;
+                    }
+                    else{
+                        echo "<h2 class='center-element'>No sessions available!</h2>";
                     }
 
 
