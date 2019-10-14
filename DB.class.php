@@ -486,13 +486,13 @@
          * @param $data
          * Retrieves a session by its ID, so only 1 or 0 retrieved
          */
-        function getSession($data){
+        function getSession($sessionID){
             try{
                 include_once("./classes/Session.class.php");
                 $query = "SELECT * FROM session WHERE idsession = :idsession";
                 $stmt = $this->db->prepare($query);
                 $stmt->execute(array(
-                    ":idsession" => $data["idsession"]
+                    ":idsession" => $sessionID
                 ));
                 $stmt->setFetchMode(PDO::FETCH_CLASS, "Session");
                 $results = $stmt->fetchAll();
@@ -522,6 +522,32 @@
             }
             catch(PDOException $e){
                 die("There was a problem retrieving sessions for the event!");
+            }
+        }
+
+        
+        /**
+         * addSession
+         * @param $data
+         * $data = array()
+         * Adds a new session based on provided data
+         */
+        function addSession($data){
+            try{
+                $query = "INSERT INTO session (name, numberallowed, event, startdate, enddate) 
+                            VALUES (:name, :numberallowed, :event, :startdate, :enddate)";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute(array(
+                    ":name" => $data["name"],
+                    ":numberallowed" => $data["numberallowed"],
+                    ":event" => $data["event"],
+                    ":startdate" => $data["datestart"],
+                    ":enddate" => $data["dateend"]
+                ));
+                return $stmt->rowCount();
+            }
+            catch(PDOException $e){
+                die("There was a problem adding the session!");
             }
         }
 

@@ -260,7 +260,7 @@
                         $venue = sanitizeString($_POST["venue"]);    
 
                         // CHECK: if all inputs were given a value
-                        if(isset($name) && isset($datestart) && isset($dateend) && isset($name) && isset($numberAllowed) && isset($venue)){
+                        if(isset($name) && isset($datestart) && isset($dateend) && isset($numberAllowed) && isset($venue)){
                             // Only if the venue exists to associate with, then add 
                             if($db->getVenue(intval($venue)) > 0){
                                 // Perform ADD POST REQUEST Processing
