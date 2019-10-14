@@ -21,8 +21,6 @@
             // BUT Admins do everything
             if(isset($_SESSION["userLoggedIn"]) && isset($_SESSION["role"])){
                 if($_SESSION["role"] == "admin"){
-                    // ADMIN ONLY
-
                     /* -------------------- Users -------------------- */
                     echo "<p class='section-heading'>Admin</p>";
 
@@ -247,9 +245,6 @@
                     else{
                         echo "<h2 class='center-element'>No sessions available!</h2>";
                     }
-
-
-
                 }// end if admin
                 else if($_SESSION["role"] == "event_manager"){
                     // EVENT MANAGER ONLY

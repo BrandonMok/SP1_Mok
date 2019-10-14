@@ -525,6 +525,67 @@
             }
         }
 
+
+        /**
+         * updateSession
+         * @param $data
+         * $data = array("key" => value, "key" => value);
+         * Updates a user by a provided array of field & values
+         */
+        function updateSession($data){
+            try{
+                $query = "UPDATE session SET ";
+                $updateId = 0; 
+                $updateArr = array();
+
+                foreach($data as $k => $v){
+                    switch($k){
+                        case "name":
+                            $query .= "name = :name,";
+                            $updateArr[":name"] = $v;
+                            break;
+                        case "numberallowed":
+                            $query .= "numberallowed = :numberallowed,";
+                            $updateArr[":numberallowed"] = intval($v);
+                            break;
+                        case "event":
+                            $query .= "event = :event,";
+                            $updateArr[":event"] = intval($v);
+                            break;
+                        case "datestart":
+                            $query .= "datestart = :datestart,";
+                            $updateArr[":datestart"] = intval($v);
+                            break;
+                        case "dateend":
+                            $query .= "dateend = :dateend,";
+                            $updateArr[":dateend"] = intval($v);
+                            break;
+                        case "id":    
+                            $updateId = intval($v);
+                            break;
+                    }
+                }
+                $query = trim($query, ",");
+                $query .= " WHERE idsession = :id";
+                $updateArr[":id"] = $updateId;
+
+                $stmt = $this->db->prepare($query);
+
+                // Bind all params 
+                foreach($updateArr as $k => $v){
+                    $stmt->bindParam($k, $v);
+                }
+
+                $stmt->execute($updateArr);
+
+                return $stmt->rowCount(); // return the # of rows affected
+            }
+            catch(PDOException $e){
+                die("There was a problem updating session!");
+            }
+        }
+
+
         /**
          * deleteSession
          * @param $sessionID

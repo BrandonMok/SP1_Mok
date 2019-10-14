@@ -129,38 +129,30 @@
                             }
                         }// end if edit/delete allowed
                         else if(managementAddCheck()){
-                            // Add 
                             if($_GET["action"] == "add"){
-                                 // Add 
-                                if($_GET["action"] == "add"){
-                                    echo "<h2 class='section-heading'>Add Event</h2>";
-                                    $addForm = "<div class='edit-add-form-container'>
-                                                    <form id='user-edit-form' name='user-edit-form' action='./eventManagement.php?&action=add' method='POST'>
-                                                        <div id='user-edit-labels'>
-                                                            <label>ID</label>
-                                                            <label>Name</label>
-                                                            <label>Date Start</label>
-                                                            <label>Date End</label>
-                                                            <label>Number Allowed</label>
-                                                            <label>Venue</label>   
-                                                        </div>
-                                                        <div id='user-edit-inputs'>
-                                                            <input type='text' name='id' readonly='readonly' placeholder='Auto-increment'>
-                                                            <input type='text' name='name'>
-                                                            <input type='text' name='datestart' placeholder='yyyy-mm-dd hh:mm:ss'>
-                                                            <input type='text' name='dateend' placeholder='yyyy-mm-dd hh:mm:ss'>
-                                                            <input type='text' name='numberallowed'>
-                                                            <input type='text' name='venue'>
-                                                        </div><br/>
-                                                        <input name='submit' id='submit-btn' type='submit' value='Submit'/>
-                                                    </form>
-                                                </div>";
-                                    echo $addForm;
-                                }
-                                else{
-                                    // REDIRECT: Action is something else
-                                    redirect("admin");
-                                }
+                                echo "<h2 class='section-heading'>Add Event</h2>";
+                                $addForm = "<div class='edit-add-form-container'>
+                                                <form id='user-edit-form' name='user-edit-form' action='./eventManagement.php?&action=add' method='POST'>
+                                                    <div id='user-edit-labels'>
+                                                        <label>ID</label>
+                                                        <label>Name</label>
+                                                        <label>Date Start</label>
+                                                        <label>Date End</label>
+                                                        <label>Number Allowed</label>
+                                                        <label>Venue</label>   
+                                                    </div>
+                                                    <div id='user-edit-inputs'>
+                                                        <input type='text' name='id' readonly='readonly' placeholder='Auto-increment'>
+                                                        <input type='text' name='name'>
+                                                        <input type='text' name='datestart' placeholder='yyyy-mm-dd hh:mm:ss'>
+                                                        <input type='text' name='dateend' placeholder='yyyy-mm-dd hh:mm:ss'>
+                                                        <input type='text' name='numberallowed'>
+                                                        <input type='text' name='venue'>
+                                                    </div><br/>
+                                                    <input name='submit' id='submit-btn' type='submit' value='Submit'/>
+                                                </form>
+                                            </div>";
+                                echo $addForm;
                             }
                             else{
                                 // REDIRECT: Action is something else
@@ -168,7 +160,7 @@
                             }
                         }// end if action was the only set
                         else{
-                            // Something other action passed
+                            // REDIRECT: Something other action passed
                             redirect("admin");
                         }
                     }
