@@ -260,7 +260,7 @@
                             $dataFields = array();
                             $dataFields["area"] = "user";
                             $dataFields["fields"]["name"] = array("type" => "s", "value" => $name);
-                            $dataFields["fields"]["password"] = array("type" => "s", "value" => $password);
+                            $dataFields["fields"]["password"] = array("type" => "sn", "value" => $password);    // passwords when hashed have letters + numbers
                             $dataFields["fields"]["role"] = array("type" => "i", "value" => $role);
                             $dataFields["method"] = array(
                                 "add" => "insertUser"

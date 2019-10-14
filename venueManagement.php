@@ -212,7 +212,7 @@
                             // Perform ADD POST REQUEST Processing
                             $dataFields = array();
                             $dataFields["area"] = "venue";
-                            $dataFields["fields"]["name"] = array("type" => "s", "value" => $name);
+                            $dataFields["fields"]["name"] = array("type" => "sn", "value" => $name);        // Venue names can have numbers
                             $dataFields["fields"]["capacity"] = array("type" => "i", "value" => $capacity);
                             $dataFields["method"] = array(
                                 "add" => "addVenue"

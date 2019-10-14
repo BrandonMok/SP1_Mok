@@ -275,7 +275,7 @@
                                 // addPost() will handle making sure names are alphabetic, dates follow format, and numberallowed/venue are > 0
                                 $dataFields = array();
                                 $dataFields["area"] = "event";
-                                $dataFields["fields"]["name"] = array("type" => "s", "value" => $name);
+                                $dataFields["fields"]["name"] = array("type" => "sn", "value" => $name);                // event names can have numbers     
                                 $dataFields["fields"]["datestart"] = array("type" => "date", "value" => $datestart);
                                 $dataFields["fields"]["dateend"] = array("type" => "date", "value" => $dateend);
                                 $dataFields["fields"]["numberallowed"] = array("type" => "i", "value" => $numberAllowed);

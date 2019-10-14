@@ -161,6 +161,14 @@
             $msg = "";
             $paramArr = array();
 
+            /**
+             * Key:
+             * "i" = Integer
+             * "s" = String
+             * "sn" = String w/numbers
+             * "date" = date
+             */
+
             foreach($fields["fields"] as $k => $v){
                 foreach($fields["fields"][$k] as $key => $value){
                     // if the key == type
@@ -171,6 +179,9 @@
                                 break;
                             case "s":
                                 $type = "s";
+                                break;
+                            case "sn":
+                                $type = "sn";
                                 break;
                             case "date":
                                 $type = "date";
@@ -184,28 +195,37 @@
                             }
                             else {
                                 $flag = false;
-                                $msg = "<p class='form-error-text center-element'>Invalid input! number</p>";
+                                $msg = "<p class='form-error-text center-element'>Invalid input!</p>";
                             }
                         }
-                        else if($type == "s"){      // s = string
-                            // var_dump($k);
-                            // var_dump($v);
-
-                            // if(alphabetic($value) || alphabeticSpace($value)){
+                        else if($type == "sn"){
+                            // SN = String Number (String w/numbers are allowed)
+                            if(alphaNumeric($value) || alphaNumericSpace($value)){
                                 $paramArr[$k] = $value;
-                            // }
-                            // else {
-                            //     $flag = false;
-                            //     $msg = "<p class='form-error-text center-element'>Invalid input! string here</p>";
-                            // }
+                            }
+                            else {
+                                $flag = false;
+                                $msg = "<p class='form-error-text center-element'>Invalid input!</p>";
+                            }
+                        }
+                        else if($type == "s"){      
+                            // s = String
+                            if(alphabetic($value) || alphabeticSpace($value)){
+                                $paramArr[$k] = $value;
+                            }
+                            else {
+                                $flag = false;
+                                $msg = "<p class='form-error-text center-element'>Invalid input! string here</p>";
+                            }
                         }
                         else if($type == "date"){
+                            // Only accepting date-time format
                             if(date3($value)){
                                 $paramArr[$k] = $value;
                             }
                             else{
                                 $flag = false;
-                                $msg = "<p class='form-error-text center-element'>Invalid input! date</p>";
+                                $msg = "<p class='form-error-text center-element'>Invalid input!</p>";
                             }
                         }
                     }
@@ -213,6 +233,7 @@
             }// end foreach
 
 
+            // Perform add/insert if values were added and flag wasn't flipped
             if(!empty($paramArr) && $flag == true){
                 $rowCount = call_user_func_array(array($db, $fields["method"]["add"]), array($paramArr));
 
