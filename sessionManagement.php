@@ -52,7 +52,7 @@
                                                                 <label>End Date</label>   
                                                             </div>
                                                             <div id='user-edit-inputs'>
-                                                                <input type='text' name='id' value='{$session->getIdsession()}' readonly='readonly'>
+                                                                <input type='text' name='id' value='{$session->getIdSession()}' readonly='readonly'>
                                                                 <input type='text' name='name' value='{$session->getName()}'>
                                                                 <input type='text' name='numberallowed' value='{$session->getNumberAllowed()}'>
                                                                 <input type='text' name='event' value='{$session->getEvent()}'>
@@ -66,7 +66,58 @@
                                 echo $sessionEditTable;
                             }
                             else if($_GET["action"] == "delete"){
+                                // DELETE
+                                $id = $_GET["id"];              // ID of venue passed in URL
 
+                                // if delete option was chosen, check for confirm variable in URL that's set when clicking Yes/No
+                                if(isset($_GET['confirm']) && !empty($_GET['confirm'])){
+                                    $dataFields = array();
+                                    $dataFields["area"] = "event";
+                                    $dataFields["fields"] = array(
+                                        "id" => $id,
+                                    );
+                                    $dataFields["method"] = array(
+                                        "delete" => "deleteSession"   // Special case for events -> need to delete everythin associated with the deleted event
+                                    );
+                                    deleteAction($dataFields);
+                                }
+
+                                $session = $db->getSession($id)[0];   // event object
+                                // event SPECIFIC TABLE W/btns
+                                echo "<h2 class='section-heading'>Delete event</h2>";
+                                $deleteInfo = "<div class='admin-table-container'>
+                                                <table class='admin-table'>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>Name</th>
+                                                        <th>Number Allowed</th>
+                                                        <th>Event</th>   
+                                                        <th>Start Date</th>
+                                                        <th>End Date</th>   
+                                                    </tr>
+                                                    <tr>
+                                                        <td>{$session->getIdSession()}</td>
+                                                        <td>{$session->getName()}</td>
+                                                        <td>{$session->getNumberAllowed()}</td>
+                                                        <td>{$session->getEvent()}</td>
+                                                        <td>{$session->getStartDate()}</td>
+                                                        <td>{$session->getEndDate()}</td>
+                                                    </tr>
+                                                </table>
+                                            </div>";
+                                echo $deleteInfo;
+
+                                // Yes & no options to delete action
+                                echo "<h2 class='section-heading'>Are you sure you want to delete the selected session?</h2><br/>";
+                                $optionDiv = "<div id='confirm-delete-container' class='center-element'>
+                                                    <a href='./sessionManagement.php?id={$session->getIdSession()}&action=delete&confirm=yes'>
+                                                        <div class='delete-btn' id='confirm-delete-btn'>Yes</div>
+                                                    </a>
+                                                    <a href='./sessionManagement.php?id={$session->getIdSession()}&action=delete&confirm=no'>
+                                                        <div class='delete-btn' id='deny-delete-btn'>No</div>
+                                                    </a>
+                                                </div>";
+                                echo $optionDiv;
                             }
                         }
                         else if(managementAddCheck()){
