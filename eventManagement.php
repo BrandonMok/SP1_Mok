@@ -29,7 +29,8 @@
                             if($_GET["action"] == "edit"){
                                 // EDIT
                                 $id = $_GET["id"];
-                                $event = $db->getEvent($id)[0]; // get the selected event
+                                $event = $db->getEvent($id); // get the selected event
+
 
                                 // Store original values to compare to on POST
                                 // Don't want to keep querying same object when doing post logic
@@ -86,7 +87,8 @@
                                     deleteAction($dataFields);
                                 }
 
-                                $event = $db->getevent($id)[0];   // event object
+                                $event = $db->getevent($id);   // event object
+
                                 // event SPECIFIC TABLE W/btns
                                 echo "<h2 class='section-heading'>Delete event</h2>";
                                 $deleteInfo = "<div class='admin-table-container'>
@@ -170,11 +172,52 @@
                             redirect("admin");
                         }
                     }
+                    /** -------------------- EVENT MANAGER --------------------*/                    
                     else if($_SESSION["role"] == "event_manager"){
                         // EVENT MANAGER - ADD/EDIT/DELETE events,sessions, and attendees for THEIR EVENT
                         if(managementEditDeleteCheck()){
                             if($_GET["action"] == "edit"){
+                                // // EDIT
+                                // $id = $_GET["id"];
+                                // $event = $db->getEvent($id); // get the selected event
 
+                                // // Store original values to compare to on POST
+                                // // Don't want to keep querying same object when doing post logic
+                                // $originalValues = array(
+                                //     "name" => $event->getName(),
+                                //     "datestart" => $event->getDateStart(),
+                                //     "dateend" => $event->getDateEnd(), 
+                                //     "numberallowed" => $event->getNumberAllowed(),
+                                //     "venue" => $event->getVenue()
+                                // );
+                                // $originalValues = json_encode($originalValues);
+
+                                // // EDIT Event SECTION
+                                // echo "<h2 class='section-heading'>Edit Event</h2>";
+
+                                // $eventEditTable = "<div class='edit-add-form-container'>
+                                //                         <form id='user-edit-form' name='user-edit-form' action='./eventManagement.php?id={$event->getIdEvent()}&action=edit' method='POST'>
+                                //                             <div id='user-edit-labels'>
+                                //                                 <label>ID</label>
+                                //                                 <label>Name</label>
+                                //                                 <label>Date Start</label>
+                                //                                 <label>Date End</label>
+                                //                                 <label>Number Allowed</label>
+                                //                                 <label>Venue</label>   
+                                //                             </div>
+                                //                             <div id='user-edit-inputs'>
+                                //                                 <input type='text' name='id' value='{$event->getIdEvent()}' readonly='readonly'>
+                                //                                 <input type='text' name='name' value='{$event->getName()}'>
+                                //                                 <input type='text' name='datestart' value='{$event->getDateStart()}'>
+                                //                                 <input type='text' name='dateend' value='{$event->getDateEnd()}'>
+                                //                                 <input type='text' name='numberallowed' value='{$event->getNumberAllowed()}'>
+                                //                                 <input type='text' name='venue' value='{$event->getVenue()}'>
+                                //                             </div>
+                                //                             <input type='hidden' name='originalValues' value='{$originalValues}'><br/>
+                                //                             <input name='submit' id='submit-btn' type='submit' value='Submit'/>
+                                //                         </form>
+                                //                     </div>";
+                                // echo $eventEditTable;
                             }
                             else if($_GET["action"] == "delete"){
 
@@ -182,41 +225,35 @@
                         }
                         else if(managementAddCheck()){
                             if($_GET["action"] == "add"){
-
-                                /**
-                                 * ALSO NEED TO MAKE A manager_event OBJECT!
-                                 * WIll need to make checks throughout if this event_manager has the right access!
-                                 */
-
-                                // $data = array();
-                                // $data["area"] = "Event";
-                                // $data["formAction"] = "./eventManagement.php?&action=add";
-                                // $data["labels"] = array("ID", "Name", "Date Start", "Date End", "Number Allowed", "Venue");
-                                // $data["input"] = array(
-                                //     "id" => array(
-                                //         "name" => "id",
-                                //         "readonly" => "readonly",
-                                //         "placeholder" => "Auto-increment"
-                                //     ),
-                                //     "name" => array(
-                                //         "name" => "name"
-                                //     ),
-                                //     "datestart" => array(
-                                //         "name" => "datestart",
-                                //         "placeholder" => "yyyy-mm-dd hh:mm:ss"
-                                //     ),
-                                //     "dateend" => array(
-                                //         "name" => "dateend",
-                                //         "placeholder" => "yyyy-mm-dd hh:mm:ss"
-                                //     ),
-                                //     "numberallowed" => array(
-                                //         "name" => "numberallowed"
-                                //     ),
-                                //     "venue" => array(
-                                //         "name" => "venue"
-                                //     )
-                                // );
-                                // addActionHTML($data);
+                                $data = array();
+                                $data["area"] = "Event";
+                                $data["formAction"] = "./eventManagement.php?&action=add";
+                                $data["labels"] = array("ID", "Name", "Date Start", "Date End", "Number Allowed", "Venue");
+                                $data["input"] = array(
+                                    "id" => array(
+                                        "name" => "id",
+                                        "readonly" => "readonly",
+                                        "placeholder" => "Auto-increment"
+                                    ),
+                                    "name" => array(
+                                        "name" => "name"
+                                    ),
+                                    "datestart" => array(
+                                        "name" => "datestart",
+                                        "placeholder" => "yyyy-mm-dd hh:mm:ss"
+                                    ),
+                                    "dateend" => array(
+                                        "name" => "dateend",
+                                        "placeholder" => "yyyy-mm-dd hh:mm:ss"
+                                    ),
+                                    "numberallowed" => array(
+                                        "name" => "numberallowed"
+                                    ),
+                                    "venue" => array(
+                                        "name" => "venue"
+                                    )
+                                );
+                                addActionHTML($data);
                             }
                         }
                         else{
@@ -338,6 +375,10 @@
 
                                 // In case of event manager, also make an manager_event object
                                 if($_SESSION["role"] == "event_manager"){
+                                    /**
+                                     * Also need to make a manager_event OBJECT!
+                                     */
+
                                     if(eventManagerEventCheck($lastID)){
                                         // Event exists! Good to make manager_event object
                                         $managerEventData = array();
