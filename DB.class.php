@@ -285,7 +285,7 @@
                     ":numberallowed" => $data["numberallowed"],
                     ":venue" => $data["venue"]
                 ));
-                return $stmt->rowCount();
+                return $this->db->lastInsertId();
             }
             catch(PDOException $e){
                 die("There was a problem adding event!");
@@ -306,7 +306,7 @@
                     ":event" => $data["event"],
                     ":manager" => $data["manager"]
                 )); 
-                return $stmt->rowCount();
+                return $this->db->lastInsertId();
             }
             catch(PDOException $e){
                 die("There was a problem adding manager event!");
@@ -563,7 +563,7 @@
                     ":startdate" => $data["datestart"],
                     ":enddate" => $data["dateend"]
                 ));
-                return $stmt->rowCount();
+                return $this->db->lastInsertId();
             }
             catch(PDOException $e){
                 die("There was a problem adding the session!");
@@ -753,7 +753,7 @@
                     ":name" => $data["name"],
                     ":capacity" => $data["capacity"]
                 ));
-                return $stmt->rowCount();
+                return $this->db->lastInsertId();
             }
             catch(PDOException $e){
                 die("There was a problem adding venue!");

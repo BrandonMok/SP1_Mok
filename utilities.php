@@ -283,8 +283,9 @@
                 $rowCount = call_user_func_array(array($db, $fields["method"]["add"]), array($paramArr));
 
                 if($rowCount > 0){
-                    header("Location: admin.php");
-                    exit;
+                    return $rowCount;
+                    // header("Location: admin.php");
+                    // exit;
                 }
                 else{
                     echo "<p class='form-error-text'>** Adding {$fields['area']} failed!</p>";
@@ -353,6 +354,23 @@
      */
     function managementEditDeleteCheck(){
         if(isset($_GET["id"]) && !empty($_GET["id"]) && isset($_GET["action"]) && !empty($_GET["action"])){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    /**
+     * eventManagerEventCheck
+     * @param $eventID
+     * Checks to see if the event trying to associate the event manager exists
+     */
+    function eventManagerEventCheck($eventID){
+        global $db;
+        // CHECK: If event exists
+        if($db->getEvent($eventID) > 0){
+            // If event exists as the last ID passed is greated than 0
             return true;
         }
         else {

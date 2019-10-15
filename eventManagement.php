@@ -333,16 +333,39 @@
                                 $dataFields["method"] = array(
                                     "add" => "addEvent"
                                 );
-                                addPost($dataFields);
+                                $lastID = addPost($dataFields);
 
 
-                                // // In case of event manager, also make an manager_event object
-                                // if($_SESSION["role"] == "event_manager"){
-                                //     $managerEventData = array();
-                                //     // $managerEventData["event"] =
-                                //     // $managerEventData["manager"] = 
+                                // In case of event manager, also make an manager_event object
+                                if($_SESSION["role"] == "event_manager"){
+                                    if(eventManagerEventCheck($lastID)){
+                                        // Event exists! Good to make manager_event object
+                                        $managerEventData = array();
+                                        $managerEventData["event"] = $lastID;
+                                        $managerEventData["manager"] = $_SESSION["id"];
 
-                                // }
+                                        $managerEventObjID = addManagerEvent($managerEventData); // call to make object
+
+                                        var_dump($managerEventObjID);
+
+                                        if($managerEventObjID > 0){
+                                            // If all good, redirect
+                                            redirect("admin");
+                                        }
+                                        else {
+                                            // ERROR: Making manager_event object failed!
+                                            echo "<p class='form-error-text'>** Creating new event as event manager failed!</p>";
+                                        }
+                                    }
+                                    else {
+                                        // ERRRO: Event trying to associate with failed!
+                                        echo "<p class='form-error-text'>** Creating new event as event manager failed!</p>";
+                                    }
+                                }// end if event manager
+
+
+                                // After making necessary objects, redirect
+                                redirect("admin");
                             }
                             else{
                                 // ERROR: Something went wrong with value of inputs

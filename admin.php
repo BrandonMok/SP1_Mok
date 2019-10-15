@@ -254,6 +254,9 @@
                         "area" => "Event"
                     ));
 
+                    // Do a search for ALL functions they own
+                    // To do that will gro through manager_event to know which ones they own!
+
                     // $allEvents = $db->getAllEvents();  
 
 

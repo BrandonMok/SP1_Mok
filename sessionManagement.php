@@ -265,6 +265,9 @@
                                     "add" => "addSession"
                                 );
                                 addPost($dataFields);
+
+                                // After making necessary objects, redirect
+                                redirect("admin");
                             }
                             else{
                                 // ERROR: Something went wrong with value of inputs

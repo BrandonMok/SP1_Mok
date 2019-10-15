@@ -219,6 +219,9 @@
                                 "add" => "addVenue"
                             );
                             addPost($dataFields);
+
+                            // After making necessary objects, redirect
+                            redirect("admin");
                         }
                         else{
                             // ERROR: No values supplied and/or field missing a value
