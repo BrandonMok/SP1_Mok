@@ -399,9 +399,13 @@
      * End the session
      */
     function endSession(){
-        unset($_SESSION['userLoggedIn']);   // unset login session variable
-        unset($_SESSION['role']);           // unset role variable
-        unset($_SESSION['currentUSR']);     // unset current user's name
+        foreach($_SESSION as $sessionVar){
+            unset($sessionVar);
+        }
+
+        // unset($_SESSION['userLoggedIn']);   // unset login session variable
+        // unset($_SESSION['role']);           // unset role variable
+        // unset($_SESSION['currentUSR']);     // unset current user's name
         unset($_SESSION);               
         
         if(isset($_COOKIE[session_name()])){

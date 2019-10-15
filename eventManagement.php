@@ -171,10 +171,62 @@
                         }
                     }
                     else if($_SESSION["role"] == "event_manager"){
-                        // EVENT MANAGER
+                        // EVENT MANAGER - ADD/EDIT/DELETE events,sessions, and attendees for THEIR EVENT
+                        if(managementEditDeleteCheck()){
+                            if($_GET["action"] == "edit"){
 
-                        
+                            }
+                            else if($_GET["action"] == "delete"){
 
+                            }
+                        }
+                        else if(managementAddCheck()){
+                            if($_GET["action"] == "add"){
+
+                                /**
+                                 * ALSO NEED TO MAKE A manager_event OBJECT!
+                                 * WIll need to make checks throughout if this event_manager has the right access!
+                                 */
+
+                                // $data = array();
+                                // $data["area"] = "Event";
+                                // $data["formAction"] = "./eventManagement.php?&action=add";
+                                // $data["labels"] = array("ID", "Name", "Date Start", "Date End", "Number Allowed", "Venue");
+                                // $data["input"] = array(
+                                //     "id" => array(
+                                //         "name" => "id",
+                                //         "readonly" => "readonly",
+                                //         "placeholder" => "Auto-increment"
+                                //     ),
+                                //     "name" => array(
+                                //         "name" => "name"
+                                //     ),
+                                //     "datestart" => array(
+                                //         "name" => "datestart",
+                                //         "placeholder" => "yyyy-mm-dd hh:mm:ss"
+                                //     ),
+                                //     "dateend" => array(
+                                //         "name" => "dateend",
+                                //         "placeholder" => "yyyy-mm-dd hh:mm:ss"
+                                //     ),
+                                //     "numberallowed" => array(
+                                //         "name" => "numberallowed"
+                                //     ),
+                                //     "venue" => array(
+                                //         "name" => "venue"
+                                //     )
+                                // );
+                                // addActionHTML($data);
+                            }
+                        }
+                        else{
+                            // REDIRECT: Is an event manager, but action is not one available
+                            redirect("events.php");
+                        }
+                    }
+                    else {
+                        // REDIRECT: User is an attendee
+                        redirect("events");
                     }
                 }
                 else {
@@ -282,6 +334,15 @@
                                     "add" => "addEvent"
                                 );
                                 addPost($dataFields);
+
+
+                                // // In case of event manager, also make an manager_event object
+                                // if($_SESSION["role"] == "event_manager"){
+                                //     $managerEventData = array();
+                                //     // $managerEventData["event"] =
+                                //     // $managerEventData["manager"] = 
+
+                                // }
                             }
                             else{
                                 // ERROR: Something went wrong with value of inputs

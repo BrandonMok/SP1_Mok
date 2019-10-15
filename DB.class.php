@@ -45,13 +45,15 @@
 
                 // Check to see if row was returned, if not then login failed
                 if($stmt->rowCount() > 0){
+                    $id = $data[0]->getIdAttendee();
                     $name = $data[0]->getName();
                     $role = $data[0]->getRole();
 
                     // Array to pass info needed on login page
                     $responseArr = array(
                         "rowCount" => $stmt->rowCount(),
-                        "currentUser" => array(            
+                        "currentUser" => array(    
+                            "id" => $id,        
                             "name" => $name,  
                             "role" => $role
                         )
@@ -287,6 +289,27 @@
             }
             catch(PDOException $e){
                 die("There was a problem adding event!");
+            } 
+        }
+
+        /**
+         * addManagerEvent
+         * @param $data
+         * Adds a manager_event when an event manager makes an event
+         */
+        function addManagerEvent($data){
+            try{
+                $query = "INSERT INTO manager_event (event, manager)
+                            VALUES (:event, :manager)";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute(array(
+                    ":event" => $data["event"],
+                    ":manager" => $data["manager"]
+                )); 
+                return $stmt->rowCount();
+            }
+            catch(PDOException $e){
+                die("There was a problem adding manager event!");
             } 
         }
 

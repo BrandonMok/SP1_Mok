@@ -58,6 +58,7 @@
                             $userCheck = $db->verifyUser($uName, $password);    // verify user (-1 if not found or 1 if found)
 
                             $rows = $userCheck["rowCount"];             // rowcount
+                            $id = $userCheck["currentUser"]["id"];      // ID
                             $role = $userCheck["currentUser"]["role"];  // role
                             $name = $userCheck["currentUser"]["name"];  // name
 
@@ -65,6 +66,7 @@
                             // Only proceed if rows returned (aka found the user)
                             if($rows > 0){
                                 $_SESSION["userLoggedIn"] = true;  // set session variable
+                                $_SESSION["id"] = $id;
                                 $_SESSION["currentUSR"] = $name;
                                 
                                 // Switch to determine role -> store as session variable

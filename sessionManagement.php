@@ -153,7 +153,7 @@
                                 addActionHTML($data);
                             }
                             else{
-                                // REDIRECT: Action is something else
+                                // REDIRECT: Something other action passed
                                 redirect("admin");
                             }
                         }

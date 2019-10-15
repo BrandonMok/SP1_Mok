@@ -247,8 +247,14 @@
                     }
                 }// end if admin
                 else if($_SESSION["role"] == "event_manager"){
-                    // EVENT MANAGER ONLY
+                    // EVENT MANAGER ONLY - can only ADD/EDIT/DELETE THEIR OWN events, sessions, attendees
+                    echo "<p class='section-heading'>Events</p>";
+                    adminAddBtns(array(
+                        "url" => "./eventManagement.php?action=add",
+                        "area" => "Event"
+                    ));
 
+                    // $allEvents = $db->getAllEvents();  
 
 
 
