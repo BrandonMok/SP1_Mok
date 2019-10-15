@@ -19,6 +19,9 @@
                 die("ERROR: Failed to connect");
             } 
         }
+        
+
+
 
         /** -------------------- USERS -------------------- */
         /**
@@ -111,7 +114,6 @@
                 die("There was a problem getting the user!");
             }
         }
-
 
         /**
          * insertUser
@@ -216,8 +218,6 @@
 
         
  
-
-
 
         /** -------------------- EVENTS -------------------- */
         /**
@@ -455,9 +455,6 @@
 
 
 
-
-
-
         /* -------------------- SESSIONS -------------------- */
         /**
          * getAllSessions
@@ -525,7 +522,6 @@
             }
         }
 
-        
         /**
          * addSession
          * @param $data
@@ -550,7 +546,6 @@
                 die("There was a problem adding the session!");
             }
         }
-
 
         /**
          * updateSession
@@ -611,7 +606,6 @@
             }
         }
 
-
         /**
          * deleteSession
          * @param $sessionID
@@ -632,7 +626,6 @@
             }
         }
 
-
         /**
          * deleteSessionsPerEvent
          * @param $eventID
@@ -651,7 +644,6 @@
                 die("There was a problem deleting all of the event's sessions!");
             }
         }
-
 
         /**
          * deleteAttendeeSessions
@@ -674,10 +666,6 @@
 
 
         
-        
-
-
-
         /* -------------------- VENUES -------------------- */
         /**
          * getAllVenues
