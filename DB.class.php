@@ -270,6 +270,48 @@
         }
 
         /**
+         * getManagerEvent
+         * @param $managerID
+         * Retreive manager_event obj (eventID + managerID) based on event MANAGERID
+         */
+        function getAllManagerEvents($managerID){
+            try{
+                include_once("./classes/ManagerEvent.class.php");
+                $query = "SELECT * FROM manager_event WHERE manager = :managerID";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute(array(
+                    ":managerID" => $managerID
+                ));
+                $stmt->setFetchMode(PDO::FETCH_CLASS, "ManagerEvent");
+                return $stmt->fetchAll();
+            }
+            catch(PDOException $e){
+                die("There was a problem retrieving events!");
+            } 
+        }
+
+        /**
+         * getManagerEvent
+         * @param $eventID
+         * Retrieves the manager_event object by the EVENTID
+         */
+        function getManagerEvent($eventID){
+            try{
+                include_once("./classes/ManagerEvent.class.php");
+                $query = "SELECT * FROM manager_event WHERE event = :eventID";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute(array(
+                    ":eventID" => $eventID
+                ));
+                $stmt->setFetchMode(PDO::FETCH_CLASS, "ManagerEvent");
+                return $stmt->fetchAll();
+            }
+            catch(PDOException $e){
+                die("There was a problem retrieving events!");
+            } 
+        }
+
+        /**
          * addEvent
          * @param $data
          */
@@ -310,27 +352,6 @@
             }
             catch(PDOException $e){
                 die("There was a problem adding manager event!");
-            } 
-        }
-
-        /**
-         * getManagerEvent
-         * @param $managerID
-         * Retreive manager_event obj (eventID + managerID) based on event manager's ID
-         */
-        function getAllManagerEvents($managerID){
-            try{
-                include_once("./classes/ManagerEvent.class.php");
-                $query = "SELECT * FROM manager_event WHERE manager = :managerID";
-                $stmt = $this->db->prepare($query);
-                $stmt->execute(array(
-                    "managerID" => $managerID
-                ));
-                $stmt->setFetchMode(PDO::FETCH_CLASS, "ManagerEvent");
-                return $stmt->fetchAll();
-            }
-            catch(PDOException $e){
-                die("There was a problem retrieving events!");
             } 
         }
 
