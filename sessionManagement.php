@@ -122,30 +122,39 @@
                         }
                         else if(managementAddCheck()){
                             if($_GET["action"] == "add"){
-                                echo "<h2 class='section-heading'>Add Session</h2>";
-                                $addForm = "<div class='edit-add-form-container'>
-                                                <form id='user-edit-form' name='user-edit-form' action='./sessionManagement.php?&action=add' method='POST'>
-                                                    <div id='user-edit-labels'>
-                                                        <label>ID</label>
-                                                        <label>Name</label>
-                                                        <label>Number Allowed</label>
-                                                        <label>Event</label>   
-                                                        <label>Start Date</label>
-                                                        <label>End Date</label>     
-                                                    </div>
-                                                    <div id='user-edit-inputs'>
-                                                        <input type='text' name='id' readonly='readonly' placeholder='Auto-increment'>
-                                                        <input type='text' name='name'>
-                                                        <input type='text' name='numberallowed'>
-                                                        <input type='text' name='event'>
-                                                        <input type='text' name='datestart' placeholder='yyyy-mm-dd hh:mm:ss'>
-                                                        <input type='text' name='dateend' placeholder='yyyy-mm-dd hh:mm:ss'>
-                                                    </div><br/>
-                                                    <input name='submit' id='submit-btn' type='submit' value='Submit'/>
-                                                </form>
-                                            </div>";
-                                echo $addForm;
-
+                                $data = array();
+                                $data["area"] = "Session";
+                                $data["formAction"] = "./sessionManagement.php?&action=add";
+                                $data["labels"] = array("ID", "Name", "Number Allowed", "Event", "Start Date", "End Date");
+                                $data["input"] = array(
+                                    "id" => array(
+                                        "name" => "id",
+                                        "readonly" => "readonly",
+                                        "placeholder" => "Auto-increment"
+                                    ),
+                                    "name" => array(
+                                        "name" => "name"
+                                    ),
+                                    "numberallowed" => array(
+                                        "name" => "numberallowed"
+                                    ),
+                                    "event" => array(
+                                        "name" => "event"
+                                    ),
+                                    "datestart" => array(
+                                        "name" => "datestart",
+                                        "placeholder" => "yyyy-mm-dd hh:mm:ss"
+                                    ),
+                                    "dateend" => array(
+                                        "name" => "dateend",
+                                        "placeholder" => "yyyy-mm-dd hh:mm:ss"
+                                    ),
+                                );
+                                addActionHTML($data);
+                            }
+                            else{
+                                // REDIRECT: Action is something else
+                                redirect("admin");
                             }
                         }
                         else{

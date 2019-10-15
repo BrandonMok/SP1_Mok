@@ -117,23 +117,24 @@
                         else if(managementAddCheck()){
                             // Add 
                             if($_GET["action"] == "add"){
-                                echo "<h2 class='section-heading'>Add Venue</h2>";
-                                $addForm = "<div class='edit-add-form-container'>
-                                                <form id='user-edit-form' name='user-edit-form' action='./venueManagement.php?&action=add' method='POST'>
-                                                    <div id='user-edit-labels'>
-                                                        <label>ID</label>
-                                                        <label>Name</label>
-                                                        <label>Capacity</label>
-                                                    </div>
-                                                    <div id='user-edit-inputs'>
-                                                        <input type='text' name='id' readonly='readonly' placeholder='Auto-increment'>
-                                                        <input type='text' name='name'>
-                                                        <input type='text' name='capacity'>
-                                                    </div><br/>
-                                                    <input name='submit' id='submit-btn' type='submit' value='Submit'/>
-                                                </form>
-                                            </div>";
-                                echo $addForm;
+                                $data = array();
+                                $data["area"] = "Venue";
+                                $data["formAction"] = "./venueManagement.php?&action=add";
+                                $data["labels"] = array("ID", "Name", "Capacity");
+                                $data["input"] = array(
+                                    "id" => array(
+                                        "name" => "id",
+                                        "readonly" => "readonly",
+                                        "placeholder" => "Auto-increment"
+                                    ),
+                                    "name" => array(
+                                        "name" => "name"
+                                    ),
+                                    "capacity" => array(
+                                        "name" => "capacity"
+                                    )
+                                );
+                                addActionHTML($data);
                             }
                             else{
                                 // REDIRECT: Action is something else

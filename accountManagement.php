@@ -127,27 +127,28 @@
                         }
                     }// end if edit/delete allowed
                     else if(managementAddCheck()){
-                        // Add 
                         if($_GET["action"] == "add"){
-                            echo "<h2 class='section-heading'>Add User</h2>";
-                            $addForm = "<div class='edit-add-form-container'>
-                                            <form id='user-edit-form' name='user-edit-form' action='./accountManagement.php?&action=add' method='POST'>
-                                                <div id='user-edit-labels'>
-                                                    <label>ID</label>
-                                                    <label>Name</label>
-                                                    <label>Password</label>
-                                                    <label>Role</label>                                                   
-                                                </div>
-                                                <div id='user-edit-inputs'>
-                                                    <input type='text' name='id' readonly='readonly' placeholder='Auto-increment'>
-                                                    <input type='text' name='name'>
-                                                    <input type='text' name='password'>
-                                                    <input type='text' name='role'>
-                                                </div><br/>
-                                                <input name='submit' id='submit-btn' type='submit' value='Submit'/>
-                                            </form>
-                                        </div>";
-                            echo $addForm;
+                            $data = array();
+                            $data["area"] = "User";
+                            $data["formAction"] = "./accountManagement.php?&action=add";
+                            $data["labels"] = array("ID", "Name", "Password", "Role");
+                            $data["input"] = array(
+                                "id" => array(
+                                    "name" => "id",
+                                    "readonly" => "readonly",
+                                    "placeholder" => "Auto-increment"
+                                ),
+                                "name" => array(
+                                    "name" => "name"
+                                ),
+                                "password" => array(
+                                    "name" => "password"
+                                ),
+                                "role" => array(
+                                    "name" => "role"
+                                )
+                            );
+                            addActionHTML($data);
                         }// end if action was the only set
                         else{
                             // REDIRECT: Action is something else

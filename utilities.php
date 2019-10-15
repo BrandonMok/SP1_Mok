@@ -101,6 +101,51 @@
     //     echo $table;
     // }
 
+        /**
+         * reusableAddActionHTML
+         * @param $data
+         * $data = array();
+         * $data['area'] = area
+         * $data['formAction'] = URL string
+         * $data['label'] = array(lbl1,lbl2,lbl3,...)
+         * $data["input"] = array("key" => array("name" => value, "readonly" => readonly, etc..), "key" => array(), ...)
+         * Reusable function to produce the code for the ADD action for admin tables
+         */
+        function addActionHTML($data){
+            if($_GET["action"] == "add"){
+                echo "<h2 class='section-heading'>Add {$data['area']}</h2>";
+                $addForm = "<div class='edit-add-form-container'>
+                                <form id='user-edit-form' name='user-edit-form' action={$data['formAction']} method='POST'>
+                                <div id='user-edit-labels'>";
+                // Create table headers
+                foreach($data["labels"] as $v){
+                    $addForm .= "<label>{$v}</label>";
+                }
+                $addForm .= "</div>
+                            <div id='user-edit-inputs'>";
+
+                // Create table inputs
+                foreach($data["input"] as $key => $value){
+                    if($key == "id"){
+                        $addForm .= "<input type='text' name={$value["name"]} readonly={$value["readonly"]} placeholder='{$value["placeholder"]}'>";
+                    }
+                    else if ($key == "datestart" || $key == "dateend"){
+                        $addForm .= "<input type='text' name={$value["name"]} placeholder='{$value["placeholder"]}'>";
+                    }
+                    else {
+                        $addForm .= "<input type='text' name={$value["name"]}>";
+                    }
+                }// end foreach
+                $addForm .= "</div><br/>
+                            <input name='submit' id='submit-btn' type='submit' value='Submit'/>
+                            </form>
+                        </div>";
+                echo $addForm;
+            }// end if ADD
+        }// end function
+
+
+
     
         /**
          * editPost
@@ -215,7 +260,7 @@
                             }
                             else {
                                 $flag = false;
-                                $msg = "<p class='form-error-text center-element'>Invalid input! string here</p>";
+                                $msg = "<p class='form-error-text center-element'>Invalid input!</p>";
                             }
                         }
                         else if($type == "date"){
