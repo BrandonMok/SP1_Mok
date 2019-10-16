@@ -280,12 +280,10 @@
 
             // Perform add/insert if values were added and flag wasn't flipped
             if(!empty($paramArr) && $flag == true){
-                $rowCount = call_user_func_array(array($db, $fields["method"]["add"]), array($paramArr));
+                $lastID = call_user_func_array(array($db, $fields["method"]["add"]), array($paramArr));
 
-                if($rowCount > 0){
-                    return $rowCount;
-                    // header("Location: admin.php");
-                    // exit;
+                if($lastID > 0){
+                    return $lastID;
                 }
                 else{
                     echo "<p class='form-error-text'>** Adding {$fields['area']} failed!</p>";
@@ -369,7 +367,7 @@
     function eventManagerEventCheck($eventID){
         global $db;
         // CHECK: If event exists
-        if($db->getEvent($eventID) > 0){
+        if(count($db->getEvent($eventID)) > 0){
             // If event exists as the last ID passed is greated than 0
             return true;
         }

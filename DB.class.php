@@ -272,7 +272,7 @@
         /**
          * getManagerEvent
          * @param $managerID
-         * Retreive manager_event obj (eventID + managerID) based on event MANAGERID
+         * Retreive MULTIPLE manager_event obj (eventID + managerID) based on MANAGERID
          */
         function getAllManagerEvents($managerID){
             try{
