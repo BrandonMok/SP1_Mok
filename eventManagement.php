@@ -214,12 +214,6 @@
 
 
 
-
-
-
-
-
-
             /** -------------------- POST LOGIC --------------------*/
             if($_SERVER["REQUEST_METHOD"] == "POST"){
                 if(isset($_GET["action"]) && !empty($_GET["action"])){
@@ -234,8 +228,6 @@
                         $originalValues = json_decode($_POST["originalValues"]);      
 
                         $flag = true;
-
-                        echo var_dump(date3($_POST["datestart"]));
 
                         if(!date3($datestart) || !date3($dateend)){
                             $flag = false;
