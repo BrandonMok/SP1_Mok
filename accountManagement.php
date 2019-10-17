@@ -208,10 +208,10 @@
                             // ERROR - not in range
                             echo "<p class='form-error-text'>** Please enter a valid role!</p>";
                         }
-                        else if(alphabetic($name) == 0){
-                            // ERROR - name had numbers
-                            echo "<p class='form-error-text'>** Please enter a valid name!</p>";
-                        }
+                        // else if(!alphabetic($name) || !alphabeticSpace($name)){
+                        //     // ERROR - name had numbers
+                        //     echo "<p class='form-error-text'>** Please enter a valid name!</p>";
+                        //}
                         else {
                             // Perform EDIT POST REQUEST Proccessing
                             $dataFields = array();

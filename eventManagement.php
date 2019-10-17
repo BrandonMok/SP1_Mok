@@ -35,7 +35,7 @@
                             }
                             else if($userRole == "event_manager"){
                                 // Make sure this event is the event_managers to be safe!
-                                $managerEvent = $db->getManagerEvent($id);
+                                $managerEvent = $db->getManagerEventOBJ($id);
                                 if(count($managerEvent) > 0 && $managerEvent[0]->getManager() == $_SESSION['id']){
                                     // The manager owns this event if the eventID is under the manager_event event field
                                     $event = $db->getEvent($id); 
@@ -92,7 +92,7 @@
                             }
                             else if($userRole == "event_manager"){
                                 // Make sure this event is the event_managers to be safe!
-                                $managerEvent = $db->getManagerEvent($id);
+                                $managerEvent = $db->getManagerEventOBJ($id);
                                 if(count($managerEvent) > 0 && $managerEvent[0]->getManager() == $_SESSION['id']){
                                     // The manager owns this event if the eventID is under the manager_event event field
                                     $event = $db->getEvent($id); 
@@ -241,10 +241,6 @@
                             $flag = false;
                             echo "<p class='form-error-text'>** Invalid date format!</p>";
                         }
-                        // if(!alphaNumeric($name) && alphaNumericSpace($name)){
-                        //     $flag = false;
-                        //     echo "<p class='form-error-text'>** Invalid: Invalid name!</p>";
-                        // }
                         if(!is_numeric($numberAllowed)){
                             $flag = false;
                             echo "<p class='form-error-text'>** Invalid: Number allowed isn't a valid value!</p>";
@@ -303,6 +299,8 @@
                                     "add" => "addEvent"
                                 );
                                 $lastID = addPost($dataFields);
+                                // addPost($dataFields);
+
 
                                 // In case of event manager, also make an manager_event object
                                 if($_SESSION["role"] == "event_manager"){
@@ -327,11 +325,11 @@
                                         }
                                     }
                                     else {
-                                        // ERRRO: Event trying to associate with failed!
+                                        // ERROR: Event trying to associate with failed!
                                         echo "<p class='form-error-text'>** Creating new event as event manager failed!</p>";
                                     }
                                 }// end if event manager
-
+                                
 
                                 // After making necessary objects, redirect
                                 redirect("admin");

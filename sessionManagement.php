@@ -21,149 +21,196 @@
             // CHECK: User is logged in & is an admin or event manager
             if(isset($_SESSION["userLoggedIn"]) && isset($_SESSION["role"])){
                 if($_SESSION["role"] == "admin" || $_SESSION["role"] == "event_manager"){
-                    // Divide up available functionality based on role
-                    if($_SESSION["role"] == "admin"){
-                        if(managementEditDeleteCheck()){
-                            if($_GET["action"] == "edit"){
-                                $id = $_GET["id"];
-                                $session = $db->getSession($id)[0]; // get the selected event
+                    $userRole = $_SESSION["role"]; // user's role
 
-                                // Store original values to compare to on POST
-                                // Don't want to keep querying same object when doing post logic
-                                $originalValues = array(
-                                    "name" => $session->getName(),
-                                    "numberallowed" => $session->getNumberAllowed(),
-                                    "event" => $session->getEvent(),
-                                    "startdate" => $session->getStartDate(),
-                                    "enddate" => $session->getEndDate()
-                                );
-                                $originalValues = json_encode($originalValues);
+                    if(managementEditDeleteCheck()){
+                        if($_GET["action"] == "edit"){
+                            $id = $_GET["id"];  // SessionID
 
-                                // EDIT Session SECTION
-                                echo "<h2 class='section-heading'>Edit Session</h2>";
-                                $sessionEditTable = "<div class='edit-add-form-container'>
-                                                        <form id='user-edit-form' name='user-edit-form' action='./sessionManagement.php?id={$session->getIdSession()}&action=edit' method='POST'>
-                                                            <div id='user-edit-labels'>
-                                                                <label>ID</label>
-                                                                <label>Name</label>
-                                                                <label>Number Allowed</label>
-                                                                <label>Event</label>   
-                                                                <label>Start Date</label>
-                                                                <label>End Date</label>   
-                                                            </div>
-                                                            <div id='user-edit-inputs'>
-                                                                <input type='text' name='id' value='{$session->getIdSession()}' readonly='readonly'>
-                                                                <input type='text' name='name' value='{$session->getName()}'>
-                                                                <input type='text' name='numberallowed' value='{$session->getNumberAllowed()}'>
-                                                                <input type='text' name='event' value='{$session->getEvent()}'>
-                                                                <input type='text' name='datestart' value='{$session->getStartDate()}'>
-                                                                <input type='text' name='dateend' value='{$session->getEndDate()}'>
-                                                            </div>
-                                                            <input type='hidden' name='originalValues' value='{$originalValues}'><br/>
-                                                            <input name='submit' id='submit-btn' type='submit' value='Submit'/>
-                                                        </form>
-                                                    </div>";
-                                echo $sessionEditTable;
+                            // Determine user's specific role to know which data to use
+                            if($userRole == "admin"){
+                                $session = $db->getSession($id); // get the selected event
                             }
-                            else if($_GET["action"] == "delete"){
-                                // DELETE
-                                $id = $_GET["id"];              // ID of venue passed in URL
+                            else if($userRole == "event_manager"){
+                                $managerSessions = $db->getAllManagerSessionsObj($_SESSION["id"]); // manager_session Objects!
 
-                                // if delete option was chosen, check for confirm variable in URL that's set when clicking Yes/No
-                                if(isset($_GET['confirm']) && !empty($_GET['confirm'])){
-                                    $dataFields = array();
-                                    $dataFields["area"] = "event";
-                                    $dataFields["fields"] = array(
-                                        "id" => $id,
-                                    );
-                                    $dataFields["method"] = array(
-                                        "delete" => "deleteSession"   // Special case for events -> need to delete everythin associated with the deleted event
-                                    );
-                                    deleteAction($dataFields);
+                                if(count($managerSessions) > 0){
+                                    foreach($managerSessions as $mSession){
+                                        if($mSession->getSession() == $id){
+                                            $session = $db->getSession($id);
+                                            break;
+                                        }
+                                    }
+
+                                    if(!isset($session)){
+                                        // REDIRECT: Session trying to edit wasn't one that manager has!
+                                        redirect("admin");
+                                    }
                                 }
+                                else {
+                                    // REDIRECT: Either no manager sessions exist to compare with or not their session
+                                    redirect("admin");
+                                }
+                            }
 
-                                $session = $db->getSession($id)[0];   // event object
-                                // event SPECIFIC TABLE W/btns
-                                echo "<h2 class='section-heading'>Delete event</h2>";
-                                $deleteInfo = "<div class='admin-table-container'>
-                                                <table class='admin-table'>
-                                                    <tr>
-                                                        <th>ID</th>
-                                                        <th>Name</th>
-                                                        <th>Number Allowed</th>
-                                                        <th>Event</th>   
-                                                        <th>Start Date</th>
-                                                        <th>End Date</th>   
-                                                    </tr>
-                                                    <tr>
-                                                        <td>{$session->getIdSession()}</td>
-                                                        <td>{$session->getName()}</td>
-                                                        <td>{$session->getNumberAllowed()}</td>
-                                                        <td>{$session->getEvent()}</td>
-                                                        <td>{$session->getStartDate()}</td>
-                                                        <td>{$session->getEndDate()}</td>
-                                                    </tr>
-                                                </table>
-                                            </div>";
-                                echo $deleteInfo;
+                            // Store original values to compare to on POST
+                            // Don't want to keep querying same object when doing post logic
+                            $originalValues = array(
+                                "name" => $session->getName(),
+                                "numberallowed" => $session->getNumberAllowed(),
+                                "event" => $session->getEvent(),
+                                "startdate" => $session->getStartDate(),
+                                "enddate" => $session->getEndDate()
+                            );
+                            $originalValues = json_encode($originalValues);
 
-                                // Yes & no options to delete action
-                                echo "<h2 class='section-heading'>Are you sure you want to delete the selected session?</h2><br/>";
-                                $optionDiv = "<div id='confirm-delete-container' class='center-element'>
-                                                    <a href='./sessionManagement.php?id={$session->getIdSession()}&action=delete&confirm=yes'>
-                                                        <div class='delete-btn' id='confirm-delete-btn'>Yes</div>
-                                                    </a>
-                                                    <a href='./sessionManagement.php?id={$session->getIdSession()}&action=delete&confirm=no'>
-                                                        <div class='delete-btn' id='deny-delete-btn'>No</div>
-                                                    </a>
+                            // EDIT Session SECTION
+                            echo "<h2 class='section-heading'>Edit Session</h2>";
+                            $sessionEditTable = "<div class='edit-add-form-container'>
+                                                    <form id='user-edit-form' name='user-edit-form' action='./sessionManagement.php?id={$session->getIdSession()}&action=edit' method='POST'>
+                                                        <div id='user-edit-labels'>
+                                                            <label>ID</label>
+                                                            <label>Name</label>
+                                                            <label>Number Allowed</label>
+                                                            <label>Event</label>   
+                                                            <label>Start Date</label>
+                                                            <label>End Date</label>   
+                                                        </div>
+                                                        <div id='user-edit-inputs'>
+                                                            <input type='text' name='id' value='{$session->getIdSession()}' readonly='readonly'>
+                                                            <input type='text' name='name' value='{$session->getName()}'>
+                                                            <input type='text' name='numberallowed' value='{$session->getNumberAllowed()}'>
+                                                            <input type='text' name='event' value='{$session->getEvent()}'>
+                                                            <input type='text' name='datestart' value='{$session->getStartDate()}'>
+                                                            <input type='text' name='dateend' value='{$session->getEndDate()}'>
+                                                        </div>
+                                                        <input type='hidden' name='originalValues' value='{$originalValues}'><br/>
+                                                        <input name='submit' id='submit-btn' type='submit' value='Submit'/>
+                                                    </form>
                                                 </div>";
-                                echo $optionDiv;
-                            }
+                            echo $sessionEditTable;
                         }
-                        else if(managementAddCheck()){
-                            if($_GET["action"] == "add"){
-                                $data = array();
-                                $data["area"] = "Session";
-                                $data["formAction"] = "./sessionManagement.php?&action=add";
-                                $data["labels"] = array("ID", "Name", "Number Allowed", "Event", "Start Date", "End Date");
-                                $data["input"] = array(
-                                    "id" => array(
-                                        "name" => "id",
-                                        "readonly" => "readonly",
-                                        "placeholder" => "Auto-increment"
-                                    ),
-                                    "name" => array(
-                                        "name" => "name"
-                                    ),
-                                    "numberallowed" => array(
-                                        "name" => "numberallowed"
-                                    ),
-                                    "event" => array(
-                                        "name" => "event"
-                                    ),
-                                    "datestart" => array(
-                                        "name" => "datestart",
-                                        "placeholder" => "yyyy-mm-dd hh:mm:ss"
-                                    ),
-                                    "dateend" => array(
-                                        "name" => "dateend",
-                                        "placeholder" => "yyyy-mm-dd hh:mm:ss"
-                                    ),
+                        else if($_GET["action"] == "delete"){
+                            // DELETE
+                            $id = $_GET["id"];  // sessionID
+
+                            // Determine user's specific role to know which data to use
+                            if($userRole == "admin"){
+                                $session = $db->getSession($id); // get the selected event
+                            }
+                            else if($userRole == "event_manager"){
+                                // get all the sessions related to this event manager!
+                                $eventManagerSessions = $db->getAllManagerSessionsObj($_SESSION["id"]); 
+                                if(count($eventManagerSessions) > 0){
+                                    foreach($eventManagerSessions as $v){
+                                        if($v->getEvent() == $id){
+                                            $session = $db->getSession($id);
+                                            break;
+                                        }
+                                    }
+
+                                    if(!isset($session)){
+                                        // ERROR: Specific session not found 
+                                        redirect("admin");
+                                    }
+                                }
+                                else {
+                                    // ERROR: No sessions not found for a event manager's event
+                                    redirect("admin");
+                                }
+                            }
+
+
+                            // if delete option was chosen, check for confirm variable in URL that's set when clicking Yes/No
+                            if(isset($_GET['confirm']) && !empty($_GET['confirm'])){
+                                $dataFields = array();
+                                $dataFields["area"] = "event";
+                                $dataFields["fields"] = array(
+                                    "id" => $id,
                                 );
-                                addActionHTML($data);
+                                $dataFields["method"] = array(
+                                    "delete" => "deleteSession"   // Special case for events -> need to delete everythin associated with the deleted event
+                                );
+                                deleteAction($dataFields);
                             }
-                            else{
-                                // REDIRECT: Something other action passed
-                                redirect("admin");
-                            }
+
+                            // event SPECIFIC TABLE W/btns
+                            echo "<h2 class='section-heading'>Delete event</h2>";
+                            $deleteInfo = "<div class='admin-table-container'>
+                                            <table class='admin-table'>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Name</th>
+                                                    <th>Number Allowed</th>
+                                                    <th>Event</th>   
+                                                    <th>Start Date</th>
+                                                    <th>End Date</th>   
+                                                </tr>
+                                                <tr>
+                                                    <td>{$session->getIdSession()}</td>
+                                                    <td>{$session->getName()}</td>
+                                                    <td>{$session->getNumberAllowed()}</td>
+                                                    <td>{$session->getEvent()}</td>
+                                                    <td>{$session->getStartDate()}</td>
+                                                    <td>{$session->getEndDate()}</td>
+                                                </tr>
+                                            </table>
+                                        </div>";
+                            echo $deleteInfo;
+
+                            // Yes & no options to delete action
+                            echo "<h2 class='section-heading'>Are you sure you want to delete the selected session?</h2><br/>";
+                            $optionDiv = "<div id='confirm-delete-container' class='center-element'>
+                                                <a href='./sessionManagement.php?id={$session->getIdSession()}&action=delete&confirm=yes'>
+                                                    <div class='delete-btn' id='confirm-delete-btn'>Yes</div>
+                                                </a>
+                                                <a href='./sessionManagement.php?id={$session->getIdSession()}&action=delete&confirm=no'>
+                                                    <div class='delete-btn' id='deny-delete-btn'>No</div>
+                                                </a>
+                                            </div>";
+                            echo $optionDiv;
+                        }
+                    }
+                    else if(managementAddCheck()){
+                        if($_GET["action"] == "add"){
+                            $data = array();
+                            $data["area"] = "Session";
+                            $data["formAction"] = "./sessionManagement.php?&action=add";
+                            $data["labels"] = array("ID", "Name", "Number Allowed", "Event", "Start Date", "End Date");
+                            $data["input"] = array(
+                                "id" => array(
+                                    "name" => "id",
+                                    "readonly" => "readonly",
+                                    "placeholder" => "Auto-increment"
+                                ),
+                                "name" => array(
+                                    "name" => "name"
+                                ),
+                                "numberallowed" => array(
+                                    "name" => "numberallowed"
+                                ),
+                                "event" => array(
+                                    "name" => "event"
+                                ),
+                                "datestart" => array(
+                                    "name" => "datestart",
+                                    "placeholder" => "yyyy-mm-dd hh:mm:ss"
+                                ),
+                                "dateend" => array(
+                                    "name" => "dateend",
+                                    "placeholder" => "yyyy-mm-dd hh:mm:ss"
+                                ),
+                            );
+                            addActionHTML($data);
                         }
                         else{
                             // REDIRECT: Something other action passed
                             redirect("admin");
                         }
                     }
-                    else if($_SESSION["role"] == "event_manager"){
-
+                    else{
+                        // REDIRECT: Something other action passed
+                        redirect("admin");
                     }
                 }
                 else {
@@ -199,22 +246,22 @@
                             $flag = false;
                             echo "<p class='form-error-text'>** Invalid date format!</p>";
                         }
-                        if(alphabeticSpace($name) == false){
-                            $flag = false;
-                            echo "<p class='form-error-text'>** Invalid: Name contains non-alphabetic characters!</p>";
-                        }
                         if(is_numeric($numberAllowed) == false){
                             $flag = false;
                             echo "<p class='form-error-text'>** Invalid: Number allowed isn't a valid value!</p>";
                         }
-                        if(is_numeric($event)){
-                            $findEvent = $db->getEvent(intval($event));
-                            if(count($findEvent) == 0 || empty($findEvent)){
+                        $findEvent = $db->getEvent(intval($event));
+                        if(count($findEvent) == 0 || empty($findEvent)){
+                            $flag = false;
+                        }
+
+                        // IN CASE: user is event manager, double check to make sure E.M owns the event this session is associated with!
+                        if($_SESSION["role"] == "event_manager"){
+                            // Make sure event_manager owns the event trying to edit
+                            $managerEvent = $db->getManagerEventOBJ($event);    // retrieve manager_event object (only one will be returned)
+                            if(count($managerEvent) < 0 || $managerEvent[0]->getManager() != $_SESSION['id']){
                                 $flag = false;
                             }
-                        }
-                        else {
-                            $flag = false;
                         }
 
 
@@ -264,7 +311,38 @@
                                 $dataFields["method"] = array(
                                     "add" => "addSession"
                                 );
-                                addPost($dataFields);
+                                $lastID = addPost($dataFields);
+
+                                // Event Managers also need to make a manager_session object to keep track of their created sessions
+                                if($_SESSION["role"] == "event_manager"){
+                                    $lastCreatedSession = $db->getSession($lastID);
+
+                                    $eventManagerEvent = $db->getManagerEventOBJ($lastCreatedSession->getEvent()); // returns a managereventOBJ IF they owned that event
+
+                                    // CHECK: Session created OK & that the created session's event is owned by the event_manager!
+                                    // ONLY ALLOW EVENT_MANAGERS TO ADD/EDIT/DELETE THEIR OWN EVENTS!!
+                                    if(count($lastCreatedSession) > 0 && count($eventManagerEvent) > 0){
+                                        // Event exists! Good to make manager_event object
+                                        $managerSession = array();
+                                        $managerSession["session"] = $lastID;
+                                        $managerSession["manager"] = $_SESSION["id"];
+
+                                        $managerSessionObjID = $db->addManagerSession($managerSession); // call to make object
+
+                                        if($managerSessionObjID > 0){
+                                            // If all good, redirect
+                                            redirect("admin");
+                                        }
+                                        else {
+                                            // ERROR: Making manager_session failed!
+                                            echo "<p class='form-error-text'>** Creating new session as event manager failed!</p>";
+                                        }
+                                    }
+                                    else {
+                                        // ERROR: Making manager_session  failed!
+                                        echo "<p class='form-error-text'>** Creating new session as event manager failed!</p>";
+                                    }
+                                }
 
                                 // After making necessary objects, redirect
                                 redirect("admin");

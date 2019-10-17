@@ -260,8 +260,6 @@
                 ));
                 
                 $stmt->setFetchMode(PDO::FETCH_CLASS, "Event");
-                // $data = $stmt->fetchAll();
-
                 return $stmt->fetch();
             }
             catch(PDOException $e){
@@ -274,7 +272,7 @@
          * @param $managerID
          * Retreive MULTIPLE manager_event obj (eventID + managerID) based on MANAGERID
          */
-        function getAllManagerEvents($managerID){
+        function getAllManagerEventsOBJ($managerID){
             try{
                 include_once("./classes/ManagerEvent.class.php");
                 $query = "SELECT * FROM manager_event WHERE manager = :managerID";
@@ -295,7 +293,7 @@
          * @param $eventID
          * Retrieves the manager_event object by the EVENTID
          */
-        function getManagerEvent($eventID){
+        function getManagerEventOBJ($eventID){
             try{
                 include_once("./classes/ManagerEvent.class.php");
                 $query = "SELECT * FROM manager_event WHERE event = :eventID";
@@ -328,6 +326,7 @@
                     ":venue" => $data["venue"]
                 ));
                 return $this->db->lastInsertId();
+                // return $stmt->rowCount();
             }
             catch(PDOException $e){
                 die("There was a problem adding event!");
@@ -557,8 +556,7 @@
                     ":idsession" => $sessionID
                 ));
                 $stmt->setFetchMode(PDO::FETCH_CLASS, "Session");
-                $results = $stmt->fetchAll();
-                return $results;
+                return $stmt->fetch();
             }
             catch(PDOException $e){
                 die("There was a problem retrieving session!");
@@ -584,6 +582,39 @@
             }
             catch(PDOException $e){
                 die("There was a problem retrieving sessions for the event!");
+            }
+        }
+
+
+        /**
+         * getManagerSessions
+         * @param $managerID
+         * NOTE: there's a table added 
+         * Retrieves all the sessions a manager owns 
+         */
+        function getAllManagerSessionsObj($managerID){
+            try{
+                include("./classes/ManagerSession.class.php");
+                $query = "SELECT * FROM manager_session WHERE manager = :managerID";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute(array(
+                    ":managerID" => $managerID
+                ));
+                $stmt->setFetchMode(PDO::FETCH_CLASS, "ManagerSession");
+                $data = $stmt->fetchAll();
+                return $data;
+            }
+            catch(PDOException $e){
+                die("There was a problem retrieving manager sessions!");
+            }
+        }
+
+        function addManagerSession($data){
+            try{
+
+            }
+            catch(PDOException $e){
+                die("There was a problem retrieving manager session!");
             }
         }
 

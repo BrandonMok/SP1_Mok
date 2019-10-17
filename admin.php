@@ -133,7 +133,7 @@
                     else if($userRole == "event_manager"){
                         // Retrieve events that this event manager OWNS!
                         $allEvents = array();
-                        $allManagerEventObjs = $db->getAllManagerEvents($_SESSION["id"]);
+                        $allManagerEventObjs = $db->getAllManagerEventsOBJ($_SESSION["id"]);
 
                         // Foreach manager_event object, cycle through and get the actual event and store in array
                         foreach($allManagerEventObjs as $v){
