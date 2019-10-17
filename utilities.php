@@ -37,6 +37,9 @@
                                         <a href='events.php'>Events</a>
                                     </li>
                                     <li>
+                                        <a href='registrations.php'>Registrations</a>
+                                    </li>
+                                    <li>
                                         <a href='logout.php'>Logout  <i class='fas fa-sign-out-alt'></i></a>
                                     </li>
                                 </ul>
@@ -50,6 +53,9 @@
                                 <ul class='nav'>
                                     <li>
                                         <a href='events.php'>Events</a>
+                                    </li>
+                                    <li>
+                                        <a href='registrations.php'>Registrations</a>
                                     </li>
                                     <li>
                                         <a href='logout.php'>Logout  <i class='fas fa-sign-out-alt'></i></a>

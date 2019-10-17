@@ -33,7 +33,7 @@
                         // Build events container with all events
                         $eventContainer = "<div id='event-container'>";
                         foreach($allEvents as $event){
-                            $eventContainer .= "<a href='./registrations.php'>
+                            $eventContainer .= "<a href='./registrations.php?id={$event->getIdEvent()}'>
                                                     <div class='events'>
                                                         <p class='event-headings'>{$event->getName()}</p>
                                                         <p class='event-timings'>{$event->getDateStart()} - {$event->getDateEnd()}</p>";
