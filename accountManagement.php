@@ -81,7 +81,9 @@
                                 $dataFields["method"] = array(
                                     "delete" => "deleteUser"
                                 );
-                                deleteAction($dataFields);
+                                $delete = deleteAction($dataFields);
+
+                                redirect("admin");
                             }
 
                             // Get user now to display delete information
@@ -208,10 +210,6 @@
                             // ERROR - not in range
                             echo "<p class='form-error-text'>** Please enter a valid role!</p>";
                         }
-                        // else if(!alphabetic($name)){
-                        //     // ERROR - name had either numbers
-                        //     echo "<p class='form-error-text'>** Please enter a valid name!</p>";
-                        // }
                         else {
                             // Perform EDIT POST REQUEST Proccessing
                             $dataFields = array();

@@ -124,18 +124,29 @@
                             // if delete option was chosen, check for confirm variable in URL that's set when clicking Yes/No
                             if(isset($_GET['confirm']) && !empty($_GET['confirm'])){
                                 $dataFields = array();
-                                $dataFields["area"] = "event";
+                                $dataFields["area"] = "session";
                                 $dataFields["fields"] = array(
-                                    "id" => $id,
+                                    "id" => $id
                                 );
                                 $dataFields["method"] = array(
                                     "delete" => "deleteSession"   // Special case for events -> need to delete everythin associated with the deleted event
                                 );
-                                deleteAction($dataFields);
+                                $delete = deleteAction($dataFields);
+
+                                if(count($delete) > 0){
+                                    /**
+                                     * Event Managers also need to delete their manager_session obj when deleting entire session
+                                     */
+                                    if($userRole == "event_manager"){
+                                        $db->deleteManagerSessions($id);
+                                    }
+                                }
+
+                                redirect("admin");
                             }
 
                             // event SPECIFIC TABLE W/btns
-                            echo "<h2 class='section-heading'>Delete event</h2>";
+                            echo "<h2 class='section-heading'>Delete Session</h2>";
                             $deleteInfo = "<div class='admin-table-container'>
                                             <table class='admin-table'>
                                                 <tr>

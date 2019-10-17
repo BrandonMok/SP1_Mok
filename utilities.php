@@ -321,8 +321,9 @@
                     $delete = call_user_func_array(array($db, $data["method"]["delete"]), array($data["fields"]["id"]));
 
                     if($delete > 0){ // if rowcount wasn't 0 -> delete user
-                        header("Location: admin.php");
-                        exit;  
+                        return $delete;
+                        // header("Location: admin.php");
+                        // exit;  
                     }
                     else{
                         // ERROR w/the delete occured

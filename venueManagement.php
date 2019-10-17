@@ -74,7 +74,9 @@
                                     $dataFields["method"] = array(
                                         "delete" => "deleteVenue"
                                     );
-                                    deleteAction($dataFields);
+                                    $delete = deleteAction($dataFields);
+
+                                    redirect("admin");
                                 }
 
                                 $venue = $db->getVenue($id)[0];   // venue object

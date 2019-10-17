@@ -113,7 +113,9 @@
                                 $dataFields["method"] = array(
                                     "delete" => "deleteEventAndSession"   // Special case for events -> need to delete everythin associated with the deleted event
                                 );
-                                deleteAction($dataFields);
+                                $delete = deleteAction($dataFields);
+
+                                redirect("admin");
                             }
 
 
