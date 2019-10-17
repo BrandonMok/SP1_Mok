@@ -100,10 +100,10 @@
                             }
                             else if($userRole == "event_manager"){
                                 // get all the sessions related to this event manager!
-                                $eventManagerSessions = $db->getAllManagerSessionsObj($_SESSION["id"]); 
+                                $eventManagerSessions = $db->getAllManagerSessionsObj($_SESSION["id"]); // Manager_Session Objects
                                 if(count($eventManagerSessions) > 0){
                                     foreach($eventManagerSessions as $v){
-                                        if($v->getEvent() == $id){
+                                        if($v->getSession() == $id){
                                             $session = $db->getSession($id);
                                             break;
                                         }
@@ -252,15 +252,16 @@
                         }
                         $findEvent = $db->getEvent(intval($event));
                         if(count($findEvent) == 0 || empty($findEvent)){
-                            $flag = false;
+                            $flag = false; // event doesn't exist or not found!
                         }
 
                         // IN CASE: user is event manager, double check to make sure E.M owns the event this session is associated with!
                         if($_SESSION["role"] == "event_manager"){
-                            // Make sure event_manager owns the event trying to edit
+                            // Make sure event_manager owns the event trying to edit!!
                             $managerEvent = $db->getManagerEventOBJ($event);    // retrieve manager_event object (only one will be returned)
                             if(count($managerEvent) < 0 || $managerEvent[0]->getManager() != $_SESSION['id']){
                                 $flag = false;
+                                echo "<p class='form-error-text'>** Invalid: Event for the session doesn't belong to you!</p>";
                             }
                         }
 

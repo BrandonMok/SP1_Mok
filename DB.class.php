@@ -355,6 +355,28 @@
         }
 
         /**
+         * addAttendeeEvent
+         * @param $data
+         * Adds a attendee_event OBJECT when user (admin,event_manager,attendee) signs up for an event
+         */
+        function addAttendeeEvent($data){
+            try{
+                $query = "INSERT INTO attendee_event (event, attendee, paid)
+                            VALUES (:event, :attendee, :paid)";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute(array(
+                    ":event" => $data["event"],
+                    ":attendee" => $data["attendee"],
+                    ":paid" => $data["paid"]
+                ));
+                return $this->db->lastInsertId();
+            }
+            catch(PDOException $e){
+                die("There was a problem adding attendee event!");
+            } 
+        }
+
+        /**
          * updateEvent
          * @param $data
          * $data = array();
@@ -610,9 +632,20 @@
             }
         }
 
+        /**
+         * addManagerSession
+         * @param $data
+         */
         function addManagerSession($data){
             try{
-
+                $query = "INSERT INTO manager_session (session, manager)
+                            VALUES (:session, :manager)";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute(array(
+                    ":session" => $data["session"],
+                    ":manager" => $data["manager"]
+                ));
+                return $this->db->lastInsertId();
             }
             catch(PDOException $e){
                 die("There was a problem retrieving manager session!");

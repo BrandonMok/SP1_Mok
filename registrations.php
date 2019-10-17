@@ -28,6 +28,7 @@
                      * get Attendee_event objects
                      * And sessions too?
                      */
+                    $allRegistration;
 
                 }
             }
