@@ -490,9 +490,10 @@
                 // Need to delete ATTENDEE_SESSIONS too! BUT... Need sessionIDs for those sessions associated w/deleted Event
                 $allSessionsPerEvent = $this->getAllSessionsPerEvent($eventID); // retrieve all relevent sessions from event
                 foreach($allSessionsPerEvent as $k => $v){
-                    // Delete all sessions related to event by grabbing their sessionIDs
-                    $deleteAttendeeSession = $this->deleteAttendeeSessions($v->getIdSession());
+                    $deleteAttendeeSession = $this->deleteAttendeeSessions($v->getIdSession()); // delete attendee_sesion objects
+                    $deleteManagerSession = $this->deleteManagerSessions($v->getIdSession());   // delete manager_session objects
                     $sumResults[] = $deleteAttendeeSession;
+                    $sumResults[] = $deleteManagerSession;
                 }   
                 $deleteAllSessions = $this->deleteSessionsPerEvent($eventID);    // delete SESSION objects that exist for the event
 
@@ -756,6 +757,25 @@
             }
             catch(PDOException $e){
                 die("There was a problem deleting attendee session!");
+            } 
+        }
+
+        /**
+         * deleteManagerSessions
+         * @param $sessionID
+         * Deletes MANAGER_SESSION records based on sessionID
+         */
+        function deleteManagerSessions($sessionID){
+            try {
+                $query = "DELETE FROM manager_session WHERE session = :sessionID";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute(array(
+                    ":sessionID" => $sessionID
+                ));
+                return $stmt->rowCount();
+            }
+            catch(PDOException $e){
+                die("There was a problem deleting manager's session!");
             } 
         }
 
