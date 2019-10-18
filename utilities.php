@@ -322,8 +322,6 @@
 
                     if($delete > 0){ // if rowcount wasn't 0 -> delete user
                         return $delete;
-                        // header("Location: admin.php");
-                        // exit;  
                     }
                     else{
                         // ERROR w/the delete occured

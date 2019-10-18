@@ -51,7 +51,7 @@
                                                 <div id='user-edit-inputs'>
                                                     <input type='text' name='id' value='{$user->getIdAttendee()}' readonly='readonly'>
                                                     <input type='text' name='name' value='{$user->getName()}'>
-                                                    <input type='text' name='password'>";
+                                                    <input type='password' name='password' placeholder='******'>";   // Password exists, not showing for privacy + security 
             
                             
                             // Don't let superadmin to change roles -> NEED to have one SUPERADMIN account
