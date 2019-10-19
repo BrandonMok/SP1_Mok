@@ -899,8 +899,7 @@
                 ));
 
                 $stmt->setFetchMode(PDO::FETCH_CLASS, "Venue");
-                $data = $stmt->fetchAll();
-
+                $data = $stmt->fetch();
                 return $data;
             }
             catch(PDOException $e){

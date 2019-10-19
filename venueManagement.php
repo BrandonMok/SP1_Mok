@@ -28,7 +28,7 @@
                             if($_GET["action"] == "edit"){
                                 // EDIT
                                 $id = $_GET["id"];                  // ID of venue passed in URL
-                                $venue = $db->getVenue($id)[0];   // venue object
+                                $venue = $db->getVenue($id);    // venue object
 
                                 // Store original values to compare to on POST
                                 // Don't want to keep querying same object when doing post logic
@@ -79,7 +79,7 @@
                                     redirect("admin");
                                 }
 
-                                $venue = $db->getVenue($id)[0];   // venue object
+                                $venue = $db->getVenue($id);   // venue object
                                 
                                 // VENUE SPECIFIC TABLE W/btns
                                 echo "<h2 class='section-heading'>Delete Venue</h2>";
