@@ -312,9 +312,29 @@
         /**
          * getAllAttendeeEvents
          * @param $attendeeID
+         * Retrieves all ATTENDEE_EVENT objects
+         */
+        function getAllAttendeeEvents(){
+            try{
+                include_once("./classes/AttendeeEvent.class.php");
+                $query = "SELECT * FROM attendee_event";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute();
+                $stmt->setFetchMode(PDO::FETCH_CLASS, "AttendeeEvent");
+                $data = $stmt->fetchAll();
+                return $data;
+            }
+            catch(PDOException $e){
+                die("There was a problem retrieving all attendees attending events!");
+            } 
+        }
+
+        /**
+         * getAllAttendeeEventsById
+         * @param $attendeeID
          * Retrieves all ATTENDEE_EVENT objects for attendee based on attendeeID
          */
-        function getAllAttendeeEvents($attendeeID){
+        function getAllAttendeeEventsById($attendeeID){
             try{
                 include_once("./classes/AttendeeEvent.class.php");
                 $query = "SELECT * FROM attendee_event WHERE attendee = :attendeeID";
@@ -659,7 +679,7 @@
          * @param $attendeeID
          * Retrieves all ATTENDEE_SESSION objects by the attendee's ID
          */
-        function getAllAttendeeSessions($attendeeID){
+        function getAllAttendeeSessionsById($attendeeID){
             try{
                 include_once("./classes/AttendeeSession.class.php");
                 $query = "SELECT * FROM attendee_session WHERE attendee = :attendeeID";

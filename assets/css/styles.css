@@ -7,6 +7,15 @@
    font-family: 'Source Sans Pro', sans-serif; 
 }
 
+/** ALl Anchor tags */
+a {
+    text-decoration: none;
+    color: black;
+}
+a:visited {
+    color: black;
+}
+
 header {
     background-color: #2e3339;
     height: 4em;
@@ -19,12 +28,6 @@ footer, .footer-login {
     width: 100%;
     border-top: 1.25em solid #29E789;
     margin-top: 5em;
-}
-/* Class used to distinguish between login page and all other page footers */
-/* Had issues where footer would overlap content on all other pages besides footer */
-.footer-login {
-    position: absolute;
-    bottom: 0;
 }
 
 
@@ -51,15 +54,6 @@ footer, .footer-login {
     font-weight: bold;
 }
 
-
-/** ALl Anchor tags */
-a {
-    text-decoration: none;
-    color: black;
-}
-a:visited {
-    color: black;
-}
 
 
 /* Heading for page/section headings */
@@ -131,13 +125,16 @@ div#back-arrow-container {
     margin-top: 2em;
 }
 
-.fontawesome-icons {
+/* .fontawesome-icons {
     font-size: 3rem;
-}
+} */
 .fontawesome-icons:hover {
     color:#29E789;
 }
 
+i {
+    font-size: 2rem;
+}
 
 
 /* Form error + success text */
@@ -170,8 +167,24 @@ div#back-arrow-container {
     font-weight: bold;
 }
 
-.registration-events {
-    
+
+.registration{
+    border: 2px solid #2e3339;
+    margin: 1em;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.registration-events, .registration-sessions {
+    flex: 1 1 100%;
+    width: 100%;
+}
+.registration-events > div, .registration-sessions > div {
+    display: inline-block;
+}
+
+.registration-buttons {
+    text-align: center;
 }
 
 

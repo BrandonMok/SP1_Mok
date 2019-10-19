@@ -73,6 +73,7 @@
                     
 
 
+
                     /* -------------------- VENUES -------------------- */
                     if($userRole == "admin"){
                         echo "<p class='section-heading'>Venues</p>";
@@ -141,7 +142,6 @@
                         }
                     }
 
-                    // $allEvents = $db->getAllEvents();  
                     if(count($allEvents) > 0){
                         // Build event table
                         $eventTable = "<div class='admin-table-container'>
@@ -281,6 +281,52 @@
                     }
                     else{
                         echo "<h2 class='center-element'>No sessions available!</h2>";
+                    }
+
+
+
+                    /** -------------------- Attendees for events --------------------*/
+                    /** Retrieve all the attendees for an event */
+                    echo "<p class='section-heading'>Attendees</p>";
+
+                    // Call reusable function to create the add btn
+                    adminAddBtns(array(
+                        "url" => "./attendeeEventManagement.php?action=add",
+                        "area" => "attendee"
+                    ));
+
+                    if($userRole == "admin"){
+                        $attendeeEvents = $db->getAllAttendeeEvents();
+                    }
+                    else if($userRole == "event_manager"){
+                        $attendeeEvents = $db->getAllAttendeeEventsById($_SESSION["role"]);
+                    }
+
+                    if(count($attendeeEvents) > 0){
+                        $attendeeEventTable = "<div class='admin-table-container'>
+                                                    <table class='admin-table'>
+                                                        <tr>
+                                                            <th>Event</th>
+                                                            <th>Attendee</th>
+                                                            <th>Paid</th>
+                                                            <th>Edit</th>
+                                                            <th>Delete</th>
+                                                        </tr>";
+                        foreach($attendeeEvents as $aEvent){
+                            $attendeeEventTable .= "<tr>
+                                                        <td>{$aEvent->getEvent()}</td>
+                                                        <td>{$aEvent->getAttendee()}</td>
+                                                        <td>{$aEvent->getPaid()}</td>
+                                                        <td><a href=''>Edit</a></td>
+                                                        <td><a href=''>Delete</a></td>
+                                                    </tr>";
+                        }
+                        $attendeeEventTable .= "</table></div>";
+                        echo $attendeeEventTable;
+                    }
+                    else {
+                        // No attendees attending events or sessions
+                        echo "<p class='section-heading'>No attendees are registered for events!</p>";
                     }
                 }// end if admin
                 else{
