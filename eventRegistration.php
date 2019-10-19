@@ -29,37 +29,19 @@
                     if($_GET["action"] == "signup"){
                         // CHECK: to see if user has already signed up for this event
                         // CHECK: to see if user has already signed up for this session
-                        $signedUpForEvent = false;
-                        $signedUpForSession = false;
 
-                        $attendeeEvents = $db->getAllAttendeeEventsById($_SESSION["id"]);
+                        $attendeeEvents = $db->getAttendeeEventByEventAttendee($_GET["id"], $_SESSION["id"]);
                         if(count($attendeeEvents) > 0){
-                            foreach($attendeeEvents as $aEvent){
-                                if($aEvent->getEvent() == $_GET["id"]){
-                                    $signedUpForEvent = true;
-                                    break;
-                                }
-                            }
-
                             // CASE: User has already signed up for the event
                             // So just do checks on the attendee_session to make sure they aren't already signed up for a session
                             if($signedUpForEvent){
                                 // Already have a attendee_event object created
                                 // CHECK: attendee_session doesn't exist alread
 
-                                $attendeeSessions = $db->getAllAttendeeSessionsById($_SESSION["id"]);
+                                $attendeeSessions = $db->getAttendeeEventBySessionAttendee($_GET["session"],$_SESSION["id"]);
                                 if(count($attendeeSessions) > 0){
-                                    foreach($attendeeSessions as $aSession){
-                                        if($aSession->getIdSession() == $_GET["session"]){
-                                            $signedUpForSession = true;
-                                            break;
-                                        }
-                                    }
-
-                                    if($signedUpForSession){
-
-                                    }
-
+                                  
+                                    
                                 }
                                 else {
                                     // User hasn't signed up for a session under this event

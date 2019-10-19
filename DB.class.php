@@ -347,7 +347,31 @@
                 return $data;
             }
             catch(PDOException $e){
-                die("There was a problem retrieving attendee Events!");
+                die("There was a problem retrieving attendee events!");
+            } 
+        }
+
+        /**
+         * getAttendeeEventByEventAttendee
+         * @param $eventID, $attendeeID
+         * ESSENTIALLY VERIFIES IF THE USER IS ASSOCIATED WITH THE EVENT
+         * Gets the attendee_event using given eventID and attendeeID to see if they already signed up
+         */
+        function getAttendeeEventByEventAttendee($eventID, $attendeeID){
+            try{
+                include_once("./classes/AttendeeEvent.class.php");
+                $query = "SELECT * FROM attendee_event WHERE event = :event AND attendee = :attendee";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute(array(
+                    ":event" => $eventID,
+                    ":attendee" => $attendeeID
+                )); 
+                $stmt->setFetchMode(PDO::FETCH_CLASS, "AttendeeEvent");
+                $data = $stmt->fetch();
+                return $data;
+            }
+            catch(PDOException $e){
+                die("There was a problem verifying registration!");
             } 
         }
 
@@ -675,7 +699,7 @@
         }
 
         /**
-         * getAllAttendeeSessions
+         * getAllAttendeeSessionsById
          * @param $attendeeID
          * Retrieves all ATTENDEE_SESSION objects by the attendee's ID
          */
@@ -694,6 +718,30 @@
             catch(PDOException $e){
                 die("There was a problem retrieving attendee sessions!");
             }
+        }
+
+        /**
+         * getAttendeeEventBySessionAttendee
+         * @param $eventID, $attendeeID
+         * ESSENTIALLY VERIFIES IF THE USER IS ASSOCIATED WITH THE SESSION
+         * Gets the attendee_session using given sessionID and attendeeID to see if they already signed up
+         */
+        function getAttendeeEventBySessionAttendee($session, $attendeeID){
+            try{
+                include_once("./classes/AttendeeEvent.class.php");
+                $query = "SELECT * FROM attendee_session WHERE session = :session AND attendee = :attendee";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute(array(
+                    ":session" => $session,
+                    ":attendee" => $attendeeID
+                )); 
+                $stmt->setFetchMode(PDO::FETCH_CLASS, "AttendeeEvent");
+                $data = $stmt->fetch();
+                return $data;
+            }
+            catch(PDOException $e){
+                die("There was a problem verifying registration!");
+            } 
         }
 
         /**
