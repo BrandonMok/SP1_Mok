@@ -36,12 +36,12 @@
                         foreach($allRegistrations as $registration){
                             $registrationEventID = $registration->getEvent();           // ATTENDEE_EVENT's EventID its associated with
                             $registrationEvent = $db->getEvent($registrationEventID);   // EVENT OBJ
-                            $venue = $db->getVenue($registrationEvent->getVenue());     // VENUE for the event object
+                            $venue = $db->getVenue($registrationEvent->getVenue())[0];     // VENUE for the event object
 
                             // Create each HTML event + session div
                             $registrationContainer .= "<div class='registration-events'>
                                                             <p class='event-headings'>{$registrationEvent->getName()}</p>
-                                                            <p>{$registrationEvent->getDateStart()} " - " {$registrationEvent->getDateEnd()}</p>
+                                                            <p>{$registrationEvent->getDate()}</p>
                                                             <p>{$venue->getName()}</p>
                                                             <p>Number Allowed: {$registrationEvent->getNumberAllowed()}</p>
                                                             <div class='registration-buttons'>

@@ -14,6 +14,11 @@
         function getNumberAllowed(){return $this->numberallowed;}
         function getVenue(){return $this->venue;}
 
+        function getDate(){
+            return "{$this->datestart} - {$this->dateend}";
+        }
+        
+
         function setIdEvent($value){
             $this->idevent = $value;
         }

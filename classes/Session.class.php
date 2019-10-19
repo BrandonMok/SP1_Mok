@@ -14,6 +14,11 @@
         function getStartDate(){return $this->startdate;}
         function getEndDate(){return $this->enddate;}
 
+        function getDate(){
+            return "{$this->startdate} - {$this->enddate}";
+        }
+        
+
         function setIdSession($value){
             $this->idsession = $value;
         }

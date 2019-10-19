@@ -36,7 +36,7 @@
                             $eventContainer .= "<a href='./registrations.php?id={$event->getIdEvent()}'>
                                                     <div class='events'>
                                                         <p class='event-headings'>{$event->getName()}</p>
-                                                        <p class='event-timings'>{$event->getDateStart()} - {$event->getDateEnd()}</p>";
+                                                        <p class='event-timings'>{$event->getDate()}</p>";
                                                         
                             // Make sure venues were retrieved to use its name on the events.php page
                             if(count($allVenues) > 0){
