@@ -310,6 +310,28 @@
         }
 
         /**
+         * getAllAttendeeEvents
+         * @param $attendeeID
+         * Retrieves all ATTENDEE_EVENT objects for attendee based on attendeeID
+         */
+        function getAllAttendeeEvents($attendeeID){
+            try{
+                include_once("./classes/AttendeeEvent.class.php");
+                $query = "SELECT * FROM attendee_event WHERE attendee = :attendeeID";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute(array(
+                    ":attendeeID" => $attendeeID
+                ));
+                $stmt->setFetchMode(PDO::FETCH_CLASS, "AttendeeEvent");
+                $data = $stmt->fetchAll();
+                return $data;
+            }
+            catch(PDOException $e){
+                die("There was a problem retrieving attendee Events!");
+            } 
+        }
+
+        /**
          * addEvent
          * @param $data
          */
@@ -617,7 +639,7 @@
          */
         function getAllManagerSessionsObj($managerID){
             try{
-                include("./classes/ManagerSession.class.php");
+                include_once("./classes/ManagerSession.class.php");
                 $query = "SELECT * FROM manager_session WHERE manager = :managerID";
                 $stmt = $this->db->prepare($query);
                 $stmt->execute(array(
@@ -629,6 +651,28 @@
             }
             catch(PDOException $e){
                 die("There was a problem retrieving manager sessions!");
+            }
+        }
+
+        /**
+         * getAllAttendeeSessions
+         * @param $attendeeID
+         * Retrieves all ATTENDEE_SESSION objects by the attendee's ID
+         */
+        function getAllAttendeeSessions($attendeeID){
+            try{
+                include_once("./classes/AttendeeSession.class.php");
+                $query = "SELECT * FROM attendee_session WHERE attendee = :attendeeID";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute(array(
+                    ":attendeeID" => $attendeeID
+                ));
+                $stmt->setFetchMode(PDO::FETCH_CLASS, "AttendeeSession");
+                $data = $stmt->fetchAll();
+                return $data;
+            }
+            catch(PDOException $e){
+                die("There was a problem retrieving attendee sessions!");
             }
         }
 

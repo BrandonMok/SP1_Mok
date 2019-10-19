@@ -23,6 +23,7 @@
                     
                     /**
                      * Put something in URL - each specific registration
+                     * Will edit/delete specific event or session!
                      */
 
                 }
