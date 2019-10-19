@@ -28,7 +28,7 @@
                 <label>Name:</label>
                 <input type="text" name="registerName" maxlength="50" placeholder="Name"/><br/>
                 <label>Password:</label>
-                <input type="text" name="registerPassword" placeholder="Password"/><br />
+                <input type="password" name="registerPassword" placeholder="Password"/><br />
                 <input name="submit" id="submit-btn" type="submit" value="Submit"/>
             </form>
 

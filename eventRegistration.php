@@ -87,12 +87,15 @@
 
                         $eventSessionContainer = "<div id='event-session-container'>";
                         foreach($sessionsPerEvent as $session){
-                            $eventSessionContainer .= "<div class='event-session-info'>
-                                                            <p>{$session->getName()}</p>
-                                                            <p>{$session->getNumberAllowed()}</p>
-                                                            <p>{$session->getDate()}</p>
+                            $eventSessionContainer .= "<div class='event-registration-session-info'>
+                                                            <p class='event-headings'>{$session->getName()}</p>
+                                                            <p>Number Allowed: {$session->getNumberAllowed()}</p>
+                                                            <p class='event-timings'>{$session->getDate()}</p>
                                                             <a href='./eventRegistration.php?id={$eventID}&session={$session->getIdSession()}&action=signup'>
-                                                                <div>Sign up</div>
+                                                                <div class='sign-up-btns'>Sign up</div>
+                                                            </a>
+                                                            <a href='./eventRegistration.php?id={$eventID}&session={$session->getIdSession()}&action=signuppay'>
+                                                                <div class='sign-up-btns'>Sign up and pay</div>
                                                             </a>
                                                         </div>";
                         }

@@ -166,6 +166,26 @@ i {
     font-style: italic;
     font-weight: bold;
 }
+.event-registration-session-info {
+    margin: 1em;
+    border: 2px solid #2e3339;
+    min-height: 12em;
+    padding-left: 2em;
+}
+/** Sign up buttons when signing up for event + session **/
+.sign-up-btns {
+    display: inline-block;
+    margin-top: 1em;
+    background-color: #29E789;
+    border: 2px solid #29E789;
+    padding: 1em;
+    width: 25%;
+}
+.sign-up-btns:hover {
+    border: 2px solid #2e3339;   
+    font-weight: bold; 
+}
+
 
 
 .registration{
@@ -186,6 +206,7 @@ i {
 .registration-buttons {
     text-align: center;
 }
+
 
 
 
