@@ -76,7 +76,7 @@
                         else {
                             // User has not signed up for any events/sessions
                             // Just make the objects!
-                            
+
                             // $attendeeEventData = array(
                             //     "event" => $_GET["id"],
                             //     "attendee" => $_SESSION["id"],
@@ -95,7 +95,7 @@
                 else if(isset($_GET["id"])){ 
                     // ID of event wanting to register for
                     $eventID = $_GET["id"];
-                    $event = $db->getEvent($id);    // only need event's name for the section heading
+                    $event = $db->getEvent($eventID);    // only need event's name for the section heading
 
                     echo "<p class='section-heading'>{$event->getName()}</p>";
 
@@ -109,7 +109,7 @@
                                                             <p>{$session->getName()}</p>
                                                             <p>{$session->getNumberAllowed()}</p>
                                                             <p>{$session->getDate()}</p>
-                                                            <a href='./eventRegistration.php?id={$id}&session={$session->getIdSession()}&action=signup'>
+                                                            <a href='./eventRegistration.php?id={$eventID}&session={$session->getIdSession()}&action=signup'>
                                                                 <div>Sign up</div>
                                                             </a>
                                                         </div>";
