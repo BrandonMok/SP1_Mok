@@ -435,7 +435,7 @@
                     ":attendee" => $data["attendee"],
                     ":paid" => $data["paid"]
                 ));
-                return $this->db->lastInsertId();
+                return $stmt->rowCount();   // attendee_event doesn't have incremented ID
             }
             catch(PDOException $e){
                 die("There was a problem adding attendee event!");

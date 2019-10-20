@@ -107,10 +107,24 @@
                     else if(isset($_GET["action"])){
                         // CASE: Only add provides the action
                         if(managementAddCheck()){
-                            // if($_GET["action"] == "add"){
-
-
-                            // }
+                            if($_GET["action"] == "add"){
+                                $data = array();
+                                $data["area"] = "Attendee Event";
+                                $data["formAction"] = "./attendeeEventManagement.php?&action=add";
+                                $data["labels"] = array("Event", "Attendee", "Paid");
+                                $data["input"] = array(
+                                    "event" => array(
+                                        "name" => "event",
+                                    ),
+                                    "attendee" => array(
+                                        "name" => "attendee"
+                                    ),
+                                    "paid" => array(
+                                        "name" => "paid",
+                                    )
+                                );
+                                addActionHTML($data);
+                            }
                         }
                     }
                 }// end if role is admin or event manager
@@ -123,6 +137,115 @@
                 // REDIRECT: User not logged in
                 redirect("login");
             }
+
+
+
+
+
+
+            /** -------------------- POST LOGIC --------------------*/
+            if($_SERVER["REQUEST_METHOD"] == "POST"){
+                if(isset($_GET["action"]) && !empty($_GET["action"])){
+                    if($_GET["action"] == "edit"){
+                        // // Grab values
+                        // $id = $_GET["id"];
+                        // $name = sanitizeString($_POST["name"]);
+                        // $datestart = sanitizeString($_POST["datestart"]);
+                        // $dateend = sanitizeString($_POST["dateend"]);
+                        // $numberAllowed = sanitizeString($_POST["numberallowed"]);  
+                        // $venue = sanitizeString($_POST["venue"]);            
+                        // $originalValues = json_decode($_POST["originalValues"]);      
+
+                        // $flag = true;
+
+                        // if(!date3($datestart) || !date3($dateend)){
+                        //     $flag = false;
+                        //     echo "<p class='form-error-text'>** Invalid date format!</p>";
+                        // }
+                        // if(!is_numeric($numberAllowed)){
+                        //     $flag = false;
+                        //     echo "<p class='form-error-text'>** Invalid: Number allowed isn't a valid value!</p>";
+                        // }
+                        // $findVenue = $db->getVenue(intval($venue));
+                        // if(count($findVenue) <= 0){
+                        //     $flag = false;
+                        //     echo "<p class='form-error-text'>** Invalid: Venue doesn't exist!</p>";
+                        // }
+
+
+                        // if($flag){
+                        //     // Perform EDIT POST REQUEST Processing
+                        //     $dataFields = array();
+                        //     $dataFields["area"] = "event";
+                        //     $dataFields["fields"] = array(
+                        //         "id" => $id,
+                        //         "name" => $name,
+                        //         "datestart" => $datestart,
+                        //         "dateend" => $dateend,
+                        //         "numberallowed" => $numberAllowed,
+                        //         "venue" => $venue
+                        //     );
+                        //     $dataFields["method"] = array(
+                        //         "update" => "updateEvent"
+                        //     );
+                        //     $dataFields["originalValues"] = $originalValues;
+                        //     editPost($dataFields);
+                        // }
+                        // else {
+                        //     echo "<p class='form-error-text'>** Invalid inputs</p>";
+                        // }
+                    }// end EDIT post processing
+                    else if($_GET["action"] == "add") {
+                        // Grab & sanitize inputs
+                        $event = sanitizeString($_POST["event"]);
+                        $attendee = sanitizeString($_POST["attendee"]);
+                        $paid = sanitizeString($_POST["paid"]);
+
+                        // CHECK: if all inputs were given a value
+                        if(isset($event) && isset($attendee) && isset($paid)){
+                            $eventObj = $db->getEvent($event);
+                            $attendeeObj = $db->getUser($attendee);
+
+
+                            // Make sure both exist
+                            if(count($eventObj) && count($attendeeObj)){
+                                // Event Manager check to handle only allowing them adding to their events!
+                                if($userRole == "event_manager"){
+                                    $allManagerEvents = $db->getAllManagerEventsOBJ($_SESSION["role"]);
+                                    foreach($allManagerEvents as $mEvents){
+                                        if($mEvents->getEvent() == $eventObj->getIdEvent()){
+                                            $managerOwnership = true;
+                                            break;
+                                        }
+                                    }
+
+                                    if($managerOwnership == false){
+                                        // REDIRECT: Manager doesn't own that event
+                                        redirect("admin");
+                                    }
+                                }
+
+
+                                $dataFields = array();
+                                $dataFields["area"] = "attendee event";
+                                $dataFields["fields"]["event"] = array("type" => "i", "value" => $event);                    
+                                $dataFields["fields"]["attendee"] = array("type" => "i", "value" => $attendee);
+                                $dataFields["fields"]["paid"] = array("type" => "i", "value" => $paid);
+                                $dataFields["method"] = array(
+                                    "add" => "addAttendeeEvent"
+                                );
+                                $lastID = addPost($dataFields);
+
+                                redirect("admin");
+                            }
+                            else {
+                                // REDIRECT: Event & user now found
+                                echo "<p class='form-error-text'>** Invalid inputs: Event or attendee doesn't exist!</p>";
+                            }
+                        }// end if isset
+                    }// end action ADD processing
+                }// end if ACTION is present
+            }// end if POST
         ?>
     </body>
 </html>
