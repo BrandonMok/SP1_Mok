@@ -27,7 +27,7 @@
                         if($_GET["action"] == "edit"){
                             // EDIT
                             $id = $_GET['id'];          // In the URL to retrieve the id
-                            $user = $db->getUser($_GET['id'])[0]; 
+                            $user = $db->getUser($_GET['id']); 
 
                             echo "<h2 class='section-heading'>Edit</h2>";
 
@@ -87,7 +87,7 @@
                             }
 
                             // Get user now to display delete information
-                            $specificUser = $db->getUser($id)[0];
+                            $specificUser = $db->getUser($id);
 
                             // DELETE USER HTML
                             echo "<h2 class='section-heading'>Delete User</h2>";

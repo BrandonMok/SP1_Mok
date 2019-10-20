@@ -314,8 +314,13 @@
                                                         </tr>";
                         foreach($attendeeEvents as $aEvent){
                             $attendeeEventTable .= "<tr>
-                                                        <td>{$aEvent->getEvent()}</td>
-                                                        <td>{$aEvent->getAttendee()}</td>
+                                                        <td>{$aEvent->getEvent()}</td>";
+                                                    
+                            // Get the attendee object to use their name to display alongside their ID
+                            $attendee = $db->getUser($aEvent->getAttendee());
+                            $attendee = $attendee->getName();
+
+                            $attendeeEventTable .=  "   <td>{$aEvent->getAttendee()} - {$attendee}</td>
                                                         <td>{$aEvent->getPaid()}</td>
                                                         <td><a href=''>Edit</a></td>
                                                         <td><a href=''>Delete</a></td>

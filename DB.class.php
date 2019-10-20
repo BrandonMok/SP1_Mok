@@ -108,7 +108,7 @@
                 $stmt->execute(array(
                     ":id" => $id
                 ));
-                $data = $stmt->fetchAll(); // retrieves the user
+                $data = $stmt->fetch(); // retrieves the user
 
                 return $data;
             }
