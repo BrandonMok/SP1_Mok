@@ -598,8 +598,8 @@
                 // Need to delete ATTENDEE_SESSIONS too! BUT... Need sessionIDs for those sessions associated w/deleted Event
                 $allSessionsPerEvent = $this->getAllSessionsPerEvent($eventID); // retrieve all relevent sessions from event
                 foreach($allSessionsPerEvent as $k => $v){
-                    $deleteAttendeeSession = $this->deleteAttendeeSessions($v->getIdSession()); // delete attendee_sesion objects
-                    $deleteManagerSession = $this->deleteManagerSessions($v->getIdSession());   // delete manager_session objects
+                    $deleteAttendeeSession = $this->deleteAttendeeSession($v->getIdSession()); // delete attendee_sesion objects
+                    $deleteManagerSession = $this->deleteManagerSession($v->getIdSession());   // delete manager_session objects
                     $sumResults[] = $deleteAttendeeSession;
                     $sumResults[] = $deleteManagerSession;
                 }   
@@ -911,7 +911,7 @@
          * deleteAttendeeSessions
          * Deletes ATTENDEE_SESSION records based on sessionID
          */
-        function deleteAttendeeSessions($sessionID){
+        function deleteAttendeeSession($sessionID){
             try{
                 $query = "DELETE FROM attendee_session WHERE session = :session";
                 $stmt = $this->db->prepare($query);
@@ -930,7 +930,7 @@
          * @param $sessionID
          * Deletes MANAGER_SESSION records based on sessionID
          */
-        function deleteManagerSessions($sessionID){
+        function deleteManagerSession($sessionID){
             try {
                 $query = "DELETE FROM manager_session WHERE session = :sessionID";
                 $stmt = $this->db->prepare($query);

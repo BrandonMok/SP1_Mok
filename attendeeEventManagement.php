@@ -70,6 +70,28 @@
                                 );
                                 $delete = deleteAction($dataFields);
 
+
+                                if($delete > 0){
+                                    // DELETE attendee_session object too if it exists
+                                    $attendeeSessions = $db->getAllAttendeeSessionsById($_GET["id"]); // all attendee_session objects
+                                    if(count($attendeeSessions) > 0){
+                                        foreach($attendeeSessions as $session){
+                                            // GET the session object
+                                            $sessionObj = $db->getSession($session->getSession());    // get actual session object
+                                            
+                                            /**
+                                             * CHECK: if the session object for the attendee_session object event is the one
+                                             *  whose eventID is the one deleting from the attendee_event, then delete the attendee_session too
+                                             *  for this user
+                                             */
+                                            if($sessionObj->getEvent() == $_GET["event"]){  
+                                                // DELETE attendee_session too!
+                                                $deleteAttendeeSession = $db->deleteAttendeeSession($session->getSession());
+                                            }
+                                        }   
+                                    }
+                                }
+
                                 redirect("admin");
                             }
 
@@ -223,6 +245,11 @@
                                         // REDIRECT: Manager doesn't own that event
                                         redirect("admin");
                                     }
+                                }
+
+                                // Set paid to 0 if nothing supplied
+                                if(empty($paid) || !isset($paid)){
+                                    $paid = 0;
                                 }
 
 

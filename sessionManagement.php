@@ -138,7 +138,7 @@
                                      * Event Managers also need to delete their manager_session obj when deleting entire session
                                      */
                                     if($userRole == "event_manager"){
-                                        $db->deleteManagerSessions($id);
+                                        $db->deleteManagerSession($id);
                                     }
                                 }
 
