@@ -27,7 +27,55 @@
 
                     if(isset($_GET["id"]) && isset($_GET["event"]) && isset($_GET["action"])){
                         if($_GET["action"] == "edit"){
+                            $attendeeID = $_GET["id"];  //attendeeID
+                            $eventID = $_GET["event"]; // eventID
 
+
+                            if($userRole == "admin"){
+                                $attendeeEvent = $db->getAttendeeEventByEventAttendee($eventID, $attendeeID); 
+                            }
+                            else if($userRole == "event_manager"){
+                                // Make sure this event is the event_managers to be safe!
+                                $eventManagerEvents = $db->getManagerEventOBJ($eventID);
+                                if(count($eventManagerEvents) > 0){
+                                    // This is an event_manager owned event
+                                    $attendeeEvent = $db->getAttendeeEventByEventAttendee($eventID, $attendeeID); 
+                                }
+                                
+                                if(!isset($attendeeEvent)){
+                                    // REDIRECT: Not event_manager's event
+                                    redirect("admin");
+                                }
+                            }
+
+                            // Store original values to compare to on POST
+                            // Don't want to keep querying same object when doing post logic
+                            $originalValues = array(
+                                "event" => $attendeeEvent->getEvent(),
+                                "attendee" => $attendeeEvent->getAttendee(),
+                                "paid" => $attendeeEvent->getPaid(), 
+                            );
+                            $originalValues = json_encode($originalValues);
+
+                            // EDIT Event SECTION
+                            echo "<h2 class='section-heading'>Edit Attendee Event</h2>";
+                            $eventEditTable = "<div class='edit-add-form-container'>
+                                                    <form id='user-edit-form' name='user-edit-form' action='./attendeeEventManagement.php?id={$attendeeEvent->getAttendee()}&event={$attendeeEvent->getEvent()}&action=edit' method='POST'>
+                                                        <div id='user-edit-labels'>
+                                                            <label>Event</label>
+                                                            <label>Attendee</label>
+                                                            <label>Paid</label>
+                                                        </div>
+                                                        <div id='user-edit-inputs'>
+                                                            <input type='text' name='event' value='{$attendeeEvent->getEvent()}'>
+                                                            <input type='text' name='attendee' value='{$attendeeEvent->getAttendee()}'>
+                                                            <input type='text' name='paid' value='{$attendeeEvent->getPaid()}'>
+                                                        </div>
+                                                        <input type='hidden' name='originalValues' value='{$originalValues}'><br/>
+                                                        <input name='submit' id='submit-btn' type='submit' value='Submit'/>
+                                                    </form>
+                                                </div>";
+                            echo $eventEditTable;
                         }
                         else if($_GET["action"] == "delete"){
                             if($userRole == "admin"){
