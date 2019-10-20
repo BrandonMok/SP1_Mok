@@ -560,6 +560,26 @@
         }
 
         /**
+         * deleteAttendeeEventByEventAttendee
+         * @param $eventID 
+         * Deletes the attendeEvent for a specific attendee event object given BOTH parameters 
+         */
+        function deleteAttendeeEventObject($eventID, $attendeeID){
+            try{
+                $query = "DELETE FROM attendee_event WHERE event = :event AND attendee = :attendee";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute(array(
+                    ":event" => $eventID,
+                    ":attendee" => $attendeeID
+                ));
+                return $stmt->rowCount();
+            }
+            catch(PDOException $e){
+                die("There was a problem deleting attendee event!");
+            } 
+        }
+
+        /**
          * deleteEventAndSession
          * @param $data
          * Function to delete an event, the attendee & manager events tied to that event, and attendee sessions tied to event

@@ -313,17 +313,21 @@
                                                             <th>Delete</th>
                                                         </tr>";
                         foreach($attendeeEvents as $aEvent){
-                            $attendeeEventTable .= "<tr>
-                                                        <td>{$aEvent->getEvent()}</td>";
+                            // Used to get name of event - for convenience 
+                            $eventName = $db->getEvent($aEvent->getEvent());
+                            $eventName = $eventName->getName();
                                                     
-                            // Get the attendee object to use their name to display alongside their ID
+                            // Get the attendee object to use their name to display alongside their ID - for convenience
                             $attendee = $db->getUser($aEvent->getAttendee());
                             $attendee = $attendee->getName();
 
+                            $attendeeEventTable .= "<tr>
+                                                        <td>{$aEvent->getEvent()} - {$eventName}</td>";
+
                             $attendeeEventTable .=  "   <td>{$aEvent->getAttendee()} - {$attendee}</td>
                                                         <td>{$aEvent->getPaid()}</td>
-                                                        <td><a href=''>Edit</a></td>
-                                                        <td><a href=''>Delete</a></td>
+                                                        <td><a href='./attendeeEventManagement.php?id={$aEvent->getAttendee()}&event={$aEvent->getEvent()}&action=edit'>Edit</a></td>
+                                                        <td><a href='./attendeeEventManagement.php?id={$aEvent->getAttendee()}&event={$aEvent->getEvent()}&action=delete'>Delete</a></td>
                                                     </tr>";
                         }
                         $attendeeEventTable .= "</table></div>";
