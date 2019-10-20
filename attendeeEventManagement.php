@@ -59,25 +59,19 @@
 
                             // if delete option was chosen, check for confirm variable in URL that's set when clicking Yes/No
                             if(isset($_GET["confirm"]) && !empty($_GET["confirm"])){
-                                if($_GET["confirm"] == "yes"){
-                                    $dataFields = array();
-                                    $dataFields["area"] = "attendee_event";
-                                    $dataFields["fields"] = array(
-                                        "id" => $_GET["event"],
-                                        "attendee" => $_GET["id"]
-                                    );
-                                    $dataFields["method"] = array(
-                                        "delete" => "deleteAttendeeEventObject" 
-                                    );
-                                    $delete = deleteAction($dataFields);
-    
-                                    redirect("admin");
-                                }
-                                else {
-                                    redirect("admin");
-                                }
-                            }
+                                $dataFields = array();
+                                $dataFields["area"] = "attendee event";
+                                $dataFields["fields"] = array(
+                                    "id" => $_GET["event"],
+                                    "attendee" => $_GET["id"]
+                                );
+                                $dataFields["method"] = array(
+                                    "delete" => "deleteAttendeeEventObject" 
+                                );
+                                $delete = deleteAction($dataFields);
 
+                                redirect("admin");
+                            }
 
                             // event SPECIFIC TABLE W/btns
                             echo "<h2 class='section-heading'>Delete Attendee Event</h2>";
@@ -98,12 +92,12 @@
                             echo $deleteInfo;
 
                             // Yes & no options to delete action
-                            echo "<h2 class='section-heading'>Are you sure you want to delete the selected event?</h2><br/>";
+                            echo "<h2 class='section-heading'>Are you sure you want to delete the selected attendee event?</h2><br/>";
                             $optionDiv = "<div id='confirm-delete-container' class='center-element'>
-                                                <a href='./attendeeEventManagement.php?id={$attendeeEvent->getEvent()}&action=delete&confirm=yes'>
+                                                <a href='./attendeeEventManagement.php?id={$attendeeEvent->getAttendee()}&event={$attendeeEvent->getEvent()}&action=delete&confirm=yes'>
                                                     <div class='delete-btn' id='confirm-delete-btn'>Yes</div>
                                                 </a>
-                                                <a href='./attendeeEventManagement.php?id={$attendeeEvent->getEvent()}&action=delete&confirm=no'>
+                                                <a href='./attendeeEventManagement.php?id={$attendeeEvent->getAttendee()}&event={$attendeeEvent->getEvent()}&action=delete&confirm=no'>
                                                     <div class='delete-btn' id='deny-delete-btn'>No</div>
                                                 </a>
                                             </div>";

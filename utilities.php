@@ -318,7 +318,14 @@
                 $decision = $_GET["confirm"];
 
                 if($decision == "yes"){
-                    $delete = call_user_func_array(array($db, $data["method"]["delete"]), array($data["fields"]["id"]));
+                    if(isset($data["fields"]["attendee"])){
+                        // CASE: For attendeeEvent delete need both fields
+                        $delete = call_user_func_array(array($db, $data["method"]["delete"]), array($data["fields"]["id"], $data["fields"]["attendee"]));
+                    }
+                    else {
+                        $delete = call_user_func_array(array($db, $data["method"]["delete"]), array($data["fields"]["id"]));
+                    }
+                    // $delete = call_user_func_array(array($db, $data["method"]["delete"]), array($data["fields"]["id"]));
 
                     if($delete > 0){ // if rowcount wasn't 0 -> delete user
                         return $delete;
@@ -330,8 +337,7 @@
                 }
                 else{
                     // user chose NO to deleting user
-                    header("Location: admin.php");
-                    exit;
+                    redirect("admin");
                 }
             }
         }
