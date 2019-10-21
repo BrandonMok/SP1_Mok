@@ -298,7 +298,18 @@
                         $attendeeEvents = $db->getAllAttendeeEvents();
                     }
                     else if($userRole == "event_manager"){
-                        $attendeeEvents = $db->getAllAttendeeEventsById($_SESSION["role"]);
+                        // Get all the manager's manager_event objects 
+                        $allManagerEventsObjs = $db->getAllManagerEventsOBJ($_SESSION["id"]);
+                        $attendeeEventsObjs = $db->getAllAttendeeEvents();
+                        $attendeeEvents = array();
+
+                        foreach($allManagerEventObjs as $mEvent){
+                            foreach($attendeeEventsObjs as $aEvent){
+                                if($mEvent->getEvent() == $aEvent->getEvent()){
+                                    $attendeeEvents[] = $aEvent;
+                                }
+                            }
+                        }
                     }
 
                     if(count($attendeeEvents) > 0){

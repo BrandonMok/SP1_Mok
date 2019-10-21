@@ -31,20 +31,15 @@
                             // If deleting event, need to also delete the attendee_sessions!
                            $deleteAttendeeEvent = $db->deleteAttendeeEventObject($_GET["event"], $_SESSION["id"]);
                            if($deleteAttendeeEvent > 0){
-                                /**
-                                 * IF deleting attendee_event worked, also need to delete attendee_session
-                                 */
-                                // $deleteAttendeeSession = $db->deleteAttendeeSessionBySessionAttendee($_GET["session"], $_SESSION["id"]);
-                                
+                                // IF deleting attendee_event worked, also need to delete attendee_session
                                 // NEED THEIR SESSIONID they're tied to the session object whose eventID is to this event
-                                $allAttendeeSessions = $db->getAllAttendeeSessionsById($_SESSION["id"]);
+                                $allAttendeeSessions = $db->getAllAttendeeSessionsById($_SESSION["id"]);        // get all attendee_session objects 
                                 foreach($allAttendeeSessions as $aSession){
-                                    $sessionOBJ = $db->getSession($aSession->getSession());
-                                    if($sessionOBJ->getEvent() == $_GET["event"]){
-                                        $deleteAttendeeSessiion = $db->deleteAttendeeSessionBySessionAttendee($sessionOBJ->getIdSession(), $_SESSION["id"]);
+                                    $sessionOBJ = $db->getSession($aSession->getSession()); // Session Object the attendee is associated with
+                                    if($sessionOBJ->getEvent() == $_GET["event"]){      // if session's event is for the event registration trying to delete
+                                        $deleteAttendeeSession = $db->deleteAttendeeSessionBySessionAttendee($sessionOBJ->getIdSession(), $_SESSION["id"]);
                                     }
                                 }
-
 
                                 redirect("registrations");
                            }
