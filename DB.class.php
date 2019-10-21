@@ -789,16 +789,16 @@
          * ESSENTIALLY VERIFIES IF THE USER IS ASSOCIATED WITH THE SESSION
          * Gets the attendee_session using given sessionID and attendeeID to see if they already signed up
          */
-        function getAttendeeEventBySessionAttendee($session, $attendeeID){
+        function getAttendeeSessionBySessionAttendee($session, $attendeeID){
             try{
-                include_once("./classes/AttendeeEvent.class.php");
+                include_once("./classes/AttendeeSession.class.php");
                 $query = "SELECT * FROM attendee_session WHERE session = :session AND attendee = :attendee";
                 $stmt = $this->db->prepare($query);
                 $stmt->execute(array(
                     ":session" => $session,
                     ":attendee" => $attendeeID
                 )); 
-                $stmt->setFetchMode(PDO::FETCH_CLASS, "AttendeeEvent");
+                $stmt->setFetchMode(PDO::FETCH_CLASS, "AttendeeSession");
                 $data = $stmt->fetch();
                 return $data;
             }
