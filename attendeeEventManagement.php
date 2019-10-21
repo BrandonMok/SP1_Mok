@@ -249,7 +249,7 @@
 
 
                             // Make sure both exist
-                            if(count($eventObj) && count($attendeeObj)){
+                            if(isset($eventObj) && !empty($eventObj) && isset($attendeeObj) && !empty($attendeeObj)){
                                 // Event Manager check to handle only allowing them adding to their events!
                                 if($userRole == "event_manager"){
                                     $allManagerEvents = $db->getAllManagerEventsOBJ($_SESSION["role"]);
@@ -270,7 +270,6 @@
                                 if(empty($paid) || !isset($paid)){
                                     $paid = 0;
                                 }
-
 
                                 $dataFields = array();
                                 $dataFields["area"] = "attendee event";
