@@ -17,6 +17,7 @@
         echo $headLinks;
     }
 
+
     /**
      * reusableHeader
      * Based on role to display available pages
@@ -71,128 +72,91 @@
         }
     }
 
-    
-    // function adminTables($data){
-    //     echo "<p class='section-heading'>{$data["class"]}</p>";
-    //     echo "<a href={$data['addURL']}>
-    //             <div class='add-btn'>Add {$data["class"]}</div>
-    //         </a>";
 
-    //     // $data will be an array w/alot of necessary data
-    //     $table = "<div class='admin-table-container'>
-    //                 <table class='admin-table'>
-    //                     <tr>";
-    //     foreach($data["th"] as $v){
-    //         $table .= "<th>{$v}</th>";
-    //     }
-    //     $table .= "</tr>";
+    /**
+     * reusableAddActionHTML
+     * @param $data
+     * $data = array();
+     * $data['area'] = area
+     * $data['formAction'] = URL string
+     * $data['label'] = array(lbl1,lbl2,lbl3,...)
+     * $data["input"] = array("key" => array("name" => value, "readonly" => readonly, etc..), "key" => array(), ...)
+     * Reusable function to produce the code for the ADD action for admin tables
+     */
+    function addActionHTML($data){
+        if($_GET["action"] == "add"){
+            echo "<h2 class='section-heading'>Add {$data['area']}</h2>";
+            $addForm = "<div class='edit-add-form-container'>
+                            <form id='user-edit-form' name='user-edit-form' action={$data['formAction']} method='POST'>
+                            <div id='user-edit-labels'>";
+            // Create table headers
+            foreach($data["labels"] as $v){
+                $addForm .= "<label>{$v}</label>";
+            }
+            $addForm .= "</div>
+                        <div id='user-edit-inputs'>";
 
-    //     $class = $data["class"];
-    //     include_once("./classes/{$class}.class.php");
-
-
-    //     foreach($data['data'][0] as $v){
-    //         $table .= "<tr>";
-    //                 foreach($data["dataMethods"] as $method){
-    //                     $methodResults = call_user_func_array(array($class, $method), array());
-    //                     $table .= "<td>{$methodResults}</td>";
-    //                 }
-    //         $table .= "<td><a href='{$data['editURL']}'>Edit</a></td>
-    //                     <td><a href='{$data['deleteURL']}'>Delete</a></td>
-    //                 </tr>";
-                 
-    //     }
-    //     $table .= "</table></div>";
-    //     echo $table;
-    // }
-
-        /**
-         * reusableAddActionHTML
-         * @param $data
-         * $data = array();
-         * $data['area'] = area
-         * $data['formAction'] = URL string
-         * $data['label'] = array(lbl1,lbl2,lbl3,...)
-         * $data["input"] = array("key" => array("name" => value, "readonly" => readonly, etc..), "key" => array(), ...)
-         * Reusable function to produce the code for the ADD action for admin tables
-         */
-        function addActionHTML($data){
-            if($_GET["action"] == "add"){
-                echo "<h2 class='section-heading'>Add {$data['area']}</h2>";
-                $addForm = "<div class='edit-add-form-container'>
-                                <form id='user-edit-form' name='user-edit-form' action={$data['formAction']} method='POST'>
-                                <div id='user-edit-labels'>";
-                // Create table headers
-                foreach($data["labels"] as $v){
-                    $addForm .= "<label>{$v}</label>";
+            // Create table inputs
+            foreach($data["input"] as $key => $value){
+                if($key == "id"){
+                    $addForm .= "<input type='text' name={$value["name"]} readonly={$value["readonly"]} placeholder='{$value["placeholder"]}'>";
                 }
-                $addForm .= "</div>
-                            <div id='user-edit-inputs'>";
-
-                // Create table inputs
-                foreach($data["input"] as $key => $value){
-                    if($key == "id"){
-                        $addForm .= "<input type='text' name={$value["name"]} readonly={$value["readonly"]} placeholder='{$value["placeholder"]}'>";
-                    }
-                    else if ($key == "datestart" || $key == "dateend"){
-                        $addForm .= "<input type='text' name={$value["name"]} placeholder='{$value["placeholder"]}'>";
-                    }
-                    else {
-                        $addForm .= "<input type='text' name={$value["name"]}>";
-                    }
-                }// end foreach
-                $addForm .= "</div><br/>
-                            <input name='submit' id='submit-btn' type='submit' value='Submit'/>
-                            </form>
-                        </div>";
-                echo $addForm;
-            }// end if ADD
-        }// end function
-
-
+                else if ($key == "datestart" || $key == "dateend"){
+                    $addForm .= "<input type='text' name={$value["name"]} placeholder='{$value["placeholder"]}'>";
+                }
+                else {
+                    $addForm .= "<input type='text' name={$value["name"]}>";
+                }
+            }// end foreach
+            $addForm .= "</div><br/>
+                        <input name='submit' id='submit-btn' type='submit' value='Submit'/>
+                        </form>
+                    </div>";
+            echo $addForm;
+        }// end if ADD
+    }// end function
 
     
-        /**
-         * editPost
-         * @param $fields
-         * $fields = array();
-         * $fields['area'] = string
-         * $fields['fields'] = array(str, str, str, ...); 
-         * $fields['method'] = array(string of method name);
-         * $fields['originalValues'] = array(obj as associative array);
-         * Reusuable POST handling for admin form submits
-         */
-        function editPost($fields){
-            global $db;
-            if($_GET["action"] == "edit"){
-                $changesArray = array();
+    /**
+     * editPost
+     * @param $fields
+     * $fields = array();
+     * $fields['area'] = string
+     * $fields['fields'] = array(str, str, str, ...); 
+     * $fields['method'] = array(string of method name);
+     * $fields['originalValues'] = array(obj as associative array);
+     * Reusuable POST handling for admin form submits
+     */
+    function editPost($fields){
+        global $db;
+        if($_GET["action"] == "edit"){
+            $changesArray = array();
 
-                foreach($fields["fields"] as $k => $v){
-                    foreach($fields["originalValues"] as $key => $value){
-                        if($k == $key){
-                            if(!empty($v) && isset($v) && $v != $value){
-                                $changesArray[$k] = $v;
-                            }
+            foreach($fields["fields"] as $k => $v){
+                foreach($fields["originalValues"] as $key => $value){
+                    if($k == $key){
+                        if(!empty($v) && isset($v) && $v != $value){
+                            $changesArray[$k] = $v;
                         }
                     }
                 }
+            }
 
-                $changesArray["id"] = $fields["fields"]["id"]; // set ID for where cause
+            $changesArray["id"] = $fields["fields"]["id"]; // set ID for where cause
 
-                if(!empty($changesArray)){
-                    $rowCount = call_user_func_array(array($db, $fields["method"]["update"] ), array($changesArray));
+            if(!empty($changesArray)){
+                $rowCount = call_user_func_array(array($db, $fields["method"]["update"] ), array($changesArray));
 
-                    if($rowCount > 0){
-                        header("Location: admin.php");
-                        exit;
-                    }
-                    else{
-                        echo "<p class='form-error-text '>** Editing {$fields['area']} failed!</p>";
-                    }
+                if($rowCount > 0){
+                    header("Location: admin.php");
+                    exit;
+                }
+                else{
+                    echo "<p class='form-error-text '>** Editing {$fields['area']} failed!</p>";
                 }
             }
         }
-
+    }
 
 
     /**
@@ -343,7 +307,6 @@
     }
 
 
-
     /**
      * managementAddCheck
      * Checks to see if the action in URL is set - used to double check for add action
@@ -356,6 +319,8 @@
             return false;
         }
     }
+
+
     /**
      * managementEditDeleteCheck
      * Checks to see if id and action were set - EDIT and DELETE require both
@@ -368,6 +333,7 @@
             return false;
         }
     }
+
 
     /**
      * eventManagerEventCheck
@@ -421,7 +387,6 @@
                 <div class='add-btn'>Add {$data['area']}</div>
             </a>";
     }
-
 
 
     /**
