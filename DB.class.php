@@ -737,7 +737,6 @@
             }
         }
 
-
         /**
          * getManagerSessions
          * @param $managerID
@@ -786,7 +785,6 @@
         /**
          * getAttendeeEventBySessionAttendee
          * @param $eventID, $attendeeID
-         * ESSENTIALLY VERIFIES IF THE USER IS ASSOCIATED WITH THE SESSION
          * Gets the attendee_session using given sessionID and attendeeID to see if they already signed up
          */
         function getAttendeeSessionBySessionAttendee($session, $attendeeID){
@@ -954,6 +952,25 @@
         }
 
         /**
+         * deleteAllSessions
+         * @param $sessionID
+         * Deleting a session also requires deleting attendee_sessions & manager_sessions
+         */
+        function deleteAllSessions($sessionID){
+            try{
+                // DELETE session object
+                $deleteSessionObj = $this->deleteSession($sessionID); 
+
+                // DELETE attendee_sessions + manager_sessions
+                $deleteAttendeeSession = $this->deleteAttendeeSession($sessionID);
+                $deleteManagerSession = $this->deleteManagerSession($sessionID);
+            }
+            catch(PDOException $e){
+                die("There was a problem deleting all of the event's sessions!");
+            }
+        }
+
+        /**
          * deleteSessionsPerEvent
          * @param $eventID
          * Deletes SESSIONS associated with an EVENT based on the EVENTID
@@ -973,7 +990,7 @@
         }
 
         /**
-         * deleteAttendeeSessions
+         * deleteAttendeeSession
          * Deletes ATTENDEE_SESSION records based on sessionID
          */
         function deleteAttendeeSession($sessionID){

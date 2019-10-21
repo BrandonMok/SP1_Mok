@@ -127,7 +127,7 @@
                                     "id" => $id
                                 );
                                 $dataFields["method"] = array(
-                                    "delete" => "deleteSession"   // Special case for events -> need to delete everythin associated with the deleted event
+                                    "delete" => "deleteAllSessions"   // Special case for events -> need to delete everythin associated with the deleted event
                                 );
                                 $delete = deleteAction($dataFields);
 
