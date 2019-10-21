@@ -810,6 +810,7 @@
         /**
          * addManagerSession
          * @param $data
+         * Creates a new manager_session object!
          */
         function addManagerSession($data){
             try{
@@ -823,7 +824,28 @@
                 return $this->db->lastInsertId();
             }
             catch(PDOException $e){
-                die("There was a problem retrieving manager session!");
+                die("There was a problem creating manager session!");
+            }
+        }
+
+         /**
+         * addAttendeeSession
+         * @param $data
+         * Creates a new attendee_session object!
+         */
+        function addAttendeeSession($data){
+            try{
+                $query = "INSERT INTO attendee_session (session, attendee)
+                            VALUES (:session, :attendee)";
+                $stmt = $this->db->prepare($query);
+                $stmt->execute(array(
+                    ":session" => $data["session"],
+                    ":attendee" => $data["attendee"]
+                ));
+                return $this->db->lastInsertId();
+            }
+            catch(PDOException $e){
+                die("There was a problem creating attendee session!");
             }
         }
 
