@@ -317,7 +317,7 @@
         function getAllAttendeeEvents(){
             try{
                 include_once("./classes/AttendeeEvent.class.php");
-                $query = "SELECT * FROM attendee_event";
+                $query = "SELECT * FROM attendee_event ORDER BY event";
                 $stmt = $this->db->prepare($query);
                 $stmt->execute();
                 $stmt->setFetchMode(PDO::FETCH_CLASS, "AttendeeEvent");
