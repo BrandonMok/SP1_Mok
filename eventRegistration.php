@@ -18,57 +18,67 @@
             reusableHeader();
 
             /**
-             * Under events section of application, used to show available sessions for that event
-             * and sign up for both
+             * Under events section of application, used to show available sessions for that event and sign up for both
              */
             if(isset($_SESSION["userLoggedIn"]) && isset($_SESSION["role"])){
                 /**
                  * CHECK: First check for all queries are set -> This is the processing for signing up 
                  */
-                if(isset($_GET["id"]) && isset($_GET["session"]) && isset($_GET["action"])){
-                    if($_GET["action"] == "signup"){
-                        // CHECK: to see if user has already signed up for this event
-                        // CHECK: to see if user has already signed up for this session
+                if(isset($_GET["event"])&& isset($_GET["session"]) && isset($_GET["action"])){
+                    if($_GET["action"] == "signup" || $_GET["action"] == "signuppay"){
+                        // CHECK: to see if user has already signed up for this event 
+                        $attendeeEvents = $db->getAttendeeEventByEventAttendee($_GET["event"], $_SESSION["id"]);
+                        if(isset($attendeeEvents) && !empty($attendeeEvents)){
+                            // CASE: attendee_event object ALREADY EXISTS
 
-                        $attendeeEvents = $db->getAttendeeEventByEventAttendee($_GET["id"], $_SESSION["id"]);
-                        if(count($attendeeEvents) > 0){
-                            // CASE: User has already signed up for the event
-                            // So just do checks on the attendee_session to make sure they aren't already signed up for a session
-                            if($signedUpForEvent){
-                                // Already have a attendee_event object created
-                                // CHECK: attendee_session doesn't exist alread
-
-                                $attendeeSessions = $db->getAttendeeEventBySessionAttendee($_GET["session"],$_SESSION["id"]);
-                                if(count($attendeeSessions) > 0){
-                                  
-                                    
-                                }
-                                else {
-                                    // User hasn't signed up for a session under this event
-                                }
+                            // CHECK: attendee_session doesn't exist yet
+                            $attendeeSessions = $db->getAttendeeEventBySessionAttendee($_GET["session"], $_SESSION["id"]);
+                            if(isset($attendeeSessions) && !empty($attendeeSessions)){
+                                // Session already signed up for
+                                echo "<p class='form-error-text'>** You've already registered for this session!</p>";
                             }
                             else {
-                                // Make attendee_event object
-                                // Make attendee_session object
+                                // CASE: User signed up for event already, but not the session
+                                $attendeeSessionData = array(
+                                    "session" => $_GET["session"],
+                                    "attendee" => $_SESSION["id"]
+                                );
+                                $addAttendeeSession = $db->addAttendeeSession($attendeeSessionData);
 
-
-
+                                redirect("events");
                             }
                         }
                         else {
-                            // User has not signed up for any events/sessions
-                            // Just make the objects!
+                            // CASE: User hasn't signed up for any evenyts; therefore no sessions signed up either
+                            $paid = 0;
+                            switch($_GET["action"]){
+                                case "signup":
+                                    $paid = 0;
+                                    break;
+                                case "signuppay":
+                                    $paid = 1;
+                                    break;
+                            }
 
-                            // $attendeeEventData = array(
-                            //     "event" => $_GET["id"],
-                            //     "attendee" => $_SESSION["id"],
-                            //     "paid" => 
-                            // );
-                            // $addAttendeeEvent = $db->addAttendeeEvent();
+                            // Make attendee_event object
+                            $attendeeEventData = array(
+                                "event" => $_GET["event"],
+                                "attendee" => $_SESSION["id"],
+                                "paid" => $paid
+                            );
+                            $addAttendeeEvent = $db->addAttendeeEvent($attendeeEventData);
 
+                            if(count($addAttendeeEvent) > 0){
+                                $attendeeSessionData = array(
+                                    "session" => $_GET["session"],
+                                    "attendee" => $_SESSION["id"]
+                                );
+                                $addAttendeeSession = $db->addAttendeeSession($attendeeSessionData);
 
-                        }
-                    }
+                                redirect("events");
+                            }
+                        }//end else
+                    }// end if
                     else {
                         // REDIRECT: Some other action was passed
                         redirect("events");
@@ -91,10 +101,10 @@
                                                             <p class='event-headings'>{$session->getName()}</p>
                                                             <p>Number Allowed: {$session->getNumberAllowed()}</p>
                                                             <p class='event-timings'>{$session->getDate()}</p>
-                                                            <a href='./eventRegistration.php?id={$eventID}&session={$session->getIdSession()}&action=signup'>
+                                                            <a href='./eventRegistration.php?event={$eventID}&session={$session->getIdSession()}&action=signup'>
                                                                 <div class='sign-up-btns'>Sign up</div>
                                                             </a>
-                                                            <a href='./eventRegistration.php?id={$eventID}&session={$session->getIdSession()}&action=signuppay'>
+                                                            <a href='./eventRegistration.php?event={$eventID}&session={$session->getIdSession()}&action=signuppay'>
                                                                 <div class='sign-up-btns'>Sign up and pay</div>
                                                             </a>
                                                         </div>";

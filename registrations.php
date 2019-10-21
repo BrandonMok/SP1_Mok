@@ -49,8 +49,12 @@
                                                                     <p>Number Allowed: {$registrationEvent->getNumberAllowed()}</p>
                                                                 </div>
                                                                 <div class='registration-btns'>
-                                                                    <a href=''><i class='fas fa-times'></i></a><br/>
-                                                                    <a href=''><i class='fas fa-edit'></i></a>
+                                                                    <a href='./registrationManagement.php?event={$registrationEvent->getIdEvent()}&action=delete'>
+                                                                        <i class='fas fa-times'></i>
+                                                                    </a><br/>
+                                                                    <a href='./registrationManagement.php?event={$registrationEvent->getIdEvent()}&action=edit'>
+                                                                        <i class='fas fa-edit'></i>
+                                                                    </a>
                                                                 </div>
                                                             </div>";
 
@@ -58,43 +62,35 @@
                             // Display the associated sessions for that event that the attendee signed up for
                             if(count($allRegistrationSessions) > 0){
                                 foreach($allRegistrationSessions as $session){
-                                    $sessionObj = $db->getSession($session->getIdSession());
-                                    if(count($sessionObj) > 0 && $sessionObj->getEvent() == $event->getIdEvent()){
+                                    $sessionObj = $db->getSession($session->getSession());  // actual session object
+                                    if(count($sessionObj) > 0 && $sessionObj->getEvent() == $registrationEvent->getIdEvent()){
                                         $registrationContainer .= "<hr/>
                                                                     <div class='registration-sessions'>
                                                                         <div class='registration-session-info'>
-                                                                            <p>{$session->getName()}</p>
+                                                                            <p class='event-headings'>{$sessionObj->getName()}</p>
                                                                             <p>{$registrationEvent->getDate()}</p>
                                                                         </div>
                                                                         <div class='registration-btns'>
                                                                             <a href=''><i class='fas fa-times'></i></a><br/>
-                                                                            <a href=''><div class='registration-btn'>Add</div></a><br/>
+                                                                            <a href=''><i class='fas fa-plus'></i></a><br/>
                                                                             <a href=''><i class='fas fa-edit'></i></a>
                                                                         </div>
-                                                                    </div>
-                                                            </div>";
+                                                                    </div>";
                                     }
                                 }
+                                $registrationContainer .= "</div>"; // close registration div
                             }
                             else {
-                                $registrationContainer .= "</div>"; // Close the main div whether sessions was added or not to close div
+                                $registrationContainer .= "</div>"; // close registration div
                             }
-                            
-                            /**
-                             * Allowing add/edit/delete here, so will probably redirect to the registrationManagementPage they see
-                             * when they originally signed up - may de something where if they're already signed up to color out the buttons
-                             */
-                            
-                        }
-                        $registrationContainer .= "</div>";
-
+                        }// end foreach
+                        $registrationContainer .= "</div>"; // close container div
                         echo $registrationContainer;
                     }
                     else {
                         // CASE: No registrations for this user
-                        echo "<h2 class='section-heading'>No events registered</h2>";
+                        echo "<h2 class='section-heading'>No registered events!</h2>";
                     }
-
                 }
             }
             else{
