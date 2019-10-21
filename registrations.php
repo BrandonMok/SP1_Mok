@@ -43,14 +43,14 @@
                             $registrationContainer .= "<div class='registration'>
                                                             <div class='registration-events'>
                                                                 <div class='registration-event-info'>
-                                                                    <p>{$registrationEvent->getName()}</p>
+                                                                    <p class='event-headings'>{$registrationEvent->getName()}</p>
                                                                     <p>{$registrationEvent->getDate()}</p>
                                                                     <p>{$venue->getName()}</p>
                                                                     <p>Number Allowed: {$registrationEvent->getNumberAllowed()}</p>
                                                                 </div>
                                                                 <div class='registration-btns'>
-                                                                    <a href=''><i class='fas fa-times'></i></a>
-                                                                    <a href=''><div class='registration-edit-btn'>Edit</div></a>
+                                                                    <a href=''><i class='fas fa-times'></i></a><br/>
+                                                                    <a href=''><i class='fas fa-edit'></i></a>
                                                                 </div>
                                                             </div>";
 
@@ -67,9 +67,9 @@
                                                                             <p>{$registrationEvent->getDate()}</p>
                                                                         </div>
                                                                         <div class='registration-btns'>
-                                                                            <a href=''><i class='fas fa-times'></i></a>
-                                                                            <a href=''><div class='registration-btn'>Add</div></a>
-                                                                            <a href=''><div class='registration-btn'>Edit</div></a>
+                                                                            <a href=''><i class='fas fa-times'></i></a><br/>
+                                                                            <a href=''><div class='registration-btn'>Add</div></a><br/>
+                                                                            <a href=''><i class='fas fa-edit'></i></a>
                                                                         </div>
                                                                     </div>
                                                             </div>";
