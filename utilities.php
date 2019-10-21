@@ -400,6 +400,9 @@
             case "events":
                 header("Location: events.php");
                 exit;
+            case "registrations":
+                header("Location: registrations.php");
+                exit;
             case "login":
                 header("Location: login.php");
                 exit;

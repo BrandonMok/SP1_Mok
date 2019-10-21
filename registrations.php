@@ -49,10 +49,10 @@
                                                                     <p>Number Allowed: {$registrationEvent->getNumberAllowed()}</p>
                                                                 </div>
                                                                 <div class='registration-btns'>
-                                                                    <a href='./registrationManagement.php?event={$registrationEvent->getIdEvent()}&action=delete'>
+                                                                    <a href='./registrationsManagement.php?event={$registrationEvent->getIdEvent()}&action=delete'>
                                                                         <i class='fas fa-times'></i>
                                                                     </a><br/>
-                                                                    <a href='./registrationManagement.php?event={$registrationEvent->getIdEvent()}&action=edit'>
+                                                                    <a href='./registrationsManagement.php?event={$registrationEvent->getIdEvent()}&action=edit'>
                                                                         <i class='fas fa-edit'></i>
                                                                     </a>
                                                                 </div>
@@ -71,7 +71,9 @@
                                                                             <p>{$registrationEvent->getDate()}</p>
                                                                         </div>
                                                                         <div class='registration-btns'>
-                                                                            <a href=''><i class='fas fa-times'></i></a><br/>
+                                                                            <a href='./registrationsManagement.php?session={$sessionObj->getIdSession()}&action=delete'>
+                                                                                <i class='fas fa-times'></i>
+                                                                            </a><br/>
                                                                             <a href=''><i class='fas fa-plus'></i></a><br/>
                                                                             <a href=''><i class='fas fa-edit'></i></a>
                                                                         </div>
