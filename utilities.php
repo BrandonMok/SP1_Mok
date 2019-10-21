@@ -10,7 +10,6 @@
     function reusableLinks() {
         $headLinks = "<meta charset='UTF-8'>
                         <meta name='google' content='notranslate'>
-                        <meta http-equiv='Content-Language' content='en'>
                         <link rel='stylesheet' href='./assets/css/styles.css'>
                         <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap' rel='stylesheet'>
                         <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.8.1/css/all.css' 
