@@ -491,15 +491,58 @@
                 foreach($updateArr as $k => $v){
                     $stmt->bindParam($k, $v);
                 }
-
                 $stmt->execute($updateArr);
-
                 return $stmt->rowCount(); // return the # of rows affected
             }
             catch(PDOException $e){
                 die("There was a problem updating the event!");
             } 
         }
+
+        /**
+         * updateAttendeeEvent
+         * @param $data
+         * Updates an Attendee_Event object
+         */
+        // function updateAttendeeEvent($data){
+        //     try {
+        //         $query = "UPDATE attendee_event SET ";
+        //         $query = "UPDATE event SET ";
+        //         $updateArr = array();
+
+        //         foreach($data as $k => $v){
+        //             switch($k){
+        //                 case "event":
+        //                     $query .= "event = :event,";
+        //                     $updateArr[":event"] = $v;
+        //                     break;
+        //                 case "attendee":
+        //                     $query .= "attendee = :attendee,";
+        //                     $updateArr[":attendee"] = $v;
+        //                     break;
+        //                 case "paid":
+        //                     $query .= "paid = :paid,";
+        //                     $updateArr[":paid"] = intval($v);
+        //                     break;
+        //             }
+        //         }
+        //         $query = trim($query, ",");
+        //         // $query .= " WHERE idevent = :id";
+        //         // $updateArr[":id"] = $updateId;
+
+        //         $stmt = $this->db->prepare($query);
+
+        //         // Bind all params 
+        //         foreach($updateArr as $k => $v){
+        //             $stmt->bindParam($k, $v);
+        //         }
+        //         $stmt->execute($updateArr);
+        //         return $stmt->rowCount(); // return the # of rows affected
+        //     }
+        //     catch(PDOException $e){
+        //         die("There was a problem updating the attendee event!");
+        //     } 
+        // }
 
         /**
          * deleteEvent

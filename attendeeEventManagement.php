@@ -217,53 +217,24 @@
             if($_SERVER["REQUEST_METHOD"] == "POST"){
                 if(isset($_GET["action"]) && !empty($_GET["action"])){
                     if($_GET["action"] == "edit"){
-                        // // Grab values
-                        // $id = $_GET["id"];
-                        // $name = sanitizeString($_POST["name"]);
-                        // $datestart = sanitizeString($_POST["datestart"]);
-                        // $dateend = sanitizeString($_POST["dateend"]);
-                        // $numberAllowed = sanitizeString($_POST["numberallowed"]);  
-                        // $venue = sanitizeString($_POST["venue"]);            
-                        // $originalValues = json_decode($_POST["originalValues"]);      
+                        $event = $_GET["event"];
+                        $attendee = sanitizeString($_POST["attendee"]);
+                        $paid = sanitizeString($_POST["paid"]);
+                        $originalValues = json_decode($_POST["originalValues"]);      
 
-                        // $flag = true;
-
-                        // if(!date3($datestart) || !date3($dateend)){
-                        //     $flag = false;
-                        //     echo "<p class='form-error-text'>** Invalid date format!</p>";
-                        // }
-                        // if(!is_numeric($numberAllowed)){
-                        //     $flag = false;
-                        //     echo "<p class='form-error-text'>** Invalid: Number allowed isn't a valid value!</p>";
-                        // }
-                        // $findVenue = $db->getVenue(intval($venue));
-                        // if(count($findVenue) <= 0){
-                        //     $flag = false;
-                        //     echo "<p class='form-error-text'>** Invalid: Venue doesn't exist!</p>";
-                        // }
-
-
-                        // if($flag){
-                        //     // Perform EDIT POST REQUEST Processing
-                        //     $dataFields = array();
-                        //     $dataFields["area"] = "event";
-                        //     $dataFields["fields"] = array(
-                        //         "id" => $id,
-                        //         "name" => $name,
-                        //         "datestart" => $datestart,
-                        //         "dateend" => $dateend,
-                        //         "numberallowed" => $numberAllowed,
-                        //         "venue" => $venue
-                        //     );
-                        //     $dataFields["method"] = array(
-                        //         "update" => "updateEvent"
-                        //     );
-                        //     $dataFields["originalValues"] = $originalValues;
-                        //     editPost($dataFields);
-                        // }
-                        // else {
-                        //     echo "<p class='form-error-text'>** Invalid inputs</p>";
-                        // }
+                        // Perform EDIT POST REQUEST Processing
+                        $dataFields = array();
+                        $dataFields["area"] = "event";
+                        $dataFields["fields"] = array(
+                            "event" => $event,
+                            "attendee" => $attendee,
+                            "paid" => $paid,
+                        );
+                        $dataFields["method"] = array(
+                            // "update" => "updateEvent"
+                        );
+                        $dataFields["originalValues"] = $originalValues;
+                        editPost($dataFields);
                     }// end EDIT post processing
                     else if($_GET["action"] == "add") {
                         // Grab & sanitize inputs
