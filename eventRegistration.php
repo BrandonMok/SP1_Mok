@@ -26,7 +26,8 @@
                 if(isset($_GET["event"])&& isset($_GET["session"]) && isset($_GET["action"])){
                     if($_GET["action"] == "signup" || $_GET["action"] == "signuppay"){
                         // CHECK: to see if user has already signed up for this event 
-                        $attendeeEvents = $db->getAttendeeEventByEventAttendee($_GET["event"], $_SESSION["id"]);
+                        $attendeeEvents = $db->getAllAttendeeEvents($_GET["event"], $_SESSION["id"]);
+
                         if(isset($attendeeEvents) && !empty($attendeeEvents)){
                             // CASE: attendee_event object ALREADY EXISTS
 

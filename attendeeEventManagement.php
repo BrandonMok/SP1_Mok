@@ -31,14 +31,15 @@
 
 
                             if($userRole == "admin"){
-                                $attendeeEvent = $db->getAttendeeEventByEventAttendee($eventID, $attendeeID); 
+                                $attendeeEvent = $db->getAllAttendeeEvents($eventID, $attendeeID); 
+
                             }
                             else if($userRole == "event_manager"){
                                 // Make sure this event is the event_managers to be safe!
                                 $eventManagerEvents = $db->getManagerEventOBJ($eventID);
                                 if(count($eventManagerEvents) > 0){
                                     // This is an event_manager owned event
-                                    $attendeeEvent = $db->getAttendeeEventByEventAttendee($eventID, $attendeeID); 
+                                    $attendeeEvent = $db->getAllAttendeeEvents($eventID, $attendeeID); 
                                 }
                                 
                                 if(!isset($attendeeEvent)){
@@ -78,7 +79,8 @@
                         }
                         else if($_GET["action"] == "delete"){
                             if($userRole == "admin"){
-                                $attendeeEvent = $db->getAttendeeEventByEventAttendee($_GET["event"],$_GET["id"]);
+                                $attendeeEvent = $db->getAllAttendeeEvents($_GET["event"],$_GET["id"]);
+
                             }
                             else if ($userRole = "event_manager"){
                                 $managerEvents = $db->getAllManagerEventsOBJ($_SESSION["id"]); // get all this manager's events
@@ -87,7 +89,7 @@
                                 if(count($managerEvents) > 0){
                                     foreach($managerEvents as $mEvents){
                                         if($mEvents->getEvent() == $_GET["event"]){
-                                            $attendeeEvent = $db->getAttendeeEventByEventAttendee($_GET["event"],$_GET["id"]);
+                                            $attendeeEvent = $db->getAllAttendeeEvents($_GET["event"],$_GET["id"]);
                                             break;
                                         }
                                     }

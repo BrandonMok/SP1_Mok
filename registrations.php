@@ -25,7 +25,7 @@
                     echo "<p class='section-heading'>Your Registrations</p>";
 
                     // Retrieve all registrations for THIS ATTENDEE 
-                    $allRegistrations = $db->getAllAttendeeEventsById($_SESSION["id"]);             // attendee_event
+                    $allRegistrations = $db->getAllAttendeeEvents(0, $_SESSION["id"]);             // attendee_event
                     $allRegistrationSessions = $db->getAllAttendeeSessionsById($_SESSION["id"]);    // attendee_session
 
                     if(count($allRegistrations) > 0){

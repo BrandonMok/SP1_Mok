@@ -311,68 +311,57 @@
 
         /**
          * getAllAttendeeEvents
-         * @param $attendeeID
-         * Retrieves all ATTENDEE_EVENT objects
-         */
-        function getAllAttendeeEvents(){
-            try{
-                include_once("./classes/AttendeeEvent.class.php");
-                $query = "SELECT * FROM attendee_event ORDER BY event";
-                $stmt = $this->db->prepare($query);
-                $stmt->execute();
-                $stmt->setFetchMode(PDO::FETCH_CLASS, "AttendeeEvent");
-                $data = $stmt->fetchAll();
-                return $data;
-            }
-            catch(PDOException $e){
-                die("There was a problem retrieving all attendees attending events!");
-            } 
-        }
-
-        /**
-         * getAllAttendeeEventsById
-         * @param $attendeeID
-         * Retrieves all ATTENDEE_EVENT objects for attendee based on attendeeID
-         */
-        function getAllAttendeeEventsById($attendeeID){
-            try{
-                include_once("./classes/AttendeeEvent.class.php");
-                $query = "SELECT * FROM attendee_event WHERE attendee = :attendeeID";
-                $stmt = $this->db->prepare($query);
-                $stmt->execute(array(
-                    ":attendeeID" => $attendeeID
-                ));
-                $stmt->setFetchMode(PDO::FETCH_CLASS, "AttendeeEvent");
-                $data = $stmt->fetchAll();
-                return $data;
-            }
-            catch(PDOException $e){
-                die("There was a problem retrieving attendee events!");
-            } 
-        }
-
-        /**
-         * getAttendeeEventByEventAttendee
          * @param $eventID, $attendeeID
-         * ESSENTIALLY VERIFIES IF THE USER IS ASSOCIATED WITH THE EVENT
-         * Gets the attendee_event using given eventID and attendeeID to see if they already signed up
+         * Retrieves attendee_event(s) based on value(s) provided
          */
-        function getAttendeeEventByEventAttendee($eventID, $attendeeID){
+        function getAllAttendeeEvents($eventID = 0, $attendeeID = 0){
             try{
                 include_once("./classes/AttendeeEvent.class.php");
-                $query = "SELECT * FROM attendee_event WHERE event = :event AND attendee = :attendee";
-                $stmt = $this->db->prepare($query);
-                $stmt->execute(array(
-                    ":event" => $eventID,
-                    ":attendee" => $attendeeID
-                )); 
-                $stmt->setFetchMode(PDO::FETCH_CLASS, "AttendeeEvent");
-                $data = $stmt->fetch();
-                return $data;
+                $query = "SELECT * FROM attendee_event ";
+
+                if($eventID == 0 && $attendeeID == 0){
+                    // No parameters supplied - so all attendee_event objects!
+                    $query .= "ORDER BY event";
+                    $stmt = $this->db->prepare(trim($query));
+                    $stmt->execute();
+                    $stmt->setFetchMode(PDO::FETCH_CLASS, "AttendeeEvent");
+                    return $stmt->fetchAll();
+                }
+                else if($eventID != 0 && $attendeeID != 0){
+                    // Both supplied - so a specific attendee_event object!
+                    $query .= "WHERE event = :event AND attendee = :attendee";
+                    $stmt = $this->db->prepare($query);
+                    $stmt->execute(array(
+                        ":event" => $eventID,
+                        ":attendee" => $attendeeID
+                    ));
+                    $stmt->setFetchMode(PDO::FETCH_CLASS, "AttendeeEvent");
+                    return $stmt->fetch();
+                }
+                else if($eventID != 0){
+                    // Can only have one attendee_event per event
+                    $query .= "WHERE event = :event";
+                    $stmt = $this->db->prepare($query);
+                    $stmt->execute(array(
+                        ":event" => $eventID
+                    ));  
+                    $stmt->setFetchMode(PDO::FETCH_CLASS, "AttendeeEvent");
+                    return $stmt->fetch();
+                }
+                else if($attendeeID != 0){
+                    // Can have multiple attendee_events per attendee!
+                    $query .= "WHERE attendee = :attendee";
+                    $stmt = $this->db->prepare($query);
+                    $stmt->execute(array(
+                        ":attendee" => $attendeeID
+                    ));
+                    $stmt->setFetchMode(PDO::FETCH_CLASS, "AttendeeEvent");
+                    return $stmt->fetchAll();
+                }
             }
             catch(PDOException $e){
-                die("There was a problem verifying registration!");
-            } 
+                die("There was a problem getting registrations!");
+            }
         }
 
         /**
