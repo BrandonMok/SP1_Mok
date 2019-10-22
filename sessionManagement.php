@@ -267,8 +267,9 @@
                         // IN CASE: user is event manager, double check to make sure E.M owns the event this session is associated with!
                         if($_SESSION["role"] == "event_manager"){
                             // Make sure event_manager owns the event trying to edit!!
-                            $managerEvent = $db->getManagerEventOBJ($event);    // retrieve manager_event object (only one will be returned)
-                            if(count($managerEvent) < 0 || $managerEvent[0]->getManager() != $_SESSION['id']){
+                            $managerEvent = $db->getAllManagerEvents($event, $_SESSION["id"]);    // retrieve manager_event object (only one will be returned)
+
+                            if(!isset($managerEvent) || empty($managerEvent)){
                                 $flag = false;
                                 echo "<p class='form-error-text'>** Invalid: Event for the session doesn't belong to you!</p>";
                             }
@@ -326,8 +327,7 @@
                                 // Event Managers also need to make a manager_session object to keep track of their created sessions
                                 if($_SESSION["role"] == "event_manager"){
                                     $lastCreatedSession = $db->getSession($lastID);
-
-                                    $eventManagerEvent = $db->getManagerEventOBJ($lastCreatedSession->getEvent()); // returns a managereventOBJ IF they owned that event
+                                    $eventManagerEvent = $db->getAllManagerEvents($lastCreatedSession->getEvent(), $_SESSION["id"]); // returns a managereventOBJ IF they owned that event
 
                                     // CHECK: Session created OK & that the created session's event is owned by the event_manager!
                                     // ONLY ALLOW EVENT_MANAGERS TO ADD/EDIT/DELETE THEIR OWN EVENTS!!

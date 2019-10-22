@@ -272,42 +272,83 @@
          * @param $managerID
          * Retreive MULTIPLE manager_event obj (eventID + managerID) based on MANAGERID
          */
-        function getAllManagerEventsOBJ($managerID){
-            try{
-                include_once("./classes/ManagerEvent.class.php");
-                $query = "SELECT * FROM manager_event WHERE manager = :managerID";
-                $stmt = $this->db->prepare($query);
-                $stmt->execute(array(
-                    ":managerID" => $managerID
-                ));
-                $stmt->setFetchMode(PDO::FETCH_CLASS, "ManagerEvent");
-                return $stmt->fetchAll();
-            }
-            catch(PDOException $e){
-                die("There was a problem retrieving events!");
-            } 
-        }
+        // function getAllManagerEventsOBJ($managerID){
+        //     try{
+        //         include_once("./classes/ManagerEvent.class.php");
+        //         $query = "SELECT * FROM manager_event WHERE manager = :managerID";
+        //         $stmt = $this->db->prepare($query);
+        //         $stmt->execute(array(
+        //             ":managerID" => $managerID
+        //         ));
+        //         $stmt->setFetchMode(PDO::FETCH_CLASS, "ManagerEvent");
+        //         return $stmt->fetchAll();
+        //     }
+        //     catch(PDOException $e){
+        //         die("There was a problem retrieving events!");
+        //     } 
+        // }
 
         /**
          * getManagerEvent
          * @param $eventID
          * Retrieves the manager_event object by the EVENTID
          */
-        function getManagerEventOBJ($eventID){
+        // function getManagerEventOBJ($eventID){
+        //     try{
+        //         include_once("./classes/ManagerEvent.class.php");
+        //         $query = "SELECT * FROM manager_event WHERE event = :eventID";
+        //         $stmt = $this->db->prepare($query);
+        //         $stmt->execute(array(
+        //             ":eventID" => $eventID
+        //         ));
+        //         $stmt->setFetchMode(PDO::FETCH_CLASS, "ManagerEvent");
+        //         return $stmt->fetchAll();
+        //     }
+        //     catch(PDOException $e){
+        //         die("There was a problem retrieving events!");
+        //     } 
+        // }
+
+
+        function getAllManagerEvents($eventID = 0, $managerID = 0){
             try{
                 include_once("./classes/ManagerEvent.class.php");
-                $query = "SELECT * FROM manager_event WHERE event = :eventID";
-                $stmt = $this->db->prepare($query);
-                $stmt->execute(array(
-                    ":eventID" => $eventID
-                ));
-                $stmt->setFetchMode(PDO::FETCH_CLASS, "ManagerEvent");
-                return $stmt->fetchAll();
+                $query = "SELECT * FROM manager_event WHERE ";
+
+                if($eventID != 0 && $managerID != 0){
+                    $query .= "event = :event AND manager = :manager";
+                    $stmt = $this->db->prepare($query);
+                    $stmt->execute(array(
+                        ":event" => $eventID,
+                        ":manager" => $managerID
+                    ));
+                    $stmt->setFetchMode(PDO::FETCH_CLASS, "ManagerEvent");
+                    return $stmt->fetch();
+                }
+                else if ($eventID != 0){
+                    $query .= "event = :event";
+                    $stmt = $this->db->prepare($query);
+                    $stmt->execute(array(
+                        ":event" => $eventID
+                    ));
+                    $stmt->setFetchMode(PDO::FETCH_CLASS, "ManagerEvent");
+                    return $stmt->fetchAll();
+                }
+                else if ($managerID != 0){
+                    $query .= "manager = :manager";
+                    $stmt = $this->db->prepare($query);
+                    $stmt->execute(array(
+                        ":manager" => $managerID
+                    ));      
+                    $stmt->setFetchMode(PDO::FETCH_CLASS, "ManagerEvent");
+                    return $stmt->fetchAll();            
+                }
             }
             catch(PDOException $e){
-                die("There was a problem retrieving events!");
+                die("There was a problem retrieving manager events!");
             } 
         }
+
 
         /**
          * getAllAttendeeEvents

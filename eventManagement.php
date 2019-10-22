@@ -33,14 +33,14 @@
                             }
                             else if($userRole == "event_manager"){
                                 // Make sure this event is the event_managers to be safe!
-                                $managerEvent = $db->getManagerEventOBJ($id);
-                                if(count($managerEvent) > 0 && $managerEvent[0]->getManager() == $_SESSION['id']){
-                                    // The manager owns this event if the eventID is under the manager_event event field
-                                    $event = $db->getEvent($id); 
-                                }
-                                else{
-                                    // REDIRECT: User doesn't have access to this event OR event doesn't exist
+                                $event = $db->getAllManagerEvents($id, $_SESSION['id']);    // specific manager_event object
+
+                                if(!isset($event) || empty($event)){
                                     redirect("admin");
+                                }
+                                else {
+                                    // Manager owns this event!
+                                    $event = $db->getEvent($id);
                                 }
                             }
 
@@ -82,7 +82,7 @@
                             echo $eventEditTable;
                         }// end if EDIT
                         else if($_GET["action"] == "delete"){
-                            $id = $_GET["id"];              
+                            $id = $_GET["id"];    // id of the event          
 
                             // Determine user's specific role to know which data to use
                             if($userRole == "admin"){
@@ -90,14 +90,15 @@
                             }
                             else if($userRole == "event_manager"){
                                 // Make sure this event is the event_managers to be safe!
-                                $managerEvent = $db->getManagerEventOBJ($id);
-                                if(count($managerEvent) > 0 && $managerEvent[0]->getManager() == $_SESSION['id']){
-                                    // The manager owns this event if the eventID is under the manager_event event field
-                                    $event = $db->getEvent($id); 
+                                $event = $db->getAllManagerEvents($id, $_SESSION["id"]);    // specific manager_event object
+                                
+                                // If not set, then not owned by the event_manager
+                                if(!isset($event) || empty($event)){
+                                    redirect("admin");                                    
                                 }
-                                else{
-                                    // REDIRECT: User doesn't have access to this event OR event doesn't exist
-                                    redirect("admin");
+                                else {
+                                    // $event is set so a manager_event object was retrieved - E.M owns the event!
+                                    $event = $db->getEvent($id);
                                 }
                             }
 
