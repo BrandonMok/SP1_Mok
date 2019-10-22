@@ -1048,17 +1048,36 @@
         }
 
         /**
-         * deleteManagerSessions
-         * @param $sessionID
-         * Deletes MANAGER_SESSION records based on sessionID
+         * deleteManagerSession
+         * @param $sessionID, $managerID
+         * Deletes manager_session based on value(s)
          */
-        function deleteManagerSession($sessionID){
+        function deleteManagerSession($sessionID = 0, $managerID = 0){
             try {
-                $query = "DELETE FROM manager_session WHERE session = :sessionID";
-                $stmt = $this->db->prepare($query);
-                $stmt->execute(array(
-                    ":sessionID" => $sessionID
-                ));
+                $query = "DELETE FROM manager_session WHERE ";
+                if($sessionID != 0 && $managerID != 0){
+                    $query .= "session = :session AND manager = :manager";
+                    $stmt = $this->db->prepare($query);
+                    $stmt->execute(array(
+                        ":session" => $sessionID,
+                        ":manager" => $managerID
+                    ));
+                }
+                else if($sessionID != 0){
+                    $query .= "session = :session";
+                    $stmt = $this->db->prepare($query);
+                    $stmt->execute(array(
+                        ":session" => $sessionID
+                    ));
+                }
+                else if($managerID != 0){
+                    $query .= "manager = :manager";
+                    $stmt = $this->db->prepare($query);
+                    $stmt->execute(array(
+                        ":manager" => $managerID
+                    ));
+                }
+
                 return $stmt->rowCount();
             }
             catch(PDOException $e){
