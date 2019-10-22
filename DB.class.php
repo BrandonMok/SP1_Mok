@@ -566,16 +566,36 @@
 
         /**
          * deleteManagerEvent
-         * @param $eventID 
-         * Delete manager event
+         * @param $eventID, $managerID
+         * Deletes manager_event object from value(s) provided
          */
-        function deleteManagerEvent($eventID){
+        function deleteManagerEvent($eventID = 0, $managerID = 0){
             try{
-                $query = "DELETE FROM manager_event WHERE event = :event";
-                $stmt = $this->db->prepare($query);
-                $stmt->execute(array(
-                    ":event" => $eventID
-                ));
+                $query = "DELETE FROM manager_event WHERE ";
+
+                if($eventID != 0 && $managerID != 0){
+                    $query .= "event = :event AND manager = :manager";
+                    $stmt = $this->db->prepare($query);
+                    $stmt->execute(array(
+                        ":event" => $eventID,
+                        ":manager" => $managerID
+                    ));
+                }
+                else if ($eventID != 0){
+                    $query .= "event = :event";
+                    $stmt = $this->db->prepare($query);
+                    $stmt->execute(array(
+                        ":event" => $eventID
+                    ));
+                }
+                else if ($managerID != 0){
+                    $query .= "manager = :manager";
+                    $stmt = $this->db->prepare($query);
+                    $stmt->execute(array(
+                        ":manager" => $managerID
+                    ));
+                }
+
                 return $stmt->rowCount();
             }
             catch(PDOException $e){
@@ -961,11 +981,11 @@
         function deleteAllSessions($sessionID){
             try{
                 // DELETE session object
-                $deleteSessionObj = $this->deleteSession($sessionID); 
+                $this->deleteSession($sessionID); 
 
                 // DELETE attendee_sessions + manager_sessions
-                $deleteAttendeeSession = $this->deleteAttendeeSession($sessionID);
-                $deleteManagerSession = $this->deleteManagerSession($sessionID);
+                $this->deleteAttendeeSession($sessionID);
+                $this->deleteManagerSession($sessionID);
             }
             catch(PDOException $e){
                 die("There was a problem deleting all of the event's sessions!");
