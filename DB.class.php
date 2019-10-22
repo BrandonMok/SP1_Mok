@@ -642,8 +642,6 @@
             } 
         }
 
-
-
         /**
          * deleteEventAndSession
          * @param $data
@@ -1013,35 +1011,35 @@
 
         /**
          * deleteAttendeeSession
-         * Deletes ATTENDEE_SESSION records based on sessionID
-         */
-        function deleteAttendeeSession($sessionID){
-            try{
-                $query = "DELETE FROM attendee_session WHERE session = :session";
-                $stmt = $this->db->prepare($query);
-                $stmt->execute(array(
-                    ":session" => $sessionID
-                ));
-                return $stmt->rowCount();
-            }
-            catch(PDOException $e){
-                die("There was a problem deleting attendee session!");
-            } 
-        }
-         
-        /**
-         * deleteAttendeeSessionBySessionAttendee
          * @param $sessionID, $attendeeID
-         * Deletes the attende_session by both the event and attendee
+         * Deletes attendee_session based on value(s)
          */
-        function deleteAttendeeSessionBySessionAttendee($sessionID, $attendeeID){
-            try{
-                $query = "DELETE FROM attendee_session WHERE session = :session AND attendee = :attendee";
-                $stmt = $this->db->prepare($query);
-                $stmt->execute(array(
-                    ":session" => $sessionID,
-                    ":attendee" => $attendeeID
-                ));
+        function deleteAttendeeSession($sessionID = 0, $attendeeID = 0){
+            try {
+                $query = "DELETE FROM attendee_session WHERE ";
+                if($sessionID != 0 && $attendeeID != 0){
+                    $query .= "session = :session AND attendee = :attendee";
+                    $stmt = $this->db->prepare($query);
+                    $stmt->execute(array(
+                        ":session" => $sessionID,
+                        ":attendee" => $attendeeID
+                    ));
+                }
+                else if($sessionID != 0){
+                    $query .= "session = :session";
+                    $stmt = $this->db->prepare($query);
+                    $stmt->execute(array(
+                        ":session" => $sessionID
+                    ));
+                }
+                else if ($attendeeID != 0){
+                    $query .= "attendee = :attendee";
+                    $stmt = $this->db->prepare($query);
+                    $stmt->execute(array(
+                        ":attendee" => $attendeeID
+                    ));
+                }
+
                 return $stmt->rowCount();
             }
             catch(PDOException $e){

@@ -37,7 +37,7 @@
                                 foreach($allAttendeeSessions as $aSession){
                                     $sessionOBJ = $db->getSession($aSession->getSession()); // Session Object the attendee is associated with
                                     if($sessionOBJ->getEvent() == $_GET["event"]){      // if session's event is for the event registration trying to delete
-                                        $deleteAttendeeSession = $db->deleteAttendeeSessionBySessionAttendee($sessionOBJ->getIdSession(), $_SESSION["id"]);
+                                        $deleteAttendeeSession = $db->deleteAttendeeSession($sessionOBJ->getIdSession(), $_SESSION["id"]);
                                     }
                                 }
 
@@ -49,7 +49,7 @@
                             }
                         }
                         else if(isset($_GET["session"])){ // SESSION
-                            $deleteAttendeeSession = $db->deleteAttendeeSessionBySessionAttendee($_GET["session"], $_SESSION["id"]);
+                            $deleteAttendeeSession = $db->deleteAttendeeSession($_GET["session"], $_SESSION["id"]);
                             if($deleteAttendeeSession > 0){
                                 redirect("registrations");
                             }
