@@ -585,16 +585,36 @@
 
         /**
          * deleteAttendeeEvent
-         * @param $eventID 
-         * Deletes the attendeEvent records 
+         * @param $eventID, $attendeeID
+         * Deletes attendee_event using value(s) provided
          */
-        function deleteAttendeeEvent($eventID){
+        function deleteAttendeeEvent($eventID = 0, $attendeeID = 0){
             try{
-                $query = "DELETE FROM attendee_event WHERE event = :event";
-                $stmt = $this->db->prepare($query);
-                $stmt->execute(array(
-                    ":event" => $eventID
-                ));
+                $query = "DELETE FROM attendee_event WHERE ";
+
+                if($eventID != 0 && $attendeeID != 0){
+                    $query .= "event = :event AND attendee = :attendee";
+                    $stmt = $this->db->prepare($query);
+                    $stmt->execute(array(
+                        ":event" => $eventID,
+                        ":attendee" => $attendeeID
+                    ));
+                }
+                else if ($eventID != 0){
+                    $query .= "event = :event";
+                    $stmt = $this->db->prepare($query);
+                    $stmt->execute(array(
+                        ":event" => $eventID
+                    ));
+                }
+                else if ($attendeeID != 0){
+                    $query .= "attendee = :attendee";
+                    $stmt = $this->db->prepare($query);
+                    $stmt->execute(array(
+                        ":attendee" => $attendeeID
+                    ));
+                }
+
                 return $stmt->rowCount();
             }
             catch(PDOException $e){
@@ -602,25 +622,7 @@
             } 
         }
 
-        /**
-         * deleteAttendeeEventByEventAttendee
-         * @param $eventID 
-         * Deletes the attendeEvent for a specific attendee event object given BOTH parameters 
-         */
-        function deleteAttendeeEventObject($eventID, $attendeeID){
-            try{
-                $query = "DELETE FROM attendee_event WHERE event = :event AND attendee = :attendee";
-                $stmt = $this->db->prepare($query);
-                $stmt->execute(array(
-                    ":event" => $eventID,
-                    ":attendee" => $attendeeID
-                ));
-                return $stmt->rowCount();
-            }
-            catch(PDOException $e){
-                die("There was a problem deleting attendee event!");
-            } 
-        }
+
 
         /**
          * deleteEventAndSession

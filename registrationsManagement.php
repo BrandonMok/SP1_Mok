@@ -29,8 +29,8 @@
                         // EVENT
                         if(isset($_GET["event"])){
                             // If deleting event, need to also delete the attendee_sessions!
-                           $deleteAttendeeEvent = $db->deleteAttendeeEventObject($_GET["event"], $_SESSION["id"]);
-                           if($deleteAttendeeEvent > 0){
+                            $deleteAttendeeEvent = $db->deleteAttendeeEvent($_GET["event"], $_SESSION["id"]);
+                            if($deleteAttendeeEvent > 0){
                                 // IF deleting attendee_event worked, also need to delete attendee_session
                                 // NEED THEIR SESSIONID they're tied to the session object whose eventID is to this event
                                 $allAttendeeSessions = $db->getAllAttendeeSessionsById($_SESSION["id"]);        // get all attendee_session objects 
@@ -42,11 +42,11 @@
                                 }
 
                                 redirect("registrations");
-                           }
-                           else {
+                            }
+                            else {
                                 // DELETE FAILED
                                 echo "<p class='form-error-text'>Deleting event failed!</p>";
-                           }
+                            }
                         }
                         else if(isset($_GET["session"])){ // SESSION
                             $deleteAttendeeSession = $db->deleteAttendeeSessionBySessionAttendee($_GET["session"], $_SESSION["id"]);

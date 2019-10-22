@@ -113,7 +113,7 @@
                                     "attendee" => $_GET["id"]
                                 );
                                 $dataFields["method"] = array(
-                                    "delete" => "deleteAttendeeEventObject" 
+                                    "delete" => "deleteAttendeeEvent" 
                                 );
                                 $delete = deleteAction($dataFields);
 
