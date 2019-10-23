@@ -217,19 +217,18 @@
                         $allSessions = $db->getAllSessions();  
                     }
                     else if($userRole == "event_manager"){
-                        // Retrieve sessions that this event manager OWNS!
-                        if(count($allEvents) > 0){
-                            // If the event manager has events, then grab sessions for that event
-                            // $allEVents contains eventObjects - use to find session object
-                            $allSessions = array();
-                            foreach($allEvents as $event){
-                                $temp =  $db->getAllSessionsPerEvent($event->getIdEvent());
-                                if(count($temp) > 0){
-                                    $allSessions[] = $temp[0];
-                                }
+                        $allSessions = array();
+
+                        // Get manager_session objects
+                        $managerSessions = $db->getAllManagerSessionsObj($_SESSION["id"]);
+                        if(count($managerSessions) > 0){
+                            // Cycle through all manager_session objects and get the session object it's associated with!
+                            foreach($managerSessions as $mSession){
+                                $allSessions[] = $db->getAllSessions($mSession->getSession());
                             }
                         }
                         else {
+                            // No manager_session objects, set to -1 
                             $allSessions = -1;
                         }
                     }

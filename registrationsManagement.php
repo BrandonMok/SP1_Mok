@@ -35,7 +35,7 @@
                                 // NEED THEIR SESSIONID they're tied to the session object whose eventID is to this event
                                 $allAttendeeSessions = $db->getAllAttendeeSessionsById($_SESSION["id"]);        // get all attendee_session objects 
                                 foreach($allAttendeeSessions as $aSession){
-                                    $sessionOBJ = $db->getSession($aSession->getSession()); // Session Object the attendee is associated with
+                                    $sessionOBJ = $db->getAllSessions($aSession->getSession()); // Session Object the attendee is associated with
                                     if($sessionOBJ->getEvent() == $_GET["event"]){      // if session's event is for the event registration trying to delete
                                         $deleteAttendeeSession = $db->deleteAttendeeSession($sessionOBJ->getIdSession(), $_SESSION["id"]);
                                     }

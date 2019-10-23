@@ -91,7 +91,7 @@
 
                     echo "<p class='section-heading'>{$event->getName()}</p>";
 
-                    $sessionsPerEvent = $db->getAllSessionsPerEvent($eventID);
+                    $sessionsPerEvent = $db->getAllSessions(0,$eventID);
                     if(count($sessionsPerEvent) > 0){
                         echo "<p class='section-heading'>Available Sessions</p>";
 

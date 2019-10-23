@@ -113,7 +113,7 @@
                                     if(count($attendeeSessions) > 0){
                                         foreach($attendeeSessions as $session){
                                             // GET the session object
-                                            $sessionObj = $db->getSession($session->getSession());    // get actual session object
+                                            $sessionObj = $db->getAllSessions($session->getSession());    // get actual session object
                                             
                                             /**
                                              * CHECK: if the session object for the attendee_session object event is the one

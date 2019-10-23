@@ -64,7 +64,7 @@
                             // Display the associated sessions for that event that the attendee signed up for
                             if(count($allRegistrationSessions) > 0){
                                 foreach($allRegistrationSessions as $session){
-                                    $sessionObj = $db->getSession($session->getSession());  // actual session object
+                                    $sessionObj = $db->getAllSessions($session->getSession());  // actual session object
                                     if(count($sessionObj) > 0 && $sessionObj->getEvent() == $registrationEvent->getIdEvent()){
                                         $registrationContainer .= "<hr/>
                                                                     <div class='registration-sessions'>

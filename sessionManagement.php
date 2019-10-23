@@ -27,7 +27,7 @@
 
                             // Determine user's specific role to know which data to use
                             if($userRole == "admin"){
-                                $session = $db->getSession($id); // get the selected event
+                                $session = $db->getAllSessions($id); // get the selected event
                             }
                             else if($userRole == "event_manager"){
                                 $managerSessions = $db->getAllManagerSessionsObj($_SESSION["id"]); // manager_session Objects!
@@ -35,7 +35,7 @@
                                 if(count($managerSessions) > 0){
                                     foreach($managerSessions as $mSession){
                                         if($mSession->getSession() == $id){
-                                            $session = $db->getSession($id);
+                                            $session = $db->getAllSessions($id);
                                             break;
                                         }
                                     }
@@ -94,7 +94,7 @@
 
                             // Determine user's specific role to know which data to use
                             if($userRole == "admin"){
-                                $session = $db->getSession($id); // get the selected event
+                                $session = $db->getAllSessions($id); // get the selected session
                             }
                             else if($userRole == "event_manager"){
                                 // get all the sessions related to this event manager!
@@ -102,7 +102,7 @@
                                 if(count($eventManagerSessions) > 0){
                                     foreach($eventManagerSessions as $v){
                                         if($v->getSession() == $id){
-                                            $session = $db->getSession($id);
+                                            $session = $db->getAllSessions($id);
                                             break;
                                         }
                                     }
@@ -326,7 +326,7 @@
 
                                 // Event Managers also need to make a manager_session object to keep track of their created sessions
                                 if($_SESSION["role"] == "event_manager"){
-                                    $lastCreatedSession = $db->getSession($lastID);
+                                    $lastCreatedSession = $db->getAllSessions($lastID);
                                     $eventManagerEvent = $db->getAllManagerEvents($lastCreatedSession->getEvent(), $_SESSION["id"]); // returns a managereventOBJ IF they owned that event
 
                                     // CHECK: Session created OK & that the created session's event is owned by the event_manager!

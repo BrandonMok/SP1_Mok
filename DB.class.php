@@ -651,7 +651,7 @@
 
                 // Deleting session
                 // Need to delete ATTENDEE_SESSIONS too! BUT... Need sessionIDs for those sessions associated w/deleted Event
-                $allSessionsPerEvent = $this->getAllSessionsPerEvent($eventID); // retrieve all relevent sessions from event
+                $allSessionsPerEvent = $this->getAllSessions(0,$eventID); // retrieve all relevent sessions from event
                 foreach($allSessionsPerEvent as $k => $v){
                     $deleteAttendeeSession = $this->deleteAttendeeSession($v->getIdSession()); // delete attendee_sesion objects
                     $deleteManagerSession = $this->deleteManagerSession($v->getIdSession());   // delete manager_session objects
@@ -686,66 +686,53 @@
         /* -------------------- SESSIONS -------------------- */
         /**
          * getAllSessions
-         * Retrieves all sessions for all events
+         * @param $sessionID, $eventID
+         * Retrieves session objects based on value(s)
          */
-        function getAllSessions(){
+        function getAllSessions($sessionID = 0, $eventID = 0){
             try{
                 include_once("./classes/Session.class.php");
-                $data = array();
-                $query = "SELECT * FROM session";
-                $stmt = $this->db->prepare($query);
-                $stmt->execute();
+                $query = "SELECT * FROM session ";
 
-                $stmt->setFetchMode(PDO::FETCH_CLASS, "Session");
-                $data = $stmt->fetchAll();
-
-                return $data;
+                if($sessionID == 0 && $eventID == 0){
+                    // No params passed - want all
+                    $stmt = $this->db->prepare(trim($query));
+                    $stmt->execute();
+                    $stmt->setFetchMode(PDO::FETCH_CLASS, "Session");
+                    return $stmt->fetchAll();
+                }
+                else if($sessionID != 0 && $eventID != 0){
+                    // BOth Params passed - want specific session object
+                    $query .= "WHERE idsession = :idsession AND event = :event";
+                    $stmt = $this->db->prepare($query);
+                    $stmt->execute(array(
+                        ":idsession" => $sessionID,
+                        ":event" => $eventID
+                    ));
+                    $stmt->setFetchMode(PDO::FETCH_CLASS, "Session");
+                    return $stmt->fetch();                    
+                }
+                else if($sessionID != 0){
+                    $query .= "WHERE idsession = :idsession";
+                    $stmt = $this->db->prepare($query);
+                    $stmt->execute(array(
+                        ":idsession" => $sessionID
+                    ));
+                    $stmt->setFetchMode(PDO::FETCH_CLASS, "Session");
+                    return $stmt->fetch();                  
+                }
+                else if($eventID != 0){
+                    $query .= "WHERE event = :event";
+                    $stmt = $this->db->prepare($query);
+                    $stmt->execute(array(
+                        ":event" => $eventID
+                    ));
+                    $stmt->setFetchMode(PDO::FETCH_CLASS, "Session");
+                    return $stmt->fetchAll();
+                }
             }
             catch(PDOException $e){
-                die("There was a problem getting all sessions!");
-            }
-        }
-
-        /**
-         * getSesssion
-         * @param $data
-         * Retrieves a session by its ID, so only 1 or 0 retrieved
-         */
-        function getSession($sessionID){
-            try{
-                include_once("./classes/Session.class.php");
-                $query = "SELECT * FROM session WHERE idsession = :idsession";
-                $stmt = $this->db->prepare($query);
-                $stmt->execute(array(
-                    ":idsession" => $sessionID
-                ));
-                $stmt->setFetchMode(PDO::FETCH_CLASS, "Session");
-                return $stmt->fetch();
-            }
-            catch(PDOException $e){
-                die("There was a problem retrieving session!");
-            }
-        }
-
-        /**
-         * getAllSessionsPerEvent
-         * @param $eventID
-         * Retrieves all sessions associated with a given eventID
-         */
-        function getAllSessionsPerEvent($eventID){
-            try{
-                include_once("./classes/Session.class.php");
-                $query = "SELECT * FROM session WHERE event = :event";
-                $stmt = $this->db->prepare($query);
-                $stmt->execute(array(
-                    ":event" => $eventID
-                ));
-                $stmt->setFetchMode(PDO::FETCH_CLASS, "Session");
-                $results = $stmt->fetchAll();
-                return $results;
-            }
-            catch(PDOException $e){
-                die("There was a problem retrieving sessions for the event!");
+                die("There was a problem retrieving sessions!");
             }
         }
 
