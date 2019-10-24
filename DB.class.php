@@ -760,49 +760,58 @@
         }
 
         /**
-         * getAllAttendeeSessionsById
-         * @param $attendeeID
-         * Retrieves all ATTENDEE_SESSION objects by the attendee's ID
+         * getAttendeeSessions
+         * @param $sessionID, $attendeeID
+         * Retrieves attendee_session based on value(s)
          */
-        function getAllAttendeeSessionsById($attendeeID){
-            try{
+        function getAttendeeSessions($sessionID = 0, $attendeeID = 0){
+            try {
                 include_once("./classes/AttendeeSession.class.php");
-                $query = "SELECT * FROM attendee_session WHERE attendee = :attendeeID";
-                $stmt = $this->db->prepare($query);
-                $stmt->execute(array(
-                    ":attendeeID" => $attendeeID
-                ));
-                $stmt->setFetchMode(PDO::FETCH_CLASS, "AttendeeSession");
-                $data = $stmt->fetchAll();
-                return $data;
-            }
-            catch(PDOException $e){
-                die("There was a problem retrieving attendee sessions!");
-            }
-        }
+                $query = "SELECT * FROM attendee_session ";
 
-        /**
-         * getAttendeeEventBySessionAttendee
-         * @param $eventID, $attendeeID
-         * Gets the attendee_session using given sessionID and attendeeID to see if they already signed up
-         */
-        function getAttendeeSessionBySessionAttendee($session, $attendeeID){
-            try{
-                include_once("./classes/AttendeeSession.class.php");
-                $query = "SELECT * FROM attendee_session WHERE session = :session AND attendee = :attendee";
-                $stmt = $this->db->prepare($query);
-                $stmt->execute(array(
-                    ":session" => $session,
-                    ":attendee" => $attendeeID
-                )); 
-                $stmt->setFetchMode(PDO::FETCH_CLASS, "AttendeeSession");
-                $data = $stmt->fetch();
-                return $data;
+                if($sessionID == 0 && $attendeeID == 0){
+                    // No params passed - want all
+                    $stmt = $this->db->prepare(trim($query));
+                    $stmt->execute();
+                    $stmt->setFetchMode(PDO::FETCH_CLASS, "AttendeeSession");
+                    return $stmt->fetchAll();
+                }
+                else if($sessionID != 0 && $attendeeID != 0){
+                    // Both passed - want specific object
+                    $query .= "WHERE session = :session AND attendee = :attendee";
+                    $stmt = $this->db->prepare($query);
+                    $stmt->execute(array(
+                        ":session" => $sessionID,
+                        ":attendee" => $attendeeID
+                    ));
+                    $stmt->setFetchMode(PDO::FETCH_CLASS, "AttendeeSession");
+                    return $stmt->fetch();
+                }
+                else if($sessionID != 0){
+                    $query .= "WHERE session = :session";
+                    $stmt = $this->db->prepare($query);
+                    $stmt->execute(array(
+                        ":session" => $sessionID
+                    ));
+                    $stmt->setFetchMode(PDO::FETCH_CLASS, "AttendeeSession");
+                    return $stmt->fetch();
+                }
+                else if($attendeeID != 0){
+                    $query .= "WHERE attendee = :attendee";
+                    $stmt = $this->db->prepare($query);
+                    $stmt->execute(array(
+                        ":attendee" => $attendeeID
+                    ));
+                    $stmt->setFetchMode(PDO::FETCH_CLASS, "AttendeeSession");
+                    return $stmt->fetchAll();
+                }
             }
             catch(PDOException $e){
-                die("There was a problem verifying registration!");
+                die("There was a problem retriving attendee session!");
             } 
         }
+
+
 
         /**
          * addManagerSession

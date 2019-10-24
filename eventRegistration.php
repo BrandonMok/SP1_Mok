@@ -32,7 +32,7 @@
                             // CASE: attendee_event object ALREADY EXISTS
 
                             // CHECK: attendee_session doesn't exist yet
-                            $attendeeSessions = $db->getAttendeeSessionBySessionAttendee($_GET["session"], $_SESSION["id"]);
+                            $attendeeSessions = $db->getAttendeeSessions($_GET["session"], $_SESSION["id"]);
                             if(isset($attendeeSessions) && !empty($attendeeSessions)){
                                 // Session already signed up for
                                 echo "<p class='form-error-text'>** You've already registered for this session!</p>";

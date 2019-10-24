@@ -26,7 +26,7 @@
 
                     // Retrieve all registrations for THIS ATTENDEE 
                     $allRegistrations = $db->getAllAttendeeEvents(0, $_SESSION["id"]);             // attendee_event
-                    $allRegistrationSessions = $db->getAllAttendeeSessionsById($_SESSION["id"]);    // attendee_session
+                    $allRegistrationSessions = $db->getAttendeeSessions(0, $_SESSION["id"]);    // attendee_session
 
                     if(count($allRegistrations) > 0){
                         $registrationContainer = "<div id='registration-container'>";

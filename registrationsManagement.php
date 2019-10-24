@@ -33,7 +33,7 @@
                             if($deleteAttendeeEvent > 0){
                                 // IF deleting attendee_event worked, also need to delete attendee_session
                                 // NEED THEIR SESSIONID they're tied to the session object whose eventID is to this event
-                                $allAttendeeSessions = $db->getAllAttendeeSessionsById($_SESSION["id"]);        // get all attendee_session objects 
+                                $allAttendeeSessions = $db->getAttendeeSessions(0,$_SESSION["id"]);        // get all attendee_session objects 
                                 foreach($allAttendeeSessions as $aSession){
                                     $sessionOBJ = $db->getAllSessions($aSession->getSession()); // Session Object the attendee is associated with
                                     if($sessionOBJ->getEvent() == $_GET["event"]){      // if session's event is for the event registration trying to delete

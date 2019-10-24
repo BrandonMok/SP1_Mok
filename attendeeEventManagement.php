@@ -109,7 +109,7 @@
 
                                 if($delete > 0){
                                     // DELETE attendee_session object too if it exists
-                                    $attendeeSessions = $db->getAllAttendeeSessionsById($_GET["id"]); // all attendee_session objects
+                                    $attendeeSessions = $db->getAttendeeSessions(0,$_GET["id"]); // all attendee_session objects
                                     if(count($attendeeSessions) > 0){
                                         foreach($attendeeSessions as $session){
                                             // GET the session object
