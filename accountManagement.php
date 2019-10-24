@@ -77,7 +77,7 @@
                                     "id" => $id,
                                 );
                                 $dataFields["method"] = array(
-                                    "delete" => "deleteUser"
+                                    "delete" => "deleteAllUserInfo"
                                 );
                                 $delete = deleteAction($dataFields);
 

@@ -211,10 +211,29 @@
                         ":idattendee" => $data[0]
                     ));
                     return $stmt->rowCount();
-             }
+                }
             }
             catch(PDOException $e){
                 die("There was a problem deleting user!");
+            } 
+        }
+
+        /**
+         * deleteAllUserInfo
+         * @param $data
+         * Deletes a user and all their relevant info (i.e. attendee_events + attendee_sessions)
+         */
+        function deleteAllUserInfo($data){
+            try {
+                $deleteUSR = $this->deleteUser($data);
+
+                if($deleteUSR > 0){
+                    $this->deleteAttendeeEvent(0,$data[0]);
+                    $this->deleteAttendeeSession(0,$data[0]);
+                }
+            }   
+            catch(PDOException $e){
+                die("There was a problem deleting user's record!");
             } 
         }
 
