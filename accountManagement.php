@@ -270,7 +270,7 @@
                         }
                         else {
                             // ERROR: No values supplied and/or field missing a value
-                            errorDisplay("Invalid inputs!");
+                            errorDisplay("Invalid: Inputs invalid and/or empty field!");
                         }
                     }// end if ADD
                 }// end if ACTION

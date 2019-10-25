@@ -33,8 +33,7 @@
             <?php
                 // Don't allow an already logged in user to make another account
                 if(isset($_SERVER["userLoggedIn"])){
-                    header('Location: events.php');
-                    exit;
+                    redirect("events");
                 }
 
                 if($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -63,15 +62,8 @@
                                 $id = $db->insertUser($newUser);
 
                                 if($id > 0){
-                                    // make custom full screen to display account created successfully?
-                                    // white rounded box
-                                    // green check mark
-                                    // sleep()
-
                                     echo "<p class='form-success-text'>Succesfully registered<i class='far fa-thumbs-up'></i></p>";
-
-                                    header("Location: login.php");
-                                    exit;
+                                    redirect("login");
                                 }
                                 else{
                                     // ERROR: failed to insert new user
@@ -81,12 +73,12 @@
                         }
                         else{
                             // ERROR Need all inputs to have value
-                            errorDisplay("Please enter a valid name and password!");
+                            errorDisplay("Invalid: Please enter a valid name and password!");
                         }
                     }
                     else {
                         // ERROR - Require user inputs
-                        errorDisplay("Please enter a valid name and password!");
+                        errorDisplay("Invalid: Please enter a valid name and password!");
                     }
                 }// end if
             ?>

@@ -309,7 +309,6 @@
                                         $managerEventObjID = $db->addManagerEvent($managerEventData); // call to make object
 
                                         if($managerEventObjID > 0){
-                                            // If all good, redirect
                                             redirect("admin");
                                         }
                                         else {
@@ -329,12 +328,12 @@
                             }
                             else{
                                 // ERROR: Something went wrong with value of inputs
-                                errorDisplay("Invalid inputs!");
+                                errorDisplay("Invalid: Venue doesn't exist!");
                             }
                         }
                         else{
                             // ERROR: No values supplied and/or field missing a value
-                            errorDisplay("Invalid inputs!");
+                            errorDisplay("Invalid: Inputs invalid and/or empty field!");
                         }
                     }// end action ADD processing
                 }// end if ACTION is present

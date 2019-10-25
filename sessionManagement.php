@@ -359,12 +359,12 @@
                             }
                             else{
                                 // ERROR: Something went wrong with value of inputs
-                                errorDisplay("Invalid inputs!");
+                                errorDisplay("Invalid: Event doesn't exist!");
                             }
                         }
                         else{
                             // ERROR: No values supplied and/or field missing a value
-                            errorDisplay("Invalid inputs!");
+                            errorDisplay("Invalid: Invalid inputs and/or empty field(s)!");
                         }
                     }// end action ADD processing
                 }// end if ACTION is present
