@@ -288,7 +288,6 @@
                     else {
                         $delete = call_user_func_array(array($db, $data["method"]["delete"]), array($data["fields"]["id"]));
                     }
-                    // $delete = call_user_func_array(array($db, $data["method"]["delete"]), array($data["fields"]["id"]));
 
                     if($delete > 0){ // if rowcount wasn't 0 -> delete user
                         return $delete;
@@ -396,10 +395,6 @@
         foreach($_SESSION as $sessionVar){
             unset($sessionVar);
         }
-
-        // unset($_SESSION['userLoggedIn']);   // unset login session variable
-        // unset($_SESSION['role']);           // unset role variable
-        // unset($_SESSION['currentUSR']);     // unset current user's name
         unset($_SESSION);               
         
         if(isset($_COOKIE[session_name()])){
