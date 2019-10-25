@@ -51,9 +51,6 @@
                                                                     <a href='./registrationsManagement.php?event={$registrationEvent->getIdEvent()}&action=delete'>
                                                                         <i class='fas fa-times'></i>
                                                                     </a><br/>
-                                                                    <a href='./registrationsManagement.php?event={$registrationEvent->getIdEvent()}&action=edit'>
-                                                                        <i class='fas fa-edit'></i>
-                                                                    </a>
                                                                     <a href='./eventRegistration.php?id={$registrationEvent->getIdEvent()}'>
                                                                         <i class='fas fa-plus'></i>
                                                                     </a>
