@@ -85,22 +85,21 @@
                                 }
 
 
-                               header("Location: events.php");
-                               exit;
+                                redirect("events");
                             }
                             else{
                                 // Invalid Login
-                                echo "<p class='form-error-text'>**Invalid Login. Please try again!</p>";
+                                errorDisplay("Invalid Login. Please try again!");
                             }
                         }
                         else{
                             // Invalid login
-                            echo "<p class='form-error-text'>**Invalid Login. Please try again!</p>";
+                            errorDisplay("Invalid Login. Please try again!");
                         }
                     }
                     else {
                         // Invalid Login - empty input
-                        echo "<p class='form-error-text'>* Please enter valid Login!</p>";
+                        errorDisplay("Invalid Login. Please try again!");
                     }
                 }// end if
             ?>

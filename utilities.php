@@ -387,6 +387,15 @@
             </a>";
     }
 
+    /**
+     * errorDisplay
+     * @param $msg
+     * Reusable function to display error messages to user (i.e. invalid input)
+     */
+    function errorDisplay($msg){
+        echo "<p class='form-error-text'>** {$msg}</p>";
+    }
+
 
     /**
      * End the session
