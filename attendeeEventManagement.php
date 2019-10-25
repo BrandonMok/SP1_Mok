@@ -268,7 +268,7 @@
                             }
                             else {
                                 // REDIRECT: Event & user now found
-                                echo "<p class='form-error-text'>** Invalid inputs: Event or attendee doesn't exist!</p>";
+                                errorDisplay("Invalid inputs: Event and/or attendee doesn't exist!");
                             }
                         }// end if isset
                     }// end action ADD processing

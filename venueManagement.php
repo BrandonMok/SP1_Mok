@@ -165,7 +165,7 @@
                         // Specific extra validation before passing into reusable edit post check
                         if((alphabeticSpace($name) == false || alphabetic($name) == false) || numbers($name) == 1){
                             // ERROR: No letters and has numbers
-                            echo "<p class='form-error-text'>** Please enter a valid name!</p>";
+                            errorDisplay("Please enter a valid name!");
                         }
                         if($capacity == "" || empty($capacity)){ // if capacity is empty, simply set to 0
                             $capacity = 0;
@@ -212,7 +212,7 @@
                         }
                         else{
                             // ERROR: No values supplied and/or field missing a value
-                            echo "<p class='form-error-text'>** Invalid inputs!</p>";
+                            errorDisplay("Invalid inputs!");
                         }
                     }// end action ADD processing
                 }// end if ACTION is present

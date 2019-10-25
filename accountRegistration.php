@@ -50,7 +50,7 @@
                             
                             if($userCheck > 0){
                                 // Display account exists MSG
-                                echo "<p class='form-error-text'>**You already have an account!</p>";
+                                errorDisplay("You already have an account!");
                             }
                             else{
                                 // Able to make a new account
@@ -75,18 +75,18 @@
                                 }
                                 else{
                                     // ERROR: failed to insert new user
-                                    echo "<p class='form-error-text'>**Failed to create account!</p>";
+                                    errorDisplay("Failed to create account!");
                                 }
                             }
                         }
                         else{
                             // ERROR Need all inputs to have value
-                            echo "<p class='form-error-text'>*Please enter a valid name and password!</p>";
+                            errorDisplay("Please enter a valid name and password!");
                         }
                     }
                     else {
                         // ERROR - Require user inputs
-                        echo "<p class='form-error-text'>* Please enter a valid name and password!</p>";
+                        errorDisplay("Please enter a valid name and password!");
                     }
                 }// end if
             ?>

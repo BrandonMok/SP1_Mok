@@ -35,7 +35,7 @@
                             $attendeeSessions = $db->getAttendeeSessions($_GET["session"], $_SESSION["id"]);
                             if(isset($attendeeSessions) && !empty($attendeeSessions)){
                                 // Session already signed up for
-                                echo "<p class='form-error-text'>** You've already registered for this session!</p>";
+                                errorDisplay("Session is already registered!");
                             }
                             else {
                                 // CASE: User signed up for event already, but not the session

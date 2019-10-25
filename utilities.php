@@ -152,7 +152,8 @@
                     exit;
                 }
                 else{
-                    echo "<p class='form-error-text '>** Editing {$fields['area']} failed!</p>";
+                    // echo "<p class='form-error-text '>** Editing {$fields['area']} failed!</p>";
+                    errorDisplay("Editing {$fields['area']} failed!");
                 }
             }
         }
@@ -209,7 +210,7 @@
                             }
                             else {
                                 $flag = false;
-                                $msg = "<p class='form-error-text center-element'>Invalid input!</p>";
+                                $msg = "Invalid input!";
                             }
                         }
                         else if($type == "sn"){
@@ -219,7 +220,7 @@
                             }
                             else {
                                 $flag = false;
-                                $msg = "<p class='form-error-text center-element'>Invalid input!</p>";
+                                $msg = "Invalid input!";
                             }
                         }
                         else if($type == "s"){      
@@ -229,7 +230,7 @@
                             }
                             else {
                                 $flag = false;
-                                $msg = "<p class='form-error-text center-element'>Invalid input!</p>";
+                                $msg = "Invalid input!";
                             }
                         }
                         else if($type == "date"){
@@ -239,7 +240,7 @@
                             }
                             else{
                                 $flag = false;
-                                $msg = "<p class='form-error-text center-element'>Invalid input!</p>";
+                                $msg = "Invalid input!";
                             }
                         }
                     }
@@ -255,12 +256,13 @@
                     return $lastID;
                 }
                 else{
-                    echo "<p class='form-error-text'>** Adding {$fields['area']} failed!</p>";
+                    // echo "<p class='form-error-text'>** Adding {$fields['area']} failed!</p>";
+                    errorDisplay("Adding {$fields['area']} failed!");
                 }
             }
             else {
                 // error occured with formats
-                echo $msg;
+                echo $this->errorDisplay($msg);
             }
         }
     }

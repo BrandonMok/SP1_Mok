@@ -45,7 +45,7 @@
                             }
                             else {
                                 // DELETE FAILED
-                                echo "<p class='form-error-text'>Deleting event failed!</p>";
+                                errorDisplay("Deleting event failed!");
                             }
                         }
                         else if(isset($_GET["session"])){ // SESSION
@@ -55,7 +55,7 @@
                             }
                             else {
                                 // DELETE FAILED
-                                echo "<p class='form-error-text'>Deleting session for event failed!</p>";
+                                errorDisplay("Deleting session for event failed!");
                             }
                         }
                         else {

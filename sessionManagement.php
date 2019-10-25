@@ -253,11 +253,11 @@
 
                         if(date3($datestart) == false || date3($dateend) == false){
                             $flag = false;
-                            echo "<p class='form-error-text'>** Invalid date format!</p>";
+                            errorDisplay("Invalid: Date format not in yyyy-mm-dd hh:mm:ss format!");
                         }
                         if(is_numeric($numberAllowed) == false){
                             $flag = false;
-                            echo "<p class='form-error-text'>** Invalid: Number allowed isn't a valid value!</p>";
+                            errorDisplay("Invalid: Number allowed isn't a valid value!");
                         }
                         $findEvent = $db->getEvent(intval($event));
                         if(count($findEvent) == 0 || empty($findEvent)){
@@ -271,7 +271,7 @@
 
                             if(!isset($managerEvent) || empty($managerEvent)){
                                 $flag = false;
-                                echo "<p class='form-error-text'>** Invalid: Event for the session doesn't belong to you!</p>";
+                                errorDisplay("Invalid: Event for the session doesn't belong to you!");
                             }
                         }
 
@@ -295,7 +295,7 @@
                             editPost($dataFields);
                         }
                         else {
-                            echo "<p class='form-error-text'>** Invalid inputs</p>";
+                            errorDisplay("Invalid inputs");
                         }
                     }// end EDIT post processing
                     else if($_GET["action"] == "add") {
@@ -345,12 +345,12 @@
                                         }
                                         else {
                                             // ERROR: Making manager_session failed!
-                                            echo "<p class='form-error-text'>** Creating new session as event manager failed!</p>";
+                                            errorDisplay("Creating new session failed!");
                                         }
                                     }
                                     else {
                                         // ERROR: Making manager_session  failed!
-                                        echo "<p class='form-error-text'>** Creating new session as event manager failed!</p>";
+                                        errorDisplay("Creating new session failed!");
                                     }
                                 }
 
@@ -359,12 +359,12 @@
                             }
                             else{
                                 // ERROR: Something went wrong with value of inputs
-                                echo "<p class='form-error-text'>** Invalid inputs!</p>";
+                                errorDisplay("Invalid inputs!");
                             }
                         }
                         else{
                             // ERROR: No values supplied and/or field missing a value
-                            echo "<p class='form-error-text'>** Invalid inputs!</p>";
+                            errorDisplay("Invalid inputs!");
                         }
                     }// end action ADD processing
                 }// end if ACTION is present

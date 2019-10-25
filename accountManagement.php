@@ -206,7 +206,7 @@
                         // If not in range or any of options, defaults to role of 0
                         if($role < 1 || $role > 3){
                             // ERROR - not in range
-                            echo "<p class='form-error-text'>** Please enter a valid role!</p>";
+                            errorDisplay("Please enter a valid role!");
                         }
                         else {
                             // Perform EDIT POST REQUEST Proccessing
@@ -270,7 +270,7 @@
                         }
                         else {
                             // ERROR: No values supplied and/or field missing a value
-                            echo "<p class='form-error-text'>** Invalid inputs!</p>";
+                            errorDisplay("Invalid inputs!");
                         }
                     }// end if ADD
                 }// end if ACTION

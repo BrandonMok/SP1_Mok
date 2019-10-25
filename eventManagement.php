@@ -232,16 +232,16 @@
 
                         if(!date3($datestart) || !date3($dateend)){
                             $flag = false;
-                            echo "<p class='form-error-text'>** Invalid date format!</p>";
+                            errorDisplay("Invalid: Date format not in yyyy-mm-dd hh:mm:ss format!");
                         }
                         if(!is_numeric($numberAllowed)){
                             $flag = false;
-                            echo "<p class='form-error-text'>** Invalid: Number allowed isn't a valid value!</p>";
+                            errorDisplay("Invalid: Number allowed isn't a valid value!");
                         }
                         $findVenue = $db->getVenue(intval($venue));
                         if(count($findVenue) <= 0){
                             $flag = false;
-                            echo "<p class='form-error-text'>** Invalid: Venue doesn't exist!</p>";
+                            errorDisplay("Invalid: Venue doesn't exist!");
                         }
 
 
@@ -264,7 +264,7 @@
                             editPost($dataFields);
                         }
                         else {
-                            echo "<p class='form-error-text'>** Invalid inputs</p>";
+                            errorDisplay("Invalid inputs");
                         }
                     }// end EDIT post processing
                     else if($_GET["action"] == "add") {
@@ -314,12 +314,12 @@
                                         }
                                         else {
                                             // ERROR: Making manager_event object failed!
-                                            echo "<p class='form-error-text'>** Creating new event as event manager failed!</p>";
+                                            errorDisplay("Creating new event failed!");
                                         }
                                     }
                                     else {
                                         // ERROR: Event trying to associate with failed!
-                                        echo "<p class='form-error-text'>** Creating new event as event manager failed!</p>";
+                                        errorDisplay("Creating new event failed!");
                                     }
                                 }// end if event manager
                                 
@@ -329,12 +329,12 @@
                             }
                             else{
                                 // ERROR: Something went wrong with value of inputs
-                                echo "<p class='form-error-text'>** Invalid inputs!</p>";
+                                errorDisplay("Invalid inputs!");
                             }
                         }
                         else{
                             // ERROR: No values supplied and/or field missing a value
-                            echo "<p class='form-error-text'>** Invalid inputs!</p>";
+                            errorDisplay("Invalid inputs!");
                         }
                     }// end action ADD processing
                 }// end if ACTION is present
