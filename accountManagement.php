@@ -165,7 +165,6 @@
 
 
                         // case when input isn't in range after switch
-                        // If not in range or any of options, defaults to role of 0
                         if($enteredRole < 1 || $enteredRole > 3){
                             // ERROR - not in range
                             errorDisplay("Please enter a valid role!");
