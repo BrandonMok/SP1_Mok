@@ -125,9 +125,6 @@ div#back-arrow-container {
     margin-top: 2em;
 }
 
-/* .fontawesome-icons {
-    font-size: 3rem;
-} */
 .fontawesome-icons:hover {
     color:#29E789;
 }
@@ -240,7 +237,7 @@ i {
     background-color: #f2f2f2;
 }
 .admin-table tr:hover {
-    background-color: #656f7c;
+    background-color: #b8b8b8;
 }
 .admin-table th {
     padding: 1em;
