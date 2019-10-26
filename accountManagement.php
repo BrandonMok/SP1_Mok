@@ -19,7 +19,6 @@
             // ADMINS only
             if(isset($_SESSION['userLoggedIn']) && isset($_SESSION['role'])){
                 if($_SESSION["role"] == "admin"){
-                    // ADMIN
                     // Check if both ID and Action were passed = edit and delete processes can continue
                     if(managementEditDeleteCheck()){
                         if($_GET["action"] == "edit"){
@@ -86,40 +85,18 @@
 
                             // Get user now to display delete information
                             $specificUser = $db->getUser($id);
-
-                            // DELETE USER HTML
-                            echo "<h2 class='section-heading'>Delete User</h2>";
-                            $deleteUserTable = "<div class='admin-table-container'> 
-                                                    <table class='admin-table'>
-                                                        <tr>
-                                                            <th>ID</th>
-                                                            <th>Name</th>
-                                                            <th>Password</th>
-                                                            <th>Role</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>{$specificUser->getIdAttendee()}</td>
-                                                            <td>{$specificUser->getName()}</td>
-                                                            <td>{$specificUser->getPassword()}</td>
-                                                            <td>{$specificUser->getRole()}</td>
-                                                        </tr>
-                                                    </table>
-                                                </div>";
-
-                            echo $deleteUserTable;
-
-                            // Yes & no options to delete action
-                            echo "<h2 class='section-heading'>Are you sure you want to delete the selected account?</h2><br/>";
-                            $optionDiv = "<div id='confirm-delete-container' class='center-element'>
-                                                <a href='./accountManagement.php?id={$specificUser->getIdAttendee()}&action=delete&confirm=yes'>
-                                                    <div class='delete-btn' id='confirm-delete-btn'>Yes</div>
-                                                </a>
-                                                <a href='./accountManagement.php?id={$specificUser->getIdAttendee()}&action=delete&confirm=no'>
-                                                    <div class='delete-btn' id='deny-delete-btn'>No</div>
-                                                </a>
-                                            </div>";
-                            echo $optionDiv;
-
+                            $deleteData = array();
+                            $deleteData["area"] = "User";
+                            $deleteData["th"] = array("ID", "Name", "Password", "Role");
+                            $deleteData["td"] = array(
+                                $specificUser->getIdAttendee(),
+                                $specificUser->getName(),
+                                $specificUser->getPassword(),
+                                $specificUser->getRole()
+                            );
+                            $deleteData["choices"]["confirm"] = "./accountManagement.php?id={$specificUser->getIdAttendee()}&action=delete&confirm=yes";
+                            $deleteData["choices"]["cancel"] = "./accountManagement.php?id={$specificUser->getIdAttendee()}&action=delete&confirm=no";
+                            confirmDeleteHtml($deleteData);
                         }
                         else {
                             // REDIRECT: something else besides edit or delete was passed

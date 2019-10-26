@@ -309,6 +309,40 @@
 
 
     /**
+     * confirmDeleteHtml
+     * @param $data
+     * Reusable function for delete action in management files
+     * Displays the HTML relevant for the object to delete
+     */
+    function confirmDeleteHtml($data){
+        $container = "<h2 class='section-heading'>Delete {$data['area']}</h2>";
+        $container .= "<div class='admin-table-container'> 
+                            <table class='admin-table'>
+                                <tr>";
+        foreach($data["th"] as $th){
+            $container .= "<th>{$th}</th>";
+        }
+        $container .= "</tr>
+                        <tr>";
+
+        foreach($data["td"] as $td){
+            $container .= "<td>{$td}</td>";
+        }
+        $container .= "</tr></table></div>";
+        $container .= "<h2 class='section-heading'>Are you sure you want to delete the selected {$data['area']}?</h2><br/>";
+        $container .= "<div id='confirm-delete-container' class='center-element'>
+                            <a href='{$data['choices']['confirm']}'>
+                                <div class='delete-btn' id='confirm-delete-btn'>Yes</div>
+                            </a>
+                            <a href='{$data['choices']['cancel']}'>
+                                <div class='delete-btn' id='deny-delete-btn'>No</div>
+                            </a>
+                        </div>";
+        echo $container;
+    }
+
+
+    /**
      * managementAddCheck
      * Checks to see if the action in URL is set - used to double check for add action
      */
