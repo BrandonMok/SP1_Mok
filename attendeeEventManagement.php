@@ -112,9 +112,7 @@
                                     $attendeeSessions = $db->getAttendeeSessions(0,$_GET["id"]); // all attendee_session objects
                                     if(count($attendeeSessions) > 0){
                                         foreach($attendeeSessions as $session){
-                                            // GET the session object
                                             $sessionObj = $db->getAllSessions($session->getSession());    // get actual session object
-                                            
                                             /**
                                              * CHECK: if the session object for the attendee_session object event is the one
                                              *  whose eventID is the one deleting from the attendee_event, then delete the attendee_session too
@@ -127,39 +125,21 @@
                                         }   
                                     }
                                 }
-
                                 redirect("admin");
                             }
 
-                            // event SPECIFIC TABLE W/btns
-                            echo "<h2 class='section-heading'>Delete Attendee Event</h2>";
-                            $deleteInfo = "<div class='admin-table-container'>
-                                            <table class='admin-table'>
-                                                <tr>
-                                                    <th>Event</th>
-                                                    <th>Attendee</th>
-                                                    <th>Paid</th>
-                                                </tr>
-                                                <tr>
-                                                    <td>{$attendeeEvent->getEvent()}</td>
-                                                    <td>{$attendeeEvent->getAttendee()}</td>
-                                                    <td>{$attendeeEvent->getPaid()}</td>
-                                                </tr>
-                                            </table>
-                                        </div>";
-                            echo $deleteInfo;
-
-                            // Yes & no options to delete action
-                            echo "<h2 class='section-heading'>Are you sure you want to delete the selected attendee event?</h2><br/>";
-                            $optionDiv = "<div id='confirm-delete-container' class='center-element'>
-                                                <a href='./attendeeEventManagement.php?id={$attendeeEvent->getAttendee()}&event={$attendeeEvent->getEvent()}&action=delete&confirm=yes'>
-                                                    <div class='delete-btn' id='confirm-delete-btn'>Yes</div>
-                                                </a>
-                                                <a href='./attendeeEventManagement.php?id={$attendeeEvent->getAttendee()}&event={$attendeeEvent->getEvent()}&action=delete&confirm=no'>
-                                                    <div class='delete-btn' id='deny-delete-btn'>No</div>
-                                                </a>
-                                            </div>";
-                            echo $optionDiv;
+                             // Data to use reusable confirmDeleteHtmL function
+                             $deleteData = array();
+                             $deleteData["area"] = "Attendee Event";
+                             $deleteData["th"] = array("Event", "Attendee", "Paid");
+                             $deleteData["td"] = array(
+                                $attendeeEvent->getEvent(),
+                                $attendeeEvent->getAttendee(),
+                                $attendeeEvent->getPaid()
+                             );
+                             $deleteData["choices"]["confirm"] = "./attendeeEventManagement.php?id={$attendeeEvent->getAttendee()}&event={$attendeeEvent->getEvent()}&action=delete&confirm=yes";
+                             $deleteData["choices"]["cancel"] = "./attendeeEventManagement.php?id={$attendeeEvent->getAttendee()}&event={$attendeeEvent->getEvent()}&action=delete&confirm=no";
+                             confirmDeleteHtml($deleteData);
                         }// end elseif
                     }
                     else if(isset($_GET["action"])){

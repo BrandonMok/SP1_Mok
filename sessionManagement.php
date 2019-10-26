@@ -127,57 +127,34 @@
                                     "id" => $id
                                 );
                                 $dataFields["method"] = array(
-                                    "delete" => "deleteAllSessions"   // Special case for events -> need to delete everythin associated with the deleted event
+                                    "delete" => "deleteAllSessions"   // Special case for events -> need to delete everything associated with the deleted event
                                 );
                                 $delete = deleteAction($dataFields);
 
                                 if(count($delete) > 0){
-                                    /**
-                                     * Event Managers also need to delete their manager_session obj when deleting entire session
-                                     */
+                                    // Event Managers also need to delete their manager_session obj when deleting entire session!
                                     if($userRole == "event_manager"){
                                         $db->deleteManagerSession($id);
                                     }
                                 }
-
                                 redirect("admin");
                             }
 
-                            // event SPECIFIC TABLE W/btns
-                            echo "<h2 class='section-heading'>Delete Session</h2>";
-                            $deleteInfo = "<div class='admin-table-container'>
-                                            <table class='admin-table'>
-                                                <tr>
-                                                    <th>ID</th>
-                                                    <th>Name</th>
-                                                    <th>Number Allowed</th>
-                                                    <th>Event</th>   
-                                                    <th>Start Date</th>
-                                                    <th>End Date</th>   
-                                                </tr>
-                                                <tr>
-                                                    <td>{$session->getIdSession()}</td>
-                                                    <td>{$session->getName()}</td>
-                                                    <td>{$session->getNumberAllowed()}</td>
-                                                    <td>{$session->getEvent()}</td>
-                                                    <td>{$session->getStartDate()}</td>
-                                                    <td>{$session->getEndDate()}</td>
-                                                </tr>
-                                            </table>
-                                        </div>";
-                            echo $deleteInfo;
-
-                            // Yes & no options to delete action
-                            echo "<h2 class='section-heading'>Are you sure you want to delete the selected session?</h2><br/>";
-                            $optionDiv = "<div id='confirm-delete-container' class='center-element'>
-                                                <a href='./sessionManagement.php?id={$session->getIdSession()}&action=delete&confirm=yes'>
-                                                    <div class='delete-btn' id='confirm-delete-btn'>Yes</div>
-                                                </a>
-                                                <a href='./sessionManagement.php?id={$session->getIdSession()}&action=delete&confirm=no'>
-                                                    <div class='delete-btn' id='deny-delete-btn'>No</div>
-                                                </a>
-                                            </div>";
-                            echo $optionDiv;
+                            // Data to use reusable confirmDeleteHtmL function
+                            $deleteData = array();
+                            $deleteData["area"] = "Session";
+                            $deleteData["th"] = array("ID", "Name", "Number Allowed", "Event", "Start Date", "End Date");
+                            $deleteData["td"] = array(
+                                $session->getIdSession(),
+                                $session->getName(),
+                                $session->getNumberAllowed(),
+                                $session->getEvent(),
+                                $session->getStartDate(),
+                                $session->getEndDate()
+                            );
+                            $deleteData["choices"]["confirm"] = "./sessionManagement.php?id={$session->getIdSession()}&action=delete&confirm=yes";
+                            $deleteData["choices"]["cancel"] = "./sessionManagement.php?id={$session->getIdSession()}&action=delete&confirm=no";
+                            confirmDeleteHtml($deleteData);
                         }
                     }
                     else if(managementAddCheck()){
