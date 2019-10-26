@@ -148,8 +148,7 @@
                 $rowCount = call_user_func_array(array($db, $fields["method"]["update"] ), array($changesArray));
 
                 if($rowCount > 0){
-                    header("Location: admin.php");
-                    exit;
+                    redirect("admin");
                 }
                 else{
                     // echo "<p class='form-error-text '>** Editing {$fields['area']} failed!</p>";
@@ -262,7 +261,7 @@
             }
             else {
                 // error occured with formats
-                echo $this->errorDisplay($msg);
+                echo errorDisplay($msg);
             }
         }
     }

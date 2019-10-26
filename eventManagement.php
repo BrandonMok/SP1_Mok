@@ -113,46 +113,24 @@
                                     "delete" => "deleteEventAndSession"   // Special case for events -> need to delete everythin associated with the deleted event
                                 );
                                 $delete = deleteAction($dataFields);
-
                                 redirect("admin");
                             }
 
-
-                            // event SPECIFIC TABLE W/btns
-                            echo "<h2 class='section-heading'>Delete event</h2>";
-                            $deleteInfo = "<div class='admin-table-container'>
-                                            <table class='admin-table'>
-                                                <tr>
-                                                    <th>ID</th>
-                                                    <th>Name</th>
-                                                    <th>Date Start</th>
-                                                    <th>Date End</th>
-                                                    <th>Number Allowed</th>
-                                                    <th>Venue</th> 
-                                                </tr>
-                                                <tr>
-                                                    <td>{$event->getIdEvent()}</td>
-                                                    <td>{$event->getName()}</td>
-                                                    <td>{$event->getDateStart()}</td>
-                                                    <td>{$event->getDateEnd()}</td>
-                                                    <td>{$event->getNumberAllowed()}</td>
-                                                    <td>{$event->getVenue()}</td>
-                                                </tr>
-                                            </table>
-                                        </div>";
-                            echo $deleteInfo;
-
-                            // Yes & no options to delete action
-                            echo "<h2 class='section-heading'>Are you sure you want to delete the selected event?</h2><br/>";
-                            $optionDiv = "<div id='confirm-delete-container' class='center-element'>
-                                                <a href='./eventManagement.php?id={$event->getIdEvent()}&action=delete&confirm=yes'>
-                                                    <div class='delete-btn' id='confirm-delete-btn'>Yes</div>
-                                                </a>
-                                                <a href='./eventManagement.php?id={$event->getIdEvent()}&action=delete&confirm=no'>
-                                                    <div class='delete-btn' id='deny-delete-btn'>No</div>
-                                                </a>
-                                            </div>";
-                            echo $optionDiv;
+                            // Data for delete event html
+                            $deleteData = array();
+                            $deleteData["area"] = "Event";
+                            $deleteData["th"] = array("ID", "Name", "Date Start", "Date End", "Number Allowed", "Venue");
+                            $deleteData["td"] = array(
+                                $event->getIdEvent(),
+                                $event->getName(),
+                                $event->getDateStart(),
+                                $event->getDateEnd(),
+                                $event->getNumberAllowed(),
+                                $event->getVenue()
+                            );
+                            $deleteData["choices"]["confirm"] = "./eventManagement.php?id={$event->getIdEvent()}&action=delete&confirm=yes";
+                            $deleteData["choices"]["cancel"] = "./eventManagement.php?id={$event->getIdEvent()}&action=delete&confirm=no";
+                            confirmDeleteHtml($deleteData);
                         }// end if DELETE
                         else {
                             // REDIRECT: something else besides edit or delete was passed
@@ -278,8 +256,9 @@
 
                         // CHECK: if all inputs were given a value
                         if(isset($name) && isset($datestart) && isset($dateend) && isset($numberAllowed) && isset($venue)){
+                            $addVenue = $db->getVenue(intval($venue));
                             // Only if the venue exists to associate with, then add 
-                            if($db->getVenue(intval($venue)) > 0){
+                            if($addVenue){
                                 // Perform ADD POST REQUEST Processing
                                 $dataFields = array();
                                 $dataFields["area"] = "event";

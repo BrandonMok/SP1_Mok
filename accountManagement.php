@@ -83,7 +83,7 @@
                                 redirect("admin");
                             }
 
-                            // Get user now to display delete information
+                            // User object
                             $specificUser = $db->getUser($id);
                             $deleteData = array();
                             $deleteData["area"] = "User";
