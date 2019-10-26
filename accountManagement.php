@@ -163,11 +163,9 @@
                         // Check entered role for new user to have
                         $enteredRole = roleCheck($role);
 
-
                         // case when input isn't in range after switch
-                        if($enteredRole < 1 || $enteredRole > 3){
-                            // ERROR - not in range
-                            errorDisplay("Please enter a valid role!");
+                        if($enteredRole == -1 || $enteredRole <= 0){
+                            errorDisplay("Invalid: Entered role isn't an available option");
                         }
                         else {
                             // Perform EDIT POST REQUEST Proccessing
@@ -177,7 +175,7 @@
                                 "id" => $id,
                                 "name" => $name,
                                 "password" => $password, 
-                                "role" => $role
+                                "role" => $enteredRole
                             );
                             $dataFields["method"] = array(
                                 "update" => "updateUser"
@@ -188,46 +186,35 @@
                     }// end if EDIT
                     else if($_GET["action"] == "add") {
                         $name = sanitizeString($_POST["name"]);
-                        $password = hash("sha256", sanitizeString($_POST["password"]));
+                        $password = sanitizeString($_POST["password"]);
                         $role = sanitizeString($_POST["role"]);     // Role is ALLOWED to be null
 
-                        // CHECK: if all inputs were given a value
-                        if(isset($name) && isset($password)){
-                            // Go through role assignment for right role value
-                            // If role is null (not supplied), then default to attendee
-                            switch($role){
-                                case 1: 
-                                case "admin":
-                                    $role = 1;
-                                    break;
-                                case 2:
-                                case "event_manager":
-                                case "event manager":
-                                    $role = 2;
-                                    break;
-                                case 3:
-                                case "attendee":
-                                    $role = 3;
-                                    break;
-                                default: 
-                                    $role = 3;
-                                    break;
-                            }
-    
-                            // Use reusable addPOST processing function
-                            $dataFields = array();
-                            $dataFields["area"] = "user";
-                            $dataFields["fields"]["name"] = array("type" => "s", "value" => $name);
-                            $dataFields["fields"]["password"] = array("type" => "sn", "value" => $password);    // passwords when hashed have letters + numbers
-                            $dataFields["fields"]["role"] = array("type" => "i", "value" => $role);
-                            $dataFields["method"] = array(
-                                "add" => "insertUser"
-                            );
-                            addPost($dataFields);
+                        // CHECK: Make sure entered fields aren't empty or not isset
+                        $data = array($name, $password, $role);
+                        $validity = notIssetEmptyCheck($data);
 
-                            
-                            // After making necessary objects, redirect
-                            redirect("admin");
+                        // CHECK: if all inputs were given a value
+                        if($validity){
+                            // Check that trying to edit role is a valid role
+                            $enteredRole = roleCheck($role);
+                            if($enteredRole == -1 || $enteredRole <= 0){
+                                errorDisplay("Invalid: Entered role isn't an available option");
+                            }
+                            else {
+                                 // Use reusable addPOST processing function
+                                $dataFields = array();
+                                $dataFields["area"] = "user";
+                                $dataFields["fields"]["name"] = array("type" => "s", "value" => $name);
+                                $dataFields["fields"]["password"] = array("type" => "sn", "value" => hash("sha256",$password));    // passwords when hashed have letters + numbers
+                                $dataFields["fields"]["role"] = array("type" => "i", "value" => $enteredRole);
+                                $dataFields["method"] = array(
+                                    "add" => "insertUser"
+                                );
+                                addPost($dataFields);
+
+                                // After making necessary objects, redirect
+                                redirect("admin");
+                            }
                         }
                         else {
                             // ERROR: No values supplied and/or field missing a value

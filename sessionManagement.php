@@ -283,10 +283,15 @@
                         $datestart = sanitizeString($_POST["datestart"]);
                         $dateend = sanitizeString($_POST["dateend"]);
 
+                        // CHECK: Make sure entered fields aren't empty or not isset
+                        $data = array($name, $numberAllowed, $event, $datestart, $dateend);
+                        $validity = notIssetEmptyCheck($data);
+
                         // CHECK: if all inputs were given a value
-                        if(isset($name) && isset($numberAllowed) && isset($event) && isset($datestart) && isset($dateend)){
+                        if($validity){
                             // CHECK: if the event trying to associate with exists! 
-                            if(!empty($db->getEvent(intval($event)))){
+                            $associateEvent = $db->getEvent(intval($event));
+                            if($associateEvent){
                                 // Perform ADD POST REQUEST Processing
                                 // addPost() will handle making sure names are alphabetic, dates follow format, and numberallowed/venue are > 0
                                 $dataFields = array();
@@ -336,7 +341,7 @@
                             }
                             else{
                                 // ERROR: Something went wrong with value of inputs
-                                errorDisplay("Invalid: Event doesn't exist!");
+                                errorDisplay("Invalid: Event trying to associate with the session doesn't exist!");
                             }
                         }
                         else{

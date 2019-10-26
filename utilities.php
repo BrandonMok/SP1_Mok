@@ -430,27 +430,49 @@
     }
 
     /**
+     * notIssetEmptyCheck
+     * @param $data
+     * Reusable function to check if entered fields are empty or !isset
+     */
+    function notIssetEmptyCheck($data){
+        $valid = true;
+        foreach($data as $value){
+            if(!isset($value) || empty($value)){
+                $valid = false;
+                break;
+            }
+        }
+        return $valid;
+    }
+
+    /**
      * roleCheck
      * @param $role
      * Check the role of a user allowing both text & number to be entered
      */
     function roleCheck($role){
+        $assignedRole = "";
+
         switch($role){
             case 1: 
             case "admin":
-                $role = 1;
+                $assignedRole = 1;
                 break;
             case 2:
             case "event_manager":
             case "event manager":
-                $role = 2;
+                $assignedRole = 2;
                 break;
             case 3:
             case "attendee":
-                $role = 3;
+                $assignedRole = 3;
                 break;
         }//end switch
-        return $role;
+
+        if(!isset($assignedRole) || empty($assignedRole)){
+            $assignedRole = -1;
+        }
+        return $assignedRole;
     }
 
 

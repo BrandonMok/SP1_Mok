@@ -251,11 +251,14 @@
                         $datestart = sanitizeString($_POST["datestart"]);
                         $dateend = sanitizeString($_POST["dateend"]);
                         $numberAllowed = sanitizeString($_POST["numberallowed"]);  
-                        $venue = sanitizeString($_POST["venue"]);    
-
+                        $venue = sanitizeString($_POST["venue"]); 
+                        
+                        // CHECK: Make sure entered fields aren't empty or not isset
+                        $data = array($name, $datestart, $dateend, $numberAllowed, $venue);
+                        $validity = notIssetEmptyCheck($data);
 
                         // CHECK: if all inputs were given a value
-                        if(isset($name) && isset($datestart) && isset($dateend) && isset($numberAllowed) && isset($venue)){
+                        if($validity){
                             $addVenue = $db->getVenue(intval($venue));
                             // Only if the venue exists to associate with, then add 
                             if($addVenue){

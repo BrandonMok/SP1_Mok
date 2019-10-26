@@ -78,7 +78,6 @@
                         else if($_GET["action"] == "delete"){
                             if($userRole == "admin"){
                                 $attendeeEvent = $db->getAllAttendeeEvents($_GET["event"],$_GET["id"]);
-
                             }
                             else if ($userRole = "event_manager"){
                                 $managerEvents = $db->getAllManagerEvents($_GET["event"], $_SESSION["id"]); // get all this manager's events
@@ -210,8 +209,12 @@
                         $attendee = sanitizeString($_POST["attendee"]);
                         $paid = sanitizeString($_POST["paid"]);
 
+                        // CHECK: Make sure entered fields aren't empty or not isset
+                        $data = array($event, $attendee, $paid);
+                        $validity = notIssetEmptyCheck($data);
+
                         // CHECK: if all inputs were given a value
-                        if(isset($event) && isset($attendee) && isset($paid)){
+                        if($validity){
                             $eventObj = $db->getEvent($event);      // EVENT 
                             $attendeeObj = $db->getUser($attendee); // User 
 
@@ -251,6 +254,10 @@
                                 errorDisplay("Invalid inputs: Event and/or attendee doesn't exist!");
                             }
                         }// end if isset
+                        else {
+                            // ERROR: No values supplied and/or field missing a value
+                            errorDisplay("Invalid: Inputs invalid and/or empty field(s)!");
+                        }
                     }// end action ADD processing
                 }// end if ACTION is present
             }// end if POST

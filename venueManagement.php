@@ -170,8 +170,12 @@
                         $name = sanitizeString($_POST["name"]);
                         $capacity = sanitizeString($_POST["capacity"]); // allowed to be null!
 
+                        // CHECK: Make sure entered fields aren't empty or not isset
+                        $data = array($name);
+                        $validity = notIssetEmptyCheck($data);
+
                         // CHECK: if all inputs were given a value
-                        if(isset($name)){
+                        if($validity){
                             // Special case for CAPACITY (allowed to be null) -> will set to 0 if null was passed though
                             if($capacity == "" || empty($capacity)){
                                 $capacity = 0;
@@ -192,7 +196,7 @@
                         }
                         else{
                             // ERROR: No values supplied and/or field missing a value
-                            errorDisplay("Invalid inputs!");
+                            errorDisplay("Invalid: Inputs invalid and/or empty field!");
                         }
                     }// end action ADD processing
                 }// end if ACTION is present
