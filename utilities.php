@@ -431,6 +431,30 @@
         echo "<p class='form-error-text'>** {$msg}</p>";
     }
 
+    /**
+     * roleCheck
+     * @param $role
+     * Check the role of a user allowing both text & number to be entered
+     */
+    function roleCheck($role){
+        switch($role){
+            case 1: 
+            case "admin":
+                $role = 1;
+                break;
+            case 2:
+            case "event_manager":
+            case "event manager":
+                $role = 2;
+                break;
+            case 3:
+            case "attendee":
+                $role = 3;
+                break;
+        }//end switch
+        return $role;
+    }
+
 
     /**
      * End the session

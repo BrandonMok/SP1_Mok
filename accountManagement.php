@@ -160,28 +160,13 @@
                         $role = sanitizeString($_POST["role"]);
                         $originalValues = json_decode($_POST["originalValues"], true); 
 
-                        // Can pass in either the number or text equilavent
-                        // Either way, sets it as a number from text input
-                        switch($role){
-                            case 1: 
-                            case "admin":
-                                $role = 1;
-                                break;
-                            case 2:
-                            case "event_manager":
-                            case "event manager":
-                                $role = 2;
-                                break;
-                            case 3:
-                            case "attendee":
-                                $role = 3;
-                                break;
-                        }//end switch
+                        // Check entered role for new user to have
+                        $enteredRole = roleCheck($role);
 
 
                         // case when input isn't in range after switch
                         // If not in range or any of options, defaults to role of 0
-                        if($role < 1 || $role > 3){
+                        if($enteredRole < 1 || $enteredRole > 3){
                             // ERROR - not in range
                             errorDisplay("Please enter a valid role!");
                         }
