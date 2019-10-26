@@ -85,29 +85,53 @@
                     }
                 }
                 else if(isset($_GET["id"])){ 
-                    // ID of event wanting to register for
-                    $eventID = $_GET["id"];
+                    $eventID = $_GET["id"];              // ID of event wanting to register for
                     $event = $db->getEvent($eventID);    // only need event's name for the section heading
 
                     echo "<p class='section-heading'>{$event->getName()}</p>";
 
-                    $sessionsPerEvent = $db->getAllSessions(0,$eventID);
+                    $sessionsPerEvent = $db->getAllSessions(0,$eventID);    // get all Session objects per an event
                     if(count($sessionsPerEvent) > 0){
                         echo "<p class='section-heading'>Available Sessions</p>";
 
-                        $eventSessionContainer = "<div id='event-session-container'>";
+                        $eventSessionContainer = "<div id='event-session-container'>";  // container to hold everything
                         foreach($sessionsPerEvent as $session){
-                            $eventSessionContainer .= "<div class='event-registration-session-info'>
-                                                            <p class='event-headings'>{$session->getName()}</p>
-                                                            <p>Number Allowed: {$session->getNumberAllowed()}</p>
-                                                            <p class='event-timings'>{$session->getDate()}</p>
-                                                            <a href='./eventRegistration.php?event={$eventID}&session={$session->getIdSession()}&action=signup'>
+                            $registered = false;    // var if user registered - reset to false at beginning for each session object
+
+                            // Determine if user is already registered for this event
+                            // if so, then do changes to html string to not allow signup again
+                            $attendeeSession = $db->getAttendeeSessions($session->getIdSession(), $_SESSION["id"]);
+                            if(isset($attendeeSession) && !empty($attendeeSession)){
+                                $registered = true;
+                            }                            
+
+                            // HTML container
+                            $eventSessionContainer .= "<div class='event-registration-session-info'>";
+                            if($registered){
+                                $eventSessionContainer .= "<p class='event-headings'>{$session->getName()} - <i class='fas fa-check'></i> Registered</p>";
+                            }
+                            else{
+                                $eventSessionContainer .= "<p class='event-headings'>{$session->getName()}</p>";
+                            }
+
+                            $eventSessionContainer .= "<p>Number Allowed: {$session->getNumberAllowed()}</p>
+                                                        <p class='event-timings'>{$session->getDate()}</p>";
+
+                            // Whether user signed up or not
+                            // Prevent signing up for a session already signed up for!
+                            if($registered){
+                                $eventSessionContainer .= "<div class='disabled-btns'>Sign up</div>
+                                                            <div class='disabled-btns'>Sign up and pay</div>";
+                            }
+                            else {
+                                $eventSessionContainer .= "<a href='./eventRegistration.php?event={$eventID}&session={$session->getIdSession()}&action=signup'>
                                                                 <div class='sign-up-btns'>Sign up</div>
                                                             </a>
                                                             <a href='./eventRegistration.php?event={$eventID}&session={$session->getIdSession()}&action=signuppay'>
                                                                 <div class='sign-up-btns'>Sign up and pay</div>
-                                                            </a>
-                                                        </div>";
+                                                            </a>";
+                            }
+                            $eventSessionContainer .= "</div>";
                         }
                         $eventSessionContainer .= "</div>";
                         echo $eventSessionContainer;
