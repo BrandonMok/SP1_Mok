@@ -8,8 +8,7 @@
     if(!isset($_SESSION['userLoggedIn'])){
         // Logout page meant to unset session variables
         // DON'T want someone logged in to directly go to this page
-        header('Location: login.php');
-        exit;
+        redirect("login");
     }
 ?>
 <!DOCTYPE html>
@@ -22,15 +21,18 @@
     </head>
     <body>
         <div id="logout-screen" class="center-element">
-            <div id="logout-textbox" class="center-element"><span>Logging Out... <br/><i class="fas fa-spinner"></i></span></div>
+            <div id="logout-textbox" class="center-element">
+                <span>Logging Out... <br/>
+                    <i class="fas fa-spinner"></i>
+                </span>
+            </div>
         </div>
 
 
         <?php
             endSession(); // End the Session!
 
-            header('Location: login.php');
-            exit;
+            redirect("login");
         ?>       
     </body>
 </html>
