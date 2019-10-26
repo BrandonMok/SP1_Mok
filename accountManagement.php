@@ -156,25 +156,34 @@
                     if($_GET["action"] == "edit"){
                         $id = $_GET["id"];  // ID on POST isnt' editable, so just use from URL
                         $name = sanitizeString($_POST["name"]);
-                        $password = hash("sha256", sanitizeString($_POST["password"]));
+                        $password = sanitizeString($_POST["password"]);
                         $role = sanitizeString($_POST["role"]);
                         $originalValues = json_decode($_POST["originalValues"], true); 
 
                         // Check entered role for new user to have
                         $enteredRole = roleCheck($role);
 
+                        // CHECK: Make sure entered fields aren't empty or not isset
+                        $data = array($id, $name, $role);
+                        $validity = notIssetEmptyCheck($data);
+
                         // case when input isn't in range after switch
                         if($enteredRole == -1 || $enteredRole <= 0){
                             errorDisplay("Invalid: Entered role isn't an available option");
                         }
-                        else {
+                        else if($validity){
+                            // Special case: don't have to change password (empty on input) on edit
+                            if(empty($password)){
+                                $password = $dataFields["originalValues"]["password"];  
+                            }
+
                             // Perform EDIT POST REQUEST Proccessing
                             $dataFields = array();
                             $dataFields["area"] = "user";
                             $dataFields["fields"] = array(
                                 "id" => $id,
                                 "name" => $name,
-                                "password" => $password, 
+                                "password" => hash("sha256", $password), 
                                 "role" => $enteredRole
                             );
                             $dataFields["method"] = array(
@@ -182,6 +191,10 @@
                             );
                             $dataFields["originalValues"] = $originalValues;
                             editPost($dataFields);
+                        }
+                        else {
+                            // ERROR: No values supplied and/or field missing a value
+                            errorDisplay("Invalid: Inputs invalid and/or empty field(s)!");
                         }
                     }// end if EDIT
                     else if($_GET["action"] == "add") {
