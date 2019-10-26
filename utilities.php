@@ -467,6 +467,9 @@
             case "attendee":
                 $assignedRole = 3;
                 break;
+            case "":
+                $assignedRole = 3;
+                break;
         }//end switch
 
         if(!isset($assignedRole) || empty($assignedRole)){

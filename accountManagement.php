@@ -164,7 +164,7 @@
                         $enteredRole = roleCheck($role);
 
                         // CHECK: Make sure entered fields aren't empty or not isset
-                        $data = array($id, $name, $role);
+                        $data = array($id, $name);
                         $validity = notIssetEmptyCheck($data);
 
                         // case when input isn't in range after switch
@@ -184,7 +184,7 @@
                                 "id" => $id,
                                 "name" => $name,
                                 "password" => hash("sha256", $password), 
-                                "role" => $enteredRole
+                                "role" => $role
                             );
                             $dataFields["method"] = array(
                                 "update" => "updateUser"
@@ -203,12 +203,12 @@
                         $role = sanitizeString($_POST["role"]);     // Role is ALLOWED to be null
 
                         // CHECK: Make sure entered fields aren't empty or not isset
-                        $data = array($name, $password, $role);
+                        $data = array($name, $password);
                         $validity = notIssetEmptyCheck($data);
 
                         // CHECK: if all inputs were given a value
                         if($validity){
-                            // Check that trying to edit role is a valid role
+                            // Check that trying to edit role is a valid role!
                             $enteredRole = roleCheck($role);
                             if($enteredRole == -1 || $enteredRole <= 0){
                                 errorDisplay("Invalid: Entered role isn't an available option");
