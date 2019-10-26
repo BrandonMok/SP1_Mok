@@ -93,6 +93,38 @@
         }
 
         /**
+         * getAllRoles
+         * @param $roleID
+         * Retrieves a role based on ID
+         */
+        function getAllRoles($roleID = 0){
+            try{
+                include_once("./classes/Role.class.php");
+                $query = "SELECT * FROM role ";
+
+                if($roleID == 0){
+                    // No ID passed - get all
+                    $stmt = $this->db->prepare(trim($query));
+                    $stmt->execute();
+                    $stmt->setFetchMode(PDO::FETCH_CLASS, "Role");
+                    return $stmt->fetchAll();
+                }
+                else {
+                    $query = "SELECT * FROM role WHERE idrole = :idrole";
+                    $stmt = $this->db->prepare($query);
+                    $stmt->execute(array(
+                        ":idrole" => $roleID
+                    ));
+                    $stmt->setFetchMode(PDO::FETCH_CLASS, "Role");
+                    return $stmt->fetch();
+                }
+            }
+            catch(PDOException $e){
+                die("There was a problem getting role name!");
+            } 
+        }
+
+        /**
          * getUser
          * @param $id
          * Retrieves a specific user from a given ID

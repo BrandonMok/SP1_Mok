@@ -183,27 +183,7 @@
             /** -------------------- POST LOGIC --------------------*/
             if($_SERVER["REQUEST_METHOD"] == "POST"){
                 if(isset($_GET["action"]) && !empty($_GET["action"])){
-                    if($_GET["action"] == "edit"){
-                        $event = $_GET["event"];
-                        $attendee = sanitizeString($_POST["attendee"]);
-                        $paid = sanitizeString($_POST["paid"]);
-                        $originalValues = json_decode($_POST["originalValues"]);      
-
-                        // Perform EDIT POST REQUEST Processing
-                        $dataFields = array();
-                        $dataFields["area"] = "event";
-                        $dataFields["fields"] = array(
-                            "event" => $event,
-                            "attendee" => $attendee,
-                            "paid" => $paid,
-                        );
-                        $dataFields["method"] = array(
-                            // "update" => "updateEvent"
-                        );
-                        $dataFields["originalValues"] = $originalValues;
-                        editPost($dataFields);
-                    }// end EDIT post processing
-                    else if($_GET["action"] == "add") {
+                    if($_GET["action"] == "add") {
                         // Grab & sanitize inputs
                         $event = sanitizeString($_POST["event"]);
                         $attendee = sanitizeString($_POST["attendee"]);
@@ -233,7 +213,8 @@
                                 }
 
                                 // Set paid to 0 if nothing supplied
-                                if(empty($paid) || !isset($paid)){
+                                $paidValid = notIssetEmptyCheck($paid);
+                                if( $paidValid == false){
                                     $paid = 0;
                                 }
 

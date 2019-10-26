@@ -32,8 +32,7 @@
                             "area" => "User"
                         ));
                             
-
-                        $allUsers = $db->getAllUsers();
+                        $allUsers = $db->getAllUsers(); 
                         if(count($allUsers) > 0){
                             // display table
                             $tableSTR = "<div class='admin-table-container'>
@@ -47,10 +46,11 @@
                                                 </tr>";
 
                             foreach($allUsers as $v){
+                                $roleName = $db->getAllRoles($v->getRole());
                                 $tableSTR .= "<tr>
                                                 <td>{$v->getIdAttendee()}</td>
                                                 <td>{$v->getName()}</td>
-                                                <td>{$v->getRole()}</td>
+                                                <td>{$v->getRole()} - {$roleName->getName()}</td>
                                                 <td><a href='./accountManagement.php?id={$v->getIdAttendee()}&action=edit'>Edit</a></td>";          
                                     
                                 // Check if user is an admin -> Don't allow admin account to be deleted
@@ -176,7 +176,7 @@
                                 foreach($allVenues as $venue){
                                     // Find event whose EventID equals VenueID
                                     if($venue->getIdVenue() == $v->getVenue()){
-                                        $eventWithVenueName = "<td>{$venue->getName()}</td>";   // if found, use venue name for display
+                                        $eventWithVenueName = "<td>{$venue->getIdVenue()} - {$venue->getName()}</td>";   // if found, use venue name for display
                                         break;
                                     }
                                     else {
@@ -320,7 +320,6 @@
                                                             <th>Event</th>
                                                             <th>Attendee</th>
                                                             <th>Paid</th>
-                                                            <th>Edit</th>
                                                             <th>Delete</th>
                                                         </tr>";
                         foreach($attendeeEvents as $aEvent){
@@ -337,7 +336,6 @@
 
                             $attendeeEventTable .=  "   <td>{$aEvent->getAttendee()} - {$attendee}</td>
                                                         <td>{$aEvent->getPaid()}</td>
-                                                        <td><a href='./attendeeEventManagement.php?id={$aEvent->getAttendee()}&event={$aEvent->getEvent()}&action=edit'>Edit</a></td>
                                                         <td><a href='./attendeeEventManagement.php?id={$aEvent->getAttendee()}&event={$aEvent->getEvent()}&action=delete'>Delete</a></td>
                                                     </tr>";
                         }
