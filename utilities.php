@@ -329,7 +329,7 @@
             $container .= "<td>{$td}</td>";
         }
         $container .= "</tr></table></div>";
-        $container .= "<h2 class='section-heading'>Are you sure you want to delete the selected {$data['area']}?</h2><br/>";
+        $container .= "<h2 class='section-heading'>Are you sure you want to delete the selected ". strtolower($data["area"]) ."?</h2><br/>";
         $container .= "<div id='confirm-delete-container' class='center-element'>
                             <a href='{$data['choices']['confirm']}'>
                                 <div class='delete-btn' id='confirm-delete-btn'>Yes</div>

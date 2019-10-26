@@ -19,7 +19,6 @@
             // ADMINS only to interact with venues
             if(isset($_SESSION["userLoggedIn"]) && isset($_SESSION["role"])){
                 if($_SESSION["role"] == "admin"){
-
                     if(managementEditDeleteCheck()){
                         if($_GET["action"] == "edit"){
                             // EDIT
@@ -71,41 +70,22 @@
                                     "delete" => "deleteVenue"
                                 );
                                 $delete = deleteAction($dataFields);
-
                                 redirect("admin");
                             }
 
-                            $venue = $db->getVenue($id);   // venue object
-                            
-                            // VENUE SPECIFIC TABLE W/btns
-                            echo "<h2 class='section-heading'>Delete Venue</h2>";
-                            $deleteInfo = "<div class='admin-table-container'>
-                                            <table class='admin-table'>
-                                                <tr>
-                                                    <th>ID</th>
-                                                    <th>Name</th>
-                                                    <th>Capacity</th>
-                                                </tr>
-                                                <tr>
-                                                    <td>{$venue->getIdVenue()}</td>
-                                                    <td>{$venue->getName()}</td>
-                                                    <td>{$venue->getCapacity()}</td>
-                                                </tr>
-                                            </table>
-                                        </div>";
-                            echo $deleteInfo;
-
-                            // Yes & no options to delete action
-                            echo "<h2 class='section-heading'>Are you sure you want to delete the selected venue?</h2><br/>";
-                            $optionDiv = "<div id='confirm-delete-container' class='center-element'>
-                                                <a href='./venueManagement.php?id={$venue->getIdVenue()}&action=delete&confirm=yes'>
-                                                    <div class='delete-btn' id='confirm-delete-btn'>Yes</div>
-                                                </a>
-                                                <a href='./venueManagement.php?id={$venue->getIdVenue()}&action=delete&confirm=no'>
-                                                    <div class='delete-btn' id='deny-delete-btn'>No</div>
-                                                </a>
-                                            </div>";
-                            echo $optionDiv;
+                            // Venue object
+                            $venue = $db->getVenue($id);   
+                            $deleteData = array();
+                            $deleteData["area"] = "Venue";
+                            $deleteData["th"] = array("ID", "Name", "Capacity");
+                            $deleteData["td"] = array(
+                                $venue->getIdVenue(),
+                                $venue->getName(),
+                                $venue->getCapacity()
+                            );
+                            $deleteData["choices"]["confirm"] = "./venueManagement.php?id={$venue->getIdVenue()}&action=delete&confirm=yes";
+                            $deleteData["choices"]["cancel"] = "./venueManagement.php?id={$venue->getIdVenue()}&action=delete&confirm=no";
+                            confirmDeleteHtml($deleteData);
                         }
                     }
                     else if(managementAddCheck()){
