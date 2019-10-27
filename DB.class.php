@@ -505,11 +505,11 @@
                             break;
                         case "datestart":
                             $query .= "datestart = :datestart,";
-                            $updateArr[":datestart"] = intval($v);
+                            $updateArr[":datestart"] = $v;
                             break;
                         case "dateend":
                             $query .= "dateend = :dateend,";
-                            $updateArr[":dateend"] = intval($v);
+                            $updateArr[":dateend"] = $v;
                             break;
                         case "numberallowed":
                             $query .= "numberallowed = :numberallowed,";

@@ -142,28 +142,32 @@
                         $capacity = sanitizeString($_POST["capacity"]);
                         $originalValues = json_decode($_POST["originalValues"], true); 
 
-                        // Specific extra validation before passing into reusable edit post check
-                        if((alphabeticSpace($name) == false || alphabetic($name) == false) || numbers($name) == 1){
-                            // ERROR: No letters and has numbers
-                            errorDisplay("Please enter a valid name!");
-                        }
+                        // CHECK: Make sure entered fields aren't empty or not isset
+                        $data = array($id, $name);
+                        $validity = notIssetEmptyCheck($data);
+
                         if($capacity == "" || empty($capacity)){ // if capacity is empty, simply set to 0
                             $capacity = 0;
                         }
-
-                        // Perform EDIT POST REQUEST Processing
-                        $dataFields = array();
-                        $dataFields["area"] = "venue";
-                        $dataFields["fields"] = array(
-                            "id" => $id,
-                            "name" => $name,
-                            "capacity" => $capacity
-                        );
-                        $dataFields["method"] = array(
-                            "update" => "updateVenue"
-                        );
-                        $dataFields["originalValues"] = $originalValues;
-                        editPost($dataFields);
+                        else if($validity){
+                            // Perform EDIT POST REQUEST Processing
+                            $dataFields = array();
+                            $dataFields["area"] = "venue";
+                            $dataFields["fields"] = array(
+                                "id" => $id,
+                                "name" => $name,
+                                "capacity" => $capacity
+                            );
+                            $dataFields["method"] = array(
+                                "update" => "updateVenue"
+                            );
+                            $dataFields["originalValues"] = $originalValues;
+                            editPost($dataFields);
+                        }
+                        else {
+                            // ERROR: No values supplied and/or field missing a value
+                            errorDisplay("Invalid: Inputs invalid and/or empty field!");
+                        }
                     }
                     else if($_GET["action"] == "add") {
                         // Grab & sanitize inputs

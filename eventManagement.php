@@ -204,7 +204,8 @@
                         $dateend = sanitizeString($_POST["dateend"]);
                         $numberAllowed = sanitizeString($_POST["numberallowed"]);  
                         $venue = sanitizeString($_POST["venue"]);            
-                        $originalValues = json_decode($_POST["originalValues"]);      
+                        $originalValues = json_decode($_POST["originalValues"]);  
+                        
 
                         $flag = true;
 
@@ -216,8 +217,9 @@
                             $flag = false;
                             errorDisplay("Invalid: Number allowed isn't a valid value!");
                         }
+
                         $findVenue = $db->getVenue(intval($venue));
-                        if(count($findVenue) <= 0){
+                        if(!isset($findVenue)){
                             $flag = false;
                             errorDisplay("Invalid: Venue doesn't exist!");
                         }
@@ -261,7 +263,7 @@
                         if($validity){
                             $addVenue = $db->getVenue(intval($venue));
                             // Only if the venue exists to associate with, then add 
-                            if($addVenue){
+                            if(isset($addVenue) && !empty($addVenue)){
                                 // Perform ADD POST REQUEST Processing
                                 $dataFields = array();
                                 $dataFields["area"] = "event";
@@ -274,7 +276,6 @@
                                     "add" => "addEvent"
                                 );
                                 $lastID = addPost($dataFields);
-                                // addPost($dataFields);
 
 
                                 // In case of event manager, also make an manager_event object
@@ -304,7 +305,6 @@
                                     }
                                 }// end if event manager
                                 
-
                                 // After making necessary objects, redirect
                                 redirect("admin");
                             }

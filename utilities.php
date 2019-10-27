@@ -175,6 +175,8 @@
                 }
             }
 
+            var_dump($changesArray);
+
             $changesArray["id"] = $fields["fields"]["id"]; // set ID for where cause
 
             if(!empty($changesArray)){
@@ -184,9 +186,11 @@
                     redirect("admin");
                 }
                 else{
-                    // echo "<p class='form-error-text '>** Editing {$fields['area']} failed!</p>";
                     errorDisplay("Editing {$fields['area']} failed!");
                 }
+            }
+            else {
+                errorDisplay("Invalid: No new changes to {$fields['area']}!");
             }
         }
     }
