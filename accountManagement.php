@@ -65,7 +65,7 @@
                         }
                         else if($_GET["action"] == "delete"){
                             // DELETE
-                            $id = $_GET["id"]; // ID of account from URL
+                            $id = $_GET['id']; // ID of account from URL
 
                             // if delete option was chosen, check for confirm variable in URL that's set when clicking Yes/No
                             if(isset($_GET["confirm"]) && !empty($_GET["confirm"])){
