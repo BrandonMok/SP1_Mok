@@ -912,13 +912,13 @@
                             $query .= "event = :event,";
                             $updateArr[":event"] = intval($v);
                             break;
-                        case "datestart":
-                            $query .= "datestart = :datestart,";
-                            $updateArr[":datestart"] = intval($v);
+                        case "startdate":
+                            $query .= "startdate = :startdate,";
+                            $updateArr[":startdate"] = $v;
                             break;
-                        case "dateend":
-                            $query .= "dateend = :dateend,";
-                            $updateArr[":dateend"] = intval($v);
+                        case "enddate":
+                            $query .= "enddate = :enddate,";
+                            $updateArr[":enddate"] = $v;
                             break;
                         case "id":    
                             $updateId = intval($v);

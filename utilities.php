@@ -178,7 +178,7 @@
             $changesArray["id"] = $fields["fields"]["id"]; // set ID for where cause
 
             if(!empty($changesArray)){
-                $rowCount = call_user_func_array(array($db, $fields["method"]["update"] ), array($changesArray));
+                $rowCount = call_user_func_array(array($db, $fields["method"]["update"]), array($changesArray));
 
                 if($rowCount > 0){
                     redirect("admin");

@@ -217,7 +217,6 @@
             if($_SERVER["REQUEST_METHOD"] == "POST"){
                 if(isset($_GET["action"]) && !empty($_GET["action"])){
                     if($_GET["action"] == "edit"){
-                        // Grab values
                         $id = $_GET["id"];
                         $name = sanitizeString($_POST["name"]);
                         $numberAllowed = sanitizeString($_POST["numberallowed"]);  
@@ -228,7 +227,7 @@
 
                         $flag = true;
 
-                        if(date3($datestart) == false || date3($dateend) == false){
+                        if(!date3($datestart) || !date3($dateend)){
                             $flag = false;
                             errorDisplay("Invalid: Date format not in yyyy-mm-dd hh:mm:ss format!");
                         }
@@ -239,13 +238,13 @@
                         $findEvent = $db->getEvent(intval($event));
                         if(count($findEvent) == 0 || empty($findEvent)){
                             $flag = false; // event doesn't exist or not found!
+                            errorDisplay("Invalid: Event doesn't exist!");
                         }
 
                         // IN CASE: user is event manager, double check to make sure E.M owns the event this session is associated with!
                         if($_SESSION["role"] == "event_manager"){
                             // Make sure event_manager owns the event trying to edit!!
                             $managerEvent = $db->getAllManagerEvents($event, $_SESSION["id"]);    // retrieve manager_event object (only one will be returned)
-
                             if(!isset($managerEvent) || empty($managerEvent)){
                                 $flag = false;
                                 errorDisplay("Invalid: Event for the session doesn't belong to you!");
@@ -262,8 +261,8 @@
                                 "name" => $name,
                                 "numberallowed" => $numberAllowed,
                                 "event" => $event,
-                                "datestart" => $datestart,
-                                "dateend" => $dateend
+                                "startdate" => $datestart,
+                                "enddate" => $dateend
                             );
                             $dataFields["method"] = array(
                                 "update" => "updateSession"
