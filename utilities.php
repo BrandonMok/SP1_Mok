@@ -175,8 +175,6 @@
                 }
             }
 
-            var_dump($changesArray);
-
             $changesArray["id"] = $fields["fields"]["id"]; // set ID for where cause
 
             if(!empty($changesArray)){
