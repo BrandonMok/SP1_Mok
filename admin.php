@@ -66,7 +66,7 @@
                             echo $tableSTR;
                         }// end of count users
                         else{
-                            echo "<h2 class='center-element'>No users found!</h2>";
+                            echo "<p class='no-objects-heading'>* No users found! *</p>";
                         }
                     }// end if admin access
                     
@@ -109,7 +109,7 @@
                             echo $venueTable;
                         }// end if count venues 
                         else {
-                            echo "<h2 class='center-element'>No venues available!</h2>";
+                            echo "<p class='no-objects-heading'>* No venues available! *</p>";
                         }
                     }
                     
@@ -143,7 +143,7 @@
                         }
                     }
 
-                    if(count($allEvents) > 0){
+                    if(!empty($allEvents) && count($allEvents) > 0){
                         // Build event table
                         $eventTable = "<div class='admin-table-container'>
                                         <table class='admin-table'>
@@ -198,7 +198,7 @@
                         echo $eventTable;
                     }
                     else{
-                        echo "<h2 class='center-element'>No events available!</h2>";
+                        echo "<p class='no-objects-heading'>* No events available! *</p>";
                     }
 
 
@@ -227,13 +227,10 @@
                                 $allSessions[] = $db->getAllSessions($mSession->getSession());
                             }
                         }
-                        else {
-                            // No manager_session objects, set to -1 
-                            $allSessions = -1;
-                        }
                     }
 
-                    if(count($allSessions) > 0){
+
+                    if(!empty($allSessions) && count($allSessions) > 0){
                         // Build event table
                         $sessionTable = "<div class='admin-table-container'>
                                         <table class='admin-table'>
@@ -280,7 +277,7 @@
                         echo $sessionTable;
                     }
                     else{
-                        echo "<h2 class='center-element'>No sessions available!</h2>";
+                        echo "<p class='no-objects-heading'>* No sessions available! *</p>";
                     }
 
 
@@ -304,16 +301,18 @@
                         $attendeeEventsObjs = $db->getAllAttendeeEvents();
                         $attendeeEvents = array();
 
-                        foreach($allManagerEventObjs as $mEvent){
-                            foreach($attendeeEventsObjs as $aEvent){
-                                if($mEvent->getEvent() == $aEvent->getEvent()){
-                                    $attendeeEvents[] = $aEvent;
+                        if(count($allManagerEventObjs) > 0){
+                            foreach($allManagerEventObjs as $mEvent){
+                                foreach($attendeeEventsObjs as $aEvent){
+                                    if($mEvent->getEvent() == $aEvent->getEvent()){
+                                        $attendeeEvents[] = $aEvent;
+                                    }
                                 }
                             }
-                        }
+                        }// end if count
                     }
 
-                    if(count($attendeeEvents) > 0){
+                    if(!empty($attendeeEvents) && count($attendeeEvents) > 0){
                         $attendeeEventTable = "<div class='admin-table-container'>
                                                     <table class='admin-table'>
                                                         <tr>
@@ -344,7 +343,7 @@
                     }
                     else {
                         // No attendees attending events or sessions
-                        echo "<p class='section-heading'>No attendees are registered for events!</p>";
+                        echo "<p class='no-objects-heading'>* No attendees are registered for events! *</p>";
                     }
                 }// end if admin
                 else{

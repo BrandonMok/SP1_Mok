@@ -287,6 +287,13 @@ i {
 #user-edit-labels > label, #user-edit-inputs > input {
     display: block;
 }
+.no-objects-heading {
+    text-align: center;
+    margin: 1em 0 2em 0;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
 
 
 
