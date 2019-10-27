@@ -278,32 +278,25 @@
                                 $lastID = addPost($dataFields);
 
 
-                                // In case of event manager, also make an manager_event object
-                                if($_SESSION["role"] == "event_manager"){
-                                    /**
-                                     * Also need to make a manager_event OBJECT!
-                                     */
-                                    if(eventManagerEventCheck($lastID)){
-                                        // Event exists! Good to make manager_event object
-                                        $managerEventData = array();
-                                        $managerEventData["event"] = $lastID;
-                                        $managerEventData["manager"] = $_SESSION["id"];
+                                /**
+                                 * Admin and event_manager need to create a manager_event object to keep track of their created events
+                                 */
+                                if(isset($lastID) && !empty($lastID)){
+                                    // Event exists! Good to make manager_event object
+                                    $managerEventData = array();
+                                    $managerEventData["event"] = $lastID;
+                                    $managerEventData["manager"] = $_SESSION["id"];
 
-                                        $managerEventObjID = $db->addManagerEvent($managerEventData); // call to make object
+                                    $managerEventObjID = $db->addManagerEvent($managerEventData); // call to make object
 
-                                        if($managerEventObjID > 0){
-                                            redirect("admin");
-                                        }
-                                        else {
-                                            // ERROR: Making manager_event object failed!
-                                            errorDisplay("Creating new event failed!");
-                                        }
+                                    if($managerEventObjID > 0){
+                                        redirect("admin");
                                     }
                                     else {
-                                        // ERROR: Event trying to associate with failed!
+                                        // ERROR: Making manager_event object failed!
                                         errorDisplay("Creating new event failed!");
                                     }
-                                }// end if event manager
+                                }
                                 
                                 // After making necessary objects, redirect
                                 redirect("admin");

@@ -262,6 +262,9 @@
                 if($deleteUSR > 0){
                     $this->deleteAttendeeEvent(0,$data[0]);
                     $this->deleteAttendeeSession(0,$data[0]);
+                    $this->deleteManagerEvent(0, $data[0]);
+                    $this->deleteManagerSession(0, $data[0]);
+                    
                 }
             }   
             catch(PDOException $e){
@@ -578,6 +581,7 @@
                         ":event" => $eventID,
                         ":manager" => $managerID
                     ));
+                    return $stmt->rowCount();
                 }
                 else if ($eventID != 0){
                     $query .= "event = :event";
@@ -585,6 +589,7 @@
                     $stmt->execute(array(
                         ":event" => $eventID
                     ));
+                    return $stmt->rowCount();
                 }
                 else if ($managerID != 0){
                     $query .= "manager = :manager";
@@ -592,9 +597,8 @@
                     $stmt->execute(array(
                         ":manager" => $managerID
                     ));
+                    return $stmt->rowCount();
                 }
-
-                return $stmt->rowCount();
             }
             catch(PDOException $e){
                 die("There was a problem deleting manager event!");
@@ -617,6 +621,7 @@
                         ":event" => $eventID,
                         ":attendee" => $attendeeID
                     ));
+                    return $stmt->rowCount();
                 }
                 else if ($eventID != 0){
                     $query .= "event = :event";
@@ -624,6 +629,7 @@
                     $stmt->execute(array(
                         ":event" => $eventID
                     ));
+                    return $stmt->rowCount();
                 }
                 else if ($attendeeID != 0){
                     $query .= "attendee = :attendee";
@@ -631,9 +637,8 @@
                     $stmt->execute(array(
                         ":attendee" => $attendeeID
                     ));
+                    return $stmt->rowCount();
                 }
-
-                return $stmt->rowCount();
             }
             catch(PDOException $e){
                 die("There was a problem deleting attendee event!");

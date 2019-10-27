@@ -281,7 +281,6 @@
                 }// end foreach
             }// end foreach
 
-
             // Perform add/insert if values were added and flag wasn't flipped
             if(!empty($paramArr) && $flag == true){
                 $lastID = call_user_func_array(array($db, $fields["method"]["add"]), array($paramArr));

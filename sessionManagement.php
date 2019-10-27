@@ -132,10 +132,8 @@
                                 $delete = deleteAction($dataFields);
 
                                 if(count($delete) > 0){
-                                    // Event Managers also need to delete their manager_session obj when deleting entire session!
-                                    if($userRole == "event_manager"){
-                                        $db->deleteManagerSession($id);
-                                    }
+                                    // Admin & Event Managers also need to delete their manager_session obj when deleting entire session!
+                                    $db->deleteManagerSession($id);
                                 }
                                 redirect("admin");
                             }
@@ -290,9 +288,8 @@
                         if($validity){
                             // CHECK: if the event trying to associate with exists! 
                             $associateEvent = $db->getEvent(intval($event));
-                            if($associateEvent){
+                            if(isset($associateEvent) && !empty($associateEvent)){
                                 // Perform ADD POST REQUEST Processing
-                                // addPost() will handle making sure names are alphabetic, dates follow format, and numberallowed/venue are > 0
                                 $dataFields = array();
                                 $dataFields["area"] = "event";
                                 $dataFields["fields"]["name"] = array("type" => "sn", "value" => $name);                // event names can have numbers     
@@ -305,23 +302,22 @@
                                 );
                                 $lastID = addPost($dataFields);
 
+
                                 // Event Managers also need to make a manager_session object to keep track of their created sessions
-                                if($_SESSION["role"] == "event_manager"){
+                                if(isset($lastID) && !empty($lastID)){
                                     $lastCreatedSession = $db->getAllSessions($lastID);
                                     $eventManagerEvent = $db->getAllManagerEvents($lastCreatedSession->getEvent(), $_SESSION["id"]); // returns a managereventOBJ IF they owned that event
 
                                     // CHECK: Session created OK & that the created session's event is owned by the event_manager!
                                     // ONLY ALLOW EVENT_MANAGERS TO ADD/EDIT/DELETE THEIR OWN EVENTS!!
-                                    if(count($lastCreatedSession) > 0 && count($eventManagerEvent) > 0){
+                                    if(!empty($lastCreatedSession) && !empty($eventManagerEvent) ){
                                         // Event exists! Good to make manager_event object
                                         $managerSession = array();
                                         $managerSession["session"] = $lastID;
                                         $managerSession["manager"] = $_SESSION["id"];
-
                                         $managerSessionObjID = $db->addManagerSession($managerSession); // call to make object
 
                                         if($managerSessionObjID > 0){
-                                            // If all good, redirect
                                             redirect("admin");
                                         }
                                         else {
